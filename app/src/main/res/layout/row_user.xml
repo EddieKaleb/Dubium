@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/usuario_container"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:layout_marginTop="-5dp"
+    android:background="@drawable/rectangle"
+    android:elevation="1dp">
+
+    <ImageView
+        android:id="@+id/iv_foto_perfil"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="-3dp"
+        android:src="@drawable/ic_anonymous"
+        android:adjustViewBounds="true" />
+
+    <LinearLayout
+        android:id="@+id/foto_perfil_container"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="-3dp"
+        android:background="@drawable/ring"
+        android:backgroundTint="@color/white"
+        android:orientation="horizontal" />
+
+    <TextView
+        android:id="@+id/tv_nome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/foto_perfil_container"
+        android:fontFamily="@string/font_family_light"
+        android:text="ANÔNIMO"
+        android:textColor="@color/black"
+        android:textSize="@dimen/font_small" />
+
+    <TextView
+        android:id="@+id/tv_distancia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_toRightOf="@id/foto_perfil_container"
+        android:fontFamily="@string/font_family_regular"
+        android:paddingTop="20dp"
+        android:textColor="@color/black"
+        android:textSize="11dp" />
+
+    <TextView
+        android:id="@+id/tv_aptidoes_comum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_toRightOf="@id/foto_perfil_container"
+        android:fontFamily="@string/font_family_thin"
+        android:paddingRight="7dp"
+        android:paddingTop="34dp"
+        android:textColor="@color/black"
+        android:textSize="11dp" />
+
+    <TextView
+        android:id="@+id/tv_dificuldades_comum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_toEndOf="@id/tv_aptidoes_comum"
+        android:layout_toRightOf="@id/foto_perfil_container"
+        android:fontFamily="@string/font_family_thin"
+        android:paddingTop="34dp"
+        android:textColor="@color/black"
+        android:textSize="11dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:paddingRight="5dp"
+        android:src="@drawable/ic_arrow" />
+</RelativeLayout>

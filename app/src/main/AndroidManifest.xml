@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.dubium">
+
+    <application
+        android:label="@string/app_name"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_d_pequeno"
+        android:roundIcon="@drawable/ic_d_pequeno"
+        android:supportsRtl="true">
+        <activity
+            android:name=".views.SplashActivity"
+            android:theme="@style/SplashStyle" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".views.LoginActivity"
+            android:theme="@style/LoginStyle" />
+        <activity
+            android:name=".views.AptitudesActivity"
+            android:theme="@style/SetupStyle" />
+        <activity
+            android:name=".views.DifficultiesActivity"
+            android:theme="@style/SetupStyle" />
+        <activity
+            android:name=".views.HomeActivity"
+            android:theme="@style/HomeStyle">
+        </activity>
+    </application>
+
+</manifest>

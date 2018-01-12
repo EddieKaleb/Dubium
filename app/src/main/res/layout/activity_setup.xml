@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/SetupStyle">
+
+    <SearchView
+        android:id="@+id/sv_disciplinas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:background="?android:attr/dividerVertical" />
+    <LinearLayout
+        android:id="@+id/view_mensagem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_first"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/font_family_thin"
+            android:text="@string/tv_first"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_bigger" />
+
+        <TextView
+            android:id="@+id/tv_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/font_family_thin"
+            android:text="@string/tv_second"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_bigger" />
+
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="150dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="60dp"
+            android:src="@drawable/ic_books" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end">
+        <ListView
+            android:id="@+id/lv_disciplinas"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+        <TextView
+            android:id="@+id/tv_prosseguir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:fontFamily="@string/font_family_regular"
+            android:paddingBottom="20dp"
+            android:paddingRight="20dp"
+            android:text="@string/tv_prosseguir"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/font_small" />
+    </LinearLayout>
+</LinearLayout>

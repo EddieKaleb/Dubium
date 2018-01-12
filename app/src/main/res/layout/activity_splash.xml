@@ -1,0 +1,12 @@
+<RelativeLayout
+style="@style/SplashStyle"
+xmlns:android="http://schemas.android.com/apk/res/android">
+
+<ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:padding="100dp"
+    android:src="@drawable/ic_dubium_grande" />
+</RelativeLayout>

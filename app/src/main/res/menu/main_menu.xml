@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_location"
+        android:icon="@drawable/ic_location"
+        android:iconTint="@color/white"
+        app:showAsAction="always"
+        tools:ignore="MenuTitle" />
+    <item
+        android:icon="@drawable/ic_more"
+        app:showAsAction="always"
+        tools:ignore="MenuTitle">
+        <menu>
+            <item
+                android:id="@+id/action_sign_out"
+                android:title="sair" />
+        </menu>
+    </item>
+</menu>

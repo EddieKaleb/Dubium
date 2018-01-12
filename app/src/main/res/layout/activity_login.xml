@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container_login"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/LoginStyle"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+    <!-- Título -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/tv_login_first"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_login_first"
+            android:textSize="@dimen/font_bigger"
+            android:fontFamily="@string/font_family_thin" />
+    </LinearLayout>
+    <!-- Social login -->
+    <LinearLayout
+        android:id="@+id/container_social_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+        <!-- Google Sign In Button -->
+        <RelativeLayout
+            android:id="@+id/btn_google"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/btns_social_login_height"
+            android:layout_marginTop="10dp"
+            android:background="@color/google"
+            android:elevation="@dimen/general_elevation"
+            android:clickable="true">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_google"
+                android:padding="8dp" />
+        </RelativeLayout>
+        <!-- Facebook Sign In Button -->
+        <RelativeLayout
+            android:id="@+id/btn_facebook"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/btns_social_login_height"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/facebook"
+            android:elevation="@dimen/general_elevation"
+            android:clickable="true">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:padding="8dp"
+                android:src="@drawable/ic_facebook" />
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/tv_login_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/font_family_thin"
+            android:textSize="@dimen/font_bigger"
+            android:text="@string/tv_login_second" />
+    </LinearLayout>
+    <!-- Login View -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
+        <!-- Name Input -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hintEnabled="false">
+        <EditText
+            android:id="@+id/et_nome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:drawableTint="@color/gray"
+            android:drawableLeft="@drawable/ic_name"
+            android:hint="Nome"
+            android:textSize="@dimen/font_small"
+            android:fontFamily="@string/font_family_light"
+            android:drawablePadding="@dimen/drawable_padding" />
+        </android.support.design.widget.TextInputLayout>
+        <!-- Email Input -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hintEnabled="false">
+            <EditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:drawableTint="@color/gray"
+                android:drawableLeft="@drawable/ic_user"
+                android:hint="Email"
+                android:textSize="@dimen/font_small"
+                android:fontFamily="@string/font_family_light"
+                android:drawablePadding="@dimen/drawable_padding" />
+        </android.support.design.widget.TextInputLayout>
+        <!-- Password Input -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hintEnabled="false">
+            <EditText
+                android:id="@+id/et_senha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:drawableTint="@color/gray"
+                android:drawableLeft="@drawable/ic_password"
+                android:hint="Senha"
+                android:textSize="@dimen/font_small"
+                android:fontFamily="@string/font_family_light"
+                android:drawablePadding="@dimen/drawable_padding" />
+        </android.support.design.widget.TextInputLayout>
+        <!-- Password Input -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hintEnabled="false">
+            <EditText
+                android:id="@+id/et_confirmar_senha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:drawableTint="@color/gray"
+                android:drawableLeft="@drawable/ic_password"
+                android:hint="Confirme a senha"
+                android:fontFamily="@string/font_family_light"
+                android:textSize="@dimen/font_small"
+                android:drawablePadding="@dimen/drawable_padding" />
+        </android.support.design.widget.TextInputLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
+            <!-- Sign Out Button -->
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/btns_login_height"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/blue"
+                android:fontFamily="@string/font_family_regular"
+                android:text="@string/btn_login"
+                android:textColor="@color/white" />
+            <!-- Sing Out and Login Button -->
+            <Button
+                android:id="@+id/btn_cadastrar"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/btns_login_height"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="5dp"
+                android:background="@color/blue"
+                android:fontFamily="@string/font_family_regular"
+                android:text="@string/btn_cadastrar"
+                android:textColor="@color/white"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="5dp"/>
+            <!-- Sign In Button -->
+            <Button
+                android:id="@+id/btn_cadastre_se"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/btns_login_height"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:background="@color/gray"
+                android:fontFamily="@string/font_family_regular"
+                android:text="@string/btn_cadastre_se"
+                android:textColor="@color/white"/>
+            <!-- Go back button -->
+            <Button
+                android:id="@+id/btn_voltar"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/btns_login_height"
+                android:layout_centerInParent="true"
+                android:background="@color/gray"
+                android:fontFamily="@string/font_family_regular"
+                android:text="@string/btn_voltar"
+                android:textColor="@color/white"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "906607800089",
+    "firebase_url": "https://dubium-4a524.firebaseio.com",
+    "project_id": "dubium-4a524",
+    "storage_bucket": "dubium-4a524.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:906607800089:android:feb3596521e747a1",
+        "android_client_info": {
+          "package_name": "com.dubium"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "906607800089-np2e6raoo664ph7fleatd7vhn9cekdcr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dubium",
+            "certificate_hash": "58c4804eef9e26dd18facc891a986117f5473b8a"
+          }
+        },
+        {
+          "client_id": "906607800089-mk72q93vm6iame0m6s95fcpni7nbeg1i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2aGJrg9sNUxOHuryKFBvWGhsG_NILV6M"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "906607800089-mk72q93vm6iame0m6s95fcpni7nbeg1i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

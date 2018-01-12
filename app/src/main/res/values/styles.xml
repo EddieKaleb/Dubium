@@ -1,0 +1,47 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- General Style -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+    <!-- FullScren Style -->
+    <style name="FullScreen" parent="@style/AppTheme">
+        <item name="colorControlNormal">@color/gray</item>
+        <item name="colorControlActivated">@color/gray</item>
+        <item name="android:orientation">vertical</item>
+        <!-- Toolbar hidden -->
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <!-- Phone Bar hidden -->
+        <item name="android:windowFullscreen">true</item>
+    </style>
+    <!-- NoActionBar Style -->
+    <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <!-- Toolbar hidden -->
+        <item name="windowNoTitle">true</item>
+    </style>
+    <!-- Custom Styles -->
+    <style name="SplashStyle" parent="@style/FullScreen">
+        <item name="android:windowBackground">@color/blue</item>
+    </style>
+    <style name="LoginStyle"  parent="@style/FullScreen">
+        <item name="android:windowBackground">@color/light_white</item>
+        <item name="android:textSize">@dimen/font_smaller</item>
+    </style>
+
+    <style name="SetupStyle" parent="@style/FullScreen">
+        <item name="android:windowBackground">@color/light_gray</item>
+        <item name="android:textSize">@dimen/font_regular</item>
+        <item name="android:fontFamily">@string/font_family_thin</item>
+    </style>
+
+    <style name="HomeStyle" parent="@style/NoActionBar">
+        <item name="android:windowBackground">@color/light_white</item>
+        <item name="colorPrimaryDark">@color/light_gray</item>
+        <item name="android:fontFamily">@string/font_family_thin</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
+    </style>
+    <!--###############################################################-->
+</resources>

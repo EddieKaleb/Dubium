@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Dubium</string>
+    <!-- LoginActivity -->
+    <string name="tv_login_first">Bem Vindo, faça seu login:</string>
+    <string name="tv_login_second">ou</string>
+    <string name="btn_login">Entrar</string>
+    <string name="btn_cadastre_se">Cadastre-se</string>
+    <string name="btn_cadastrar">Cadastrar</string>
+    <string name="btn_voltar">Voltar</string>
+
+    <!-- SetupActivity -->
+    <string name="tv_first">Vamos começar?</string>
+    <string name="tv_second">Adicione alguns favoritos!</string>
+    <string name="tv_prosseguir">PROSSEGUIR</string>
+</resources>

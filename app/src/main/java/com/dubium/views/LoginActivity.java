@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.dubium.BaseActivity;
 import com.dubium.R;
+import com.dubium.database.FacebookLogin;
 import com.dubium.database.GoogleLogin;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -51,10 +52,10 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.tv_login_second) TextView mTvLoginSecond;
 
     private GoogleLogin mGoogleLogin;
-    private static final int RC_GOOGLE_SIGN_IN = 9001;
-
+    private FacebookLogin mFacebookLogin;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
+    private static final int RC_GOOGLE_SIGN_IN = 9001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,8 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        try {
+        // Code block to generate KeyHash to Facebook login setup.
+        /*try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "com.dubium",
                     PackageManager.GET_SIGNATURES);
@@ -75,7 +77,7 @@ public class LoginActivity extends BaseActivity {
 
         } catch (NoSuchAlgorithmException e) {
 
-        }
+        }*/
 
         TransitionManager.beginDelayedTransition(mContainerLogin, new Fade());
         mBtnCadastrar.setVisibility(View.GONE);
@@ -84,18 +86,10 @@ public class LoginActivity extends BaseActivity {
         mEtConfirmarSenha.setVisibility(View.GONE);
 
         mGoogleLogin = new GoogleLogin(this, mFirebaseAuth);
+        mFacebookLogin = new FacebookLogin(this, mFirebaseAuth);
 
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if ( !(user == null) ) {
-                    Intent intent = new Intent(getBaseContext(), HomeActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }
-        };
+
+        initializeAuthStateListener();
 
         mBtnCadastreSe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +140,14 @@ public class LoginActivity extends BaseActivity {
 
             }
         });
+
+        mBtnFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                facebookSignIn();
+            }
+        });
     }
 
     @Override
@@ -189,6 +191,13 @@ public class LoginActivity extends BaseActivity {
 
         Intent signInIntent = mGoogleLogin.getSignIntent();
         startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
+
+    }
+
+    // Sign in with Facebook
+    private void facebookSignIn(){
+
+        mFacebookLogin.signIn();
 
     }
 

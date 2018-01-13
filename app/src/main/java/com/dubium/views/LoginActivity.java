@@ -3,10 +3,16 @@ package com.dubium.views;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.transition.AutoTransition;
 import android.support.transition.Fade;
 import android.support.transition.TransitionManager;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -15,12 +21,19 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.dubium.BaseActivity;
 import com.dubium.R;
+import com.dubium.database.GoogleLogin;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends BaseActivity {
 
     @BindView(R.id.container_login) LinearLayout mContainerLogin;
     @BindView(R.id.container_social_login) LinearLayout mContainerSocialLogin;
@@ -37,6 +50,11 @@ public class LoginActivity extends Activity {
     @BindView(R.id.tv_login_first) TextView mTvLoginFirst;
     @BindView(R.id.tv_login_second) TextView mTvLoginSecond;
 
+    private GoogleLogin mGoogleLogin;
+    private static final int RC_GOOGLE_SIGN_IN = 9001;
+
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +62,40 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        setContentView(R.layout.activity_login);
-        ButterKnife.bind(this);
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.dubium",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        }
 
         TransitionManager.beginDelayedTransition(mContainerLogin, new Fade());
         mBtnCadastrar.setVisibility(View.GONE);
         mBtnVoltar.setVisibility(View.GONE);
         mEtNome.setVisibility(View.GONE);
         mEtConfirmarSenha.setVisibility(View.GONE);
+
+        mGoogleLogin = new GoogleLogin(this, mFirebaseAuth);
+
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if ( !(user == null) ) {
+                    Intent intent = new Intent(getBaseContext(), HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        };
 
         mBtnCadastreSe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,5 +137,73 @@ public class LoginActivity extends Activity {
                 startActivity(intent);
             }
         });
+
+        mBtnGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                googleSignIn();
+
+            }
+        });
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        if(mAuthStateListener != null){
+            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        mGoogleLogin.revokeAccess();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Google Sign in.
+        if (requestCode == RC_GOOGLE_SIGN_IN) {
+
+            mGoogleLogin.signIn(data);
+        }
+        // Facebook Sign in.
+        else{
+            //mCallbackManager.onActivityResult( requestCode, resultCode, data );
+        }
+    }
+
+    // Sign in with Google
+    private void googleSignIn() {
+
+        Intent signInIntent = mGoogleLogin.getSignIntent();
+        startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
+
+    }
+
+    // Initialize the AuthStateListener to verify if user is logged.
+    private void initializeAuthStateListener() {
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    Intent intent = new Intent(getBaseContext(), HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        };
     }
 }

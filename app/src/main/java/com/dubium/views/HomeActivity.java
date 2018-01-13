@@ -1,6 +1,7 @@
 package com.dubium.views;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -21,6 +22,8 @@ import com.dubium.R;
 import com.dubium.fragments.ChatsFragment;
 import com.dubium.fragments.HomeFragment;
 import com.dubium.fragments.ProfileFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -83,7 +86,10 @@ public class HomeActivity extends BaseActivity {
                         return false;
                     }
                 });
+
         alertaValidacaoPermissao();
+
+        // Inicializa o AuthState para verificação de usuário logado.
     }
 
     @Override
@@ -98,7 +104,7 @@ public class HomeActivity extends BaseActivity {
 
         switch (item.getItemId()) {
             case R.id.action_sign_out:
-                finish();
+                signOut();
                 return true;
             case R.id.action_location:
                 return true;
@@ -119,6 +125,15 @@ public class HomeActivity extends BaseActivity {
         builder.setCancelable(false);
         builder.create();
         builder.show();
+    }
+
+    private void signOut(){
+
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+        startActivity(intent);
+        finish();
+
     }
 
 }

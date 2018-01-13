@@ -9,6 +9,7 @@ import android.content.Intent;
 public class User {
 
     private String nome;
+    private String email;
     private String fotoUrl;
     private int aptidoesComuns;
     private int dificuldadesComuns;
@@ -22,6 +23,11 @@ public class User {
         this.distancia = distancia;
     }
 
+    public User(String name, String email){
+        this.nome = name;
+        this.email = email;
+    }
+
     public String getNome() {
         return nome;
     }
@@ -29,6 +35,10 @@ public class User {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+    public String getEmail(){ return email; }
+
+    public void setEmail(){ this.email = email; }
 
     public String getFotoUrl() {
         return fotoUrl;

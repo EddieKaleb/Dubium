@@ -32,12 +32,20 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
-    // ...
-    compile 'com.google.firebase:firebase-core:11.0.4'
-    compile 'com.google.android.gms:play-services:11.0.4'
+    // Firebase
+    compile 'com.google.firebase:firebase-core:11.8.0'
+    compile 'com.google.firebase:firebase-auth:11.8.0'
+    compile 'com.google.firebase:firebase-database:11.8.0'
+    compile 'com.google.android.gms:play-services-auth:11.8.0'
+
+    // Facebook
+    compile 'com.facebook.android:facebook-login:4.+'
+    compile 'com.facebook.android:facebook-android-sdk:4.+'
+
     // Butter Knife
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
     // Displaying images
     compile 'com.github.bumptech.glide:glide:3.6.1'
 }

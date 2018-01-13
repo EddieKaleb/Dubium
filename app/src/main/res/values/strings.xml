@@ -1,4 +1,9 @@
 <resources>
+
+    <!-- Facebook -->
+    <string name="facebook_app_id">148586035799444</string>
+    <string name="fb_login_protocol_scheme">fb148586035799444</string>
+
     <string name="app_name">Dubium</string>
     <!-- LoginActivity -->
     <string name="tv_login_first">Bem Vindo, faça seu login:</string>

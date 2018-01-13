@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "906607800089-plglklpoo249meljt0nq7ln3864cm7un.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dubium",
+            "certificate_hash": "d9916ae5899bb8bfd47c0718a79d98e90d290487"
+          }
+        },
+        {
           "client_id": "906607800089-np2e6raoo664ph7fleatd7vhn9cekdcr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

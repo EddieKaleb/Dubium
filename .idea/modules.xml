@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Dubium.iml" filepath="$PROJECT_DIR$/Dubium.iml" />
-      <module fileurl="file://D:\Java\Android\Dubium\DubiumUI.iml" filepath="D:\Java\Android\Dubium\DubiumUI.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

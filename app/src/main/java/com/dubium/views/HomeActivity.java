@@ -1,13 +1,21 @@
 package com.dubium.views;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.transition.AutoTransition;
 import android.support.transition.Fade;
 import android.support.transition.TransitionManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -16,14 +24,20 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.dubium.BaseActivity;
+import com.dubium.Manifest;
 import com.dubium.R;
 import com.dubium.fragments.ChatsFragment;
 import com.dubium.fragments.HomeFragment;
 import com.dubium.fragments.ProfileFragment;
+import com.dubium.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.io.IOException;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +52,8 @@ public class HomeActivity extends BaseActivity {
     HomeFragment mHomeFragment;
     ChatsFragment mChatsFragment;
     ProfileFragment mProfileFragment;
+
+    LocationManager locationManager;
 
     final FragmentManager fragmentManager = getSupportFragmentManager();
     int mMenuPrevItem;
@@ -128,12 +144,80 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void signOut(){
-
         FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(getBaseContext(), LoginActivity.class);
         startActivity(intent);
         finish();
 
     }
+
+    public void find_location(){
+
+        double latitude ;
+        double longitude;
+        String towers = "";
+        Location location = null;
+
+        if (ActivityCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED){
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    2);
+
+            //Toast.makeText(this, "SEM PERMISSÃO", Toast.LENGTH_SHORT).show();
+
+        }else{
+            //Toast.makeText(this, "TUDO TOP", Toast.LENGTH_SHORT).show();
+            locationManager = (LocationManager)
+                    getSystemService(Context.LOCATION_SERVICE);
+
+            Criteria crit = new Criteria();
+            towers = locationManager.getBestProvider(crit, false);
+
+            // esse getLastKnownLocation() É UM METODO QUE TEM PRA PEGAR A LOCATILIZAÇÃO COM BASE NO MELHOR POVEDOR
+            // N COLOQUEI PQ PRECISO DISCUTIR ONDE ISSO VAI FICAR
+
+            location = getLastKnownLocation();
+        }
+
+        if (location != null) {
+            longitude = location.getLongitude();
+            latitude = location.getLatitude();
+            /* jogar as coisas pra os dados do User*/
+            //user.buscarEndereco(latitude, longitude);
+
+        }else{
+            //Toast.makeText(this, "Location is null! " + towers, Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    private Location getLastKnownLocation() {
+        List<String> providers = locationManager.getProviders(true);
+        Location bestLocation = null;
+        Location l = null;
+        for (String provider : providers) {
+            try {
+                l = locationManager.getLastKnownLocation(provider);
+            } catch (SecurityException e) {
+            }
+
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null
+                    || l.getAccuracy() < bestLocation.getAccuracy()) {
+                Log.d("found best location: %s", String.valueOf(1));
+                bestLocation = l;
+            }
+        }
+        if (bestLocation == null) {
+            return null;
+        }
+        return bestLocation;
+    }
+
 
 }

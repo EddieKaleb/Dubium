@@ -1,6 +1,22 @@
 package com.dubium.model;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
+import android.widget.Toast;
+
+import com.dubium.Manifest;
+
+import java.io.IOException;
+import java.util.List;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by eddie on 09/01/2018.
@@ -77,7 +93,20 @@ public class User {
         this.distancia = distancia;
     }
 
-    private void calculaDistancia() {
-        // Calcular a distância
+    public void buscarEndereco(double latitude, double longitude) throws IOException {
+        Geocoder geocoder;
+        Address address = null;
+        List<Address> addresses;
+
+        geocoder = new Geocoder(getApplicationContext());
+        //PASSANDO A LATITUDE E LONGITUDE QUE TEMOS, E QUERENDO APENAS 1 RESULTADO
+        addresses = geocoder.getFromLocation(latitude, longitude,1);
+
+        if (addresses.size() > 0)
+            address = addresses.get(0);
+        //ATIBUIÇÃO DE DADOS AO USER
+
     }
+
+
 }

@@ -14,13 +14,14 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import com.dubium.R;
+import com.dubium.fragments.UserViewHolder;
 import com.dubium.model.User;
 
 /**
  * Created by eddie on 09/01/2018.
  */
 
-public class UserAdapter extends ArrayAdapter<User> {
+public class UserAdapter extends ArrayAdapter<UserViewHolder> {
 
     RelativeLayout mUsuarioContainer;
     ImageView mIvFotoPerfil;
@@ -29,13 +30,13 @@ public class UserAdapter extends ArrayAdapter<User> {
     TextView mTvDificuldadesComuns;
     TextView mTvDistancia;
 
-    public UserAdapter(Context context, ArrayList<User> users) {
+    public UserAdapter(Context context, ArrayList<UserViewHolder> users) {
         super(context, 0, users);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final User u = getItem(position);
+        final UserViewHolder u = getItem(position);
         if (convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_user, parent, false);
 
@@ -46,14 +47,14 @@ public class UserAdapter extends ArrayAdapter<User> {
         mTvDificuldadesComuns = (TextView) convertView.findViewById(R.id.tv_dificuldades_comum);
         mTvDistancia = (TextView) convertView.findViewById(R.id.tv_distancia);
 
-        mTvNome.setText(u.getNome().toUpperCase());
+        mTvNome.setText(u.getName().toUpperCase());
         mTvDistancia.setText(u.getDistancia());
         mTvAptidoesComuns.setText(u.getAptidoesComuns());
         mTvDificuldadesComuns.setText(u.getDificuldadesComuns());
 
-        if (u.getFotoUrl() != null) {
+        if (u.getPhotoUrl() != null) {
             Glide.with(mIvFotoPerfil.getContext())
-                    .load(u.getFotoUrl())
+                    .load(u.getPhotoUrl())
                     .into(mIvFotoPerfil);
         }
 

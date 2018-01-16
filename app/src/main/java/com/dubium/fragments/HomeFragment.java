@@ -107,7 +107,11 @@ public class HomeFragment extends Fragment {
                     Toast.makeText(getActivity(), "Não há nenhum pedido",
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    UserAdapter adapter = new UserAdapter(getActivity(), users );
+
+                    ArrayList<UserViewHolder> userListViewHolder;
+                    userListViewHolder = filterUserList(users);
+
+                    UserAdapter adapter = new UserAdapter(getActivity(), userListViewHolder );
 
                     mUsersListView.setAdapter(adapter);
                 }
@@ -117,6 +121,11 @@ public class HomeFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {Toast.makeText(getActivity(), "ERRO", Toast.LENGTH_SHORT).show();}
         });
 
+    }
+
+    private ArrayList<UserViewHolder> filterUserList(ArrayList<User> users){
+        ArrayList<UserViewHolder> l = new ArrayList<UserViewHolder>();
+        return l;
     }
 
 }

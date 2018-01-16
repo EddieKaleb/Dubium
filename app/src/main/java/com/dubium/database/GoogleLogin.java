@@ -3,11 +3,14 @@ package com.dubium.database;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.dubium.R;
+import com.dubium.model.User;
+import com.dubium.views.AptitudesActivity;
 import com.dubium.views.HomeActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -21,6 +24,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by Marcus Vinícius on 12/01/18.
@@ -34,14 +42,17 @@ public class GoogleLogin {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseDatabaseManager mFirebaseDatabaseManager;
 
-    private Context context;
+    private DatabaseReference mUserReference;
+
+
+    private Context mContext;
 
     private String TAG = "GoogleLogin";
 
     //Class Constructor
     public GoogleLogin(Context context, FirebaseAuth mFirebaseAuth){
 
-        this.context = context;
+        this.mContext = context;
 
         this.mFirebaseAuth = mFirebaseAuth;
         this.mFirebaseDatabaseManager = new FirebaseDatabaseManager();
@@ -76,7 +87,7 @@ public class GoogleLogin {
 
         //try {
         mFirebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener((Activity) mContext, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
@@ -84,20 +95,48 @@ public class GoogleLogin {
                                 /* If sign in was successful, the user is stored on Firebase Database
                                 and the MainActivity is started.
                                 */
-                                FirebaseUser user = mFirebaseAuth.getCurrentUser();
-                                mFirebaseDatabaseManager.saveUser(user);
 
-                                //context.startActivity(new Intent(context, MainActivity.class));
+                                FirebaseUser fbUser = mFirebaseAuth.getCurrentUser();
 
-                                Intent i = new Intent(context, HomeActivity.class);
-                                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                context.startActivity(i);
-                                ((Activity) context).finish();
+                                mUserReference = FirebaseDatabase.getInstance().getReference().child("users").child(fbUser.getUid());
+
+                                ValueEventListener userListener = new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        // Get Post object and use the values to update the UI
+                                        User user = dataSnapshot.getValue(User.class);
+
+                                        // If user don't exists
+                                        if(user == null){
+                                            Intent i = new Intent(mContext, AptitudesActivity.class);
+                                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            mContext.startActivity(i);
+                                            ((Activity) mContext).finish();
+                                        }
+                                        // If user exists
+                                        else{
+                                            Intent i = new Intent(mContext, HomeActivity.class);
+                                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            mContext.startActivity(i);
+                                            ((Activity) mContext).finish();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        // Getting Post failed, log a message
+                                        Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                                        // ...
+                                    }
+                                };
+
+                                mUserReference.addListenerForSingleValueEvent(userListener);
+
                             } else {
 
                                 // If sign in failed, a message is displayed to the user.
                                 Log.w(TAG, "signInWithCredential:failure", task.getException());
-                                Toast.makeText(context, "Autentication failed", Toast.LENGTH_LONG).show();
+                                Toast.makeText(mContext, "Autentication failed", Toast.LENGTH_LONG).show();
                             }
 
                             //hideProgressDialog();

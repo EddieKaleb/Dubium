@@ -99,7 +99,7 @@ public class HomeFragment extends Fragment {
                 User user;
                 users.clear();
 
-                for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
+                /*for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
                     user = objSnapshot.getValue(User.class);
                     users.add(user);
                 }
@@ -114,11 +114,13 @@ public class HomeFragment extends Fragment {
                     UserAdapter adapter = new UserAdapter(getActivity(), userListViewHolder );
 
                     mUsersListView.setAdapter(adapter);
-                }
+                }*/
 
             }
             @Override
-            public void onCancelled(DatabaseError databaseError) {Toast.makeText(getActivity(), "ERRO", Toast.LENGTH_SHORT).show();}
+            public void onCancelled(DatabaseError databaseError) {
+                //Toast.makeText(getActivity(), "ERRO", Toast.LENGTH_SHORT).show();
+            }
         });
 
     }

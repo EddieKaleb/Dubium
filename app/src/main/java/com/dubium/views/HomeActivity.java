@@ -33,6 +33,7 @@ import com.dubium.fragments.ChatsFragment;
 import com.dubium.fragments.HomeFragment;
 import com.dubium.fragments.ProfileFragment;
 import com.dubium.model.User;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -145,6 +146,7 @@ public class HomeActivity extends BaseActivity {
 
     private void signOut(){
         FirebaseAuth.getInstance().signOut();
+        LoginManager.getInstance().logOut();
         Intent intent = new Intent(getBaseContext(), LoginActivity.class);
         startActivity(intent);
         finish();

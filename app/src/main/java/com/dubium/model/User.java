@@ -20,7 +20,8 @@ public class User {
     private String photoUrl;
     private UserAdress mUserAdress;
 
-    public User(String nome, String email, String photoUrl, UserAdress mUserAdress) {
+    public User(String uId, String nome, String email, String photoUrl, UserAdress mUserAdress) {
+        this.uId = uId;
         this.name = nome;
         this.photoUrl = photoUrl;
         this.email = email;
@@ -28,6 +29,14 @@ public class User {
     }
 
     public User(){}
+
+    public String getUid(){
+        return uId;
+    }
+
+    public void setUid(String uId){
+        this.uId = uId;
+    }
 
     public String getName() {
         return name;

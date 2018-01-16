@@ -1,9 +1,14 @@
 package com.dubium.database;
 
+import android.util.Log;
+
 import com.dubium.model.User;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by Marcus Vinícius on 12/01/18.
@@ -20,14 +25,10 @@ public class FirebaseDatabaseManager {
     }
 
     // Save an user on database
-    public void saveUser(FirebaseUser fbUser) {
+    public void saveUser(User user) {
 
-        String userId = fbUser.getUid();
-        String userEmail = fbUser.getEmail();
-        String userName = fbUser.getDisplayName();
+        String uId = user.getUid();
 
-        User user = new User(userName, userEmail);
-
-        mDatabase.child("users").child(userId).setValue(user);
+        mDatabase.child("users").child(uId).setValue(user);
     }
 }

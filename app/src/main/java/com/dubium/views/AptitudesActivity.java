@@ -110,8 +110,17 @@ public class AptitudesActivity extends Activity {
         });
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onBackPressed() {}
 }

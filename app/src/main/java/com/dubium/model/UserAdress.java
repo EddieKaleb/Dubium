@@ -40,10 +40,9 @@ public class UserAdress {
 
         //ATRIBUIÇÃO DE DADOS AO USER - Implementar os sets
         this.state = address.getAdminArea();
-        this.city = address.getSubLocality();
+        this.city = address.getLocality();
         this.latitude = latitude;
         this.longitude = longitude;
-
 
     }
 

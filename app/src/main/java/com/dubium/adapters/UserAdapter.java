@@ -47,7 +47,7 @@ public class UserAdapter extends ArrayAdapter<UserViewHolder> {
         mTvDificuldadesComuns = (TextView) convertView.findViewById(R.id.tv_dificuldades_comum);
         mTvDistancia = (TextView) convertView.findViewById(R.id.tv_distancia);
 
-        mTvNome.setText(u.getName().toUpperCase());
+        mTvNome.setText(u.getName());
         mTvDistancia.setText(u.getDistancia());
         mTvAptidoesComuns.setText(u.getAptidoesComuns());
         mTvDificuldadesComuns.setText(u.getDificuldadesComuns());

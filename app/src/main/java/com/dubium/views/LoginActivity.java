@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.transition.AutoTransition;
 import android.support.transition.Fade;
 import android.support.transition.TransitionManager;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -20,13 +21,24 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dubium.BaseActivity;
 import com.dubium.R;
+import com.dubium.database.EmailPasswordLogin;
 import com.dubium.database.FacebookLogin;
 import com.dubium.database.GoogleLogin;
+import com.dubium.model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -53,9 +65,12 @@ public class LoginActivity extends BaseActivity {
 
     private GoogleLogin mGoogleLogin;
     private FacebookLogin mFacebookLogin;
+    private EmailPasswordLogin mEmailPasswordLogin;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     private static final int RC_GOOGLE_SIGN_IN = 9001;
+
+    private DatabaseReference mUserReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +102,7 @@ public class LoginActivity extends BaseActivity {
 
         mGoogleLogin = new GoogleLogin(this, mFirebaseAuth);
         mFacebookLogin = new FacebookLogin(this, mFirebaseAuth);
-
+        mEmailPasswordLogin = new EmailPasswordLogin(this, mFirebaseAuth);
 
         initializeAuthStateListener();
 
@@ -127,8 +142,12 @@ public class LoginActivity extends BaseActivity {
         mBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), AptitudesActivity.class);
-                startActivity(intent);
+
+                if (!validateForm()) {
+                    return;
+                }
+
+                mEmailPasswordLogin.signIn(mEtEmail.getText().toString(), mEtSenha.getText().toString());
             }
         });
 
@@ -182,7 +201,7 @@ public class LoginActivity extends BaseActivity {
         }
         // Facebook Sign in.
         else{
-            //mCallbackManager.onActivityResult( requestCode, resultCode, data );
+            mFacebookLogin.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -215,4 +234,28 @@ public class LoginActivity extends BaseActivity {
             }
         };
     }
+
+    private boolean validateForm() {
+        boolean valid = true;
+
+        String email = mEtEmail.getText().toString();
+        if (TextUtils.isEmpty(email)) {
+            mEtEmail.setError("Campo vazio!");
+            valid = false;
+        } else {
+            mEtEmail.setError(null);
+        }
+
+        String password = mEtSenha.getText().toString();
+        if (TextUtils.isEmpty(password)) {
+            mEtSenha.setError("Campo vazio!");
+            valid = false;
+        } else {
+            mEtSenha.setError(null);
+        }
+
+        return valid;
+    }
+
+
 }

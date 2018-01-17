@@ -10,19 +10,9 @@ import android.widget.Toast;
 import com.dubium.model.User;
 import com.dubium.views.AptitudesActivity;
 import com.dubium.views.HomeActivity;
-import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,87 +21,36 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Arrays;
-
 /**
- * Created by Marcus Vinícius on 12/01/18.
+ * Created by marcus-vinicius on 17/01/18.
  */
 
-public class FacebookLogin {
+public class EmailPasswordLogin {
 
-    private CallbackManager mCallbackManager;
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseDatabaseManager mFirebaseDatabaseManager;
-    private Context mContext;
     private DatabaseReference mUserReference;
+    private FirebaseAuth mFirebaseAuth;
 
-    private static final String TAG = "FacebookLogin";
+    private Context mContext;
+
+    private String TAG = "EmailPasswordLogin";
 
 
-    public FacebookLogin(Context context, FirebaseAuth firebaseAuth){
-
-        FacebookSdk.sdkInitialize(context.getApplicationContext());
-        AppEventsLogger.activateApp(context);
-
-        this.mFirebaseDatabaseManager = new FirebaseDatabaseManager();
-
+    public EmailPasswordLogin(Context context, FirebaseAuth firebaseAuth){
         this.mContext = context;
         this.mFirebaseAuth = firebaseAuth;
 
-        initializeFacebookSignIn();
-
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-
-        mCallbackManager.onActivityResult( requestCode, resultCode, data );
-
-    }
-
-    public void signIn(){
-
-        LoginManager.getInstance().logInWithReadPermissions((Activity) mContext, Arrays.asList("email", "public_profile"));
-
-    }
-
-    private void initializeFacebookSignIn(){
-
-        mCallbackManager = CallbackManager.Factory.create();
-
-        LoginManager.getInstance().registerCallback(mCallbackManager,
-                new FacebookCallback<LoginResult>()
-                {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        Log.d(TAG, "facebook:onSuccess:" + loginResult);
-                        handleFacebookAccessToken(loginResult.getAccessToken());
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        Log.d(TAG, "facebook:onCancel");
-                    }
-
-                    @Override
-                    public void onError(FacebookException error) {
-                        Log.d(TAG, "facebook:onError", error);
-                    }
-                });
-    }
-
-    private void handleFacebookAccessToken(AccessToken token) {
-        Log.d(TAG, "handleFacebookAccessToken:" + token);
-
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        mFirebaseAuth.signInWithCredential(credential)
+    public void signIn(String email, String password){
+        mFirebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener((Activity) mContext, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("LoginEmail", "signInWithEmail:success");
+                            FirebaseUser user = mFirebaseAuth.getCurrentUser();
 
-                            /* If sign in was successful, the user is stored on Firebase Database
-                                and the MainActivity is started.
-                             */
                             FirebaseUser fbUser = mFirebaseAuth.getCurrentUser();
 
                             mUserReference = FirebaseDatabase.getInstance().getReference().child("users").child(fbUser.getUid());
@@ -147,12 +86,10 @@ public class FacebookLogin {
                             };
 
                             mUserReference.addListenerForSingleValueEvent(userListener);
-
                         } else {
-
-                            // If sign in failed, a message is displayed to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(mContext, "Authentication failed." + task.getException(),
+                            // If sign in fails, display a message to the user.
+                            Log.w("LoginEmail", "signInWithEmail:failure", task.getException());
+                            Toast.makeText(mContext, "Falha na autenticação.",
                                     Toast.LENGTH_LONG).show();
                         }
                     }

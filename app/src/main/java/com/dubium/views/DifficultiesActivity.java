@@ -53,6 +53,7 @@ public class DifficultiesActivity extends AptitudesActivity {
                 }
                 Intent intent = new Intent(v.getContext(), HomeActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

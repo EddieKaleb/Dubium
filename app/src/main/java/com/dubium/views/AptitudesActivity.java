@@ -3,6 +3,7 @@ package com.dubium.views;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 
 import com.dubium.R;
 import com.dubium.adapters.SetupAdapter;
+import com.dubium.model.Subject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -28,9 +31,9 @@ public class AptitudesActivity extends Activity {
     @BindView(R.id.tv_first) TextView mTvFirst;
     @BindView(R.id.tv_second) TextView mTvSecond;
     @BindView(R.id.iv_icon) ImageView mIvIcon;
-    public final ArrayList<String> mDisciplinas = new ArrayList<>();
+    public final ArrayList<Subject> mDisciplinas = new ArrayList<>();
     // Lista para aptidões e dificuldades
-    public final ArrayList<String> mMinhasDisciplinas = new ArrayList<>();
+    public final ArrayList<Subject> mMinhasDisciplinas = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +45,10 @@ public class AptitudesActivity extends Activity {
         mLvDisciplinas.setVisibility(View.GONE);
 
         // Query do firebase para adicionar algumas disciplinas
-        mDisciplinas.add("Matemática");
-        mDisciplinas.add("Filosofia");
-        mDisciplinas.add("Português");
-        mDisciplinas.add("Inglês");
+        mDisciplinas.add(new Subject("1", "Matemática"));
+        mDisciplinas.add(new Subject("2", "Filosofia"));
+        mDisciplinas.add(new Subject("3", "Português"));
+        mDisciplinas.add(new Subject("4", "Inglês"));
 
         final ArrayAdapter mAdapterSearch = new ArrayAdapter(this, android.R.layout.simple_list_item_1, mDisciplinas);
         final SetupAdapter mAdapterSetup = new SetupAdapter(this, mMinhasDisciplinas);
@@ -56,6 +59,7 @@ public class AptitudesActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mAdapterSetup.add(mDisciplinas.get(position));  // Nova aptidão ou dificuldade
+                Log.i("OnItemClick", mMinhasDisciplinas.size() + "");
                 mDisciplinas.remove(position); // Remove da listagem de busca
                 mLvDisciplinas.setAdapter(mAdapterSetup); // Troca para listagem de aptidões ou dificuldades
                 mSvDisciplinas.setIconified(true); // Fecha o SearchView
@@ -105,6 +109,10 @@ public class AptitudesActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), DifficultiesActivity.class);
+
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable("Aptitudes", (ArrayList<Subject>) mMinhasDisciplinas);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         });

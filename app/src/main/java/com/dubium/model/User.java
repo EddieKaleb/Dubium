@@ -28,6 +28,14 @@ public class User {
         this.mUserAdress = mUserAdress;
     }
 
+    public User(String uId, String nome, String email) {
+        this.uId = uId;
+        this.name = nome;
+        this.photoUrl = photoUrl;
+        this.email = email;
+        this.mUserAdress = mUserAdress;
+    }
+
     public User(){}
 
     public String getUid(){

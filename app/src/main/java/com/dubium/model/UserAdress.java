@@ -14,19 +14,17 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class UserAdress {
 
-    private String latitude;
-    private String longitude;
+    private double latitude;
+    private double longitude;
     private String city;
     private String state;
 
-    public UserAdress(String latitude, String longitude){
+    public UserAdress(double latitude, double longitude){
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    public UserAdress(){
-
-    }
+    public UserAdress(){}
 
     public void findAdress(double latitude, double longitude) throws IOException {
         Geocoder geocoder;
@@ -39,23 +37,29 @@ public class UserAdress {
 
         if (addresses.size() > 0)
             address = addresses.get(0);
+
         //ATRIBUIÇÃO DE DADOS AO USER - Implementar os sets
+        this.state = address.getAdminArea();
+        this.city = address.getSubLocality();
+        this.latitude = latitude;
+        this.longitude = longitude;
+
 
     }
 
-    public String getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 

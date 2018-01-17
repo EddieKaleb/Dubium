@@ -36,6 +36,8 @@ public class User {
         this.mUserAdress = mUserAdress;
     }
 
+
+
     public User(){}
 
     public String getUid(){
@@ -62,6 +64,13 @@ public class User {
         return photoUrl;
     }
 
+    public UserAdress getmUserAdress() {
+        return mUserAdress;
+    }
+
+    public void setmUserAdress(UserAdress mUserAdress) {
+        this.mUserAdress = mUserAdress;
+    }
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
     }

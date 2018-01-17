@@ -42,7 +42,7 @@ public class HomeFragment extends Fragment {
 
     boolean initialRefresh = true;
 
-    public final ArrayList<User> users = new ArrayList<>();
+    //public final ArrayList<User> users = new ArrayList<>();
 
     public HomeFragment() {
 
@@ -89,37 +89,39 @@ public class HomeFragment extends Fragment {
         }, 100);
     }
 
+
     public void listar(){
+
         final ArrayList<User> users = new ArrayList<>();
 
-        mUsersDatabaseReference.addValueEventListener(new ValueEventListener() {
-
+        Query query = mUsersDatabaseReference.orderByChild("users");
+        query.addListenerForSingleValueEvent(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user;
                 users.clear();
 
-                /*for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
+                for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
                     user = objSnapshot.getValue(User.class);
                     users.add(user);
                 }
+
                 if (users.size() <= 0) {
-                    Toast.makeText(getActivity(), "Não há nenhum pedido",
+                    Toast.makeText(getActivity(), "Não há nenhum usuario proximo",
                             Toast.LENGTH_SHORT).show();
                 } else {
 
                     ArrayList<UserViewHolder> userListViewHolder;
                     userListViewHolder = filterUserList(users);
 
-                    UserAdapter adapter = new UserAdapter(getActivity(), userListViewHolder );
+                    mUserAdapter = new UserAdapter(getActivity(), userListViewHolder );
 
-                    mUsersListView.setAdapter(adapter);
-                }*/
-
+                    mUsersListView.setAdapter(mUserAdapter);
+                }
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                //Toast.makeText(getActivity(), "ERRO", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "ERRO", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -127,6 +129,11 @@ public class HomeFragment extends Fragment {
 
     private ArrayList<UserViewHolder> filterUserList(ArrayList<User> users){
         ArrayList<UserViewHolder> l = new ArrayList<UserViewHolder>();
+
+        for(User u: users){
+
+        }
+
         return l;
     }
 

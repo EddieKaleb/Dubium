@@ -125,7 +125,7 @@ public class HomeActivity extends BaseActivity {
                 signOut();
                 return true;
             case R.id.action_location:
-                return true;
+                find_location();
         }
         return false;
     }

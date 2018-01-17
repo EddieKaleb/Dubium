@@ -39,11 +39,14 @@ public class HomeFragment extends Fragment {
     UserAdapter mUserAdapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
 
+    final ArrayList<User> users = new ArrayList<>();
+
+
     FirebaseAuth mFirebaseAuth;
     FirebaseUser currentUser;
     User userActual;
     FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
-    DatabaseReference mUsersDatabaseReference = mFirebaseDatabase.getReference().child("users");
+    DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference();
 
     boolean initialRefresh = true;
 
@@ -68,10 +71,10 @@ public class HomeFragment extends Fragment {
         });
 
         listar();
-        if (initialRefresh == true)
+        /*if (initialRefresh == true)
             initialRefresh = false;
 
-       /* if (initialRefresh == true) {
+        if (initialRefresh == true) {
             users.add(new User("Marcus Vinicius","https://www.nationalgeographic.com/content/dam/animals/thumbs/rights-exempt/mammals/d/domestic-dog_thumb.jpg", 1, 2, 12));
             initialRefresh = false;
         }
@@ -87,27 +90,27 @@ public class HomeFragment extends Fragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                //mUserAdapter.add(new User("Marcus Vinicius","https://www.nationalgeographic.com/content/dam/animals/thumbs/rights-exempt/mammals/d/domestic-dog_thumb.jpg", 1, 2, 12));
+                listar();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         }, 100);
     }
 
     public void listar(){
-        final ArrayList<User> users = new ArrayList<>();
 
-        Query query = mUsersDatabaseReference.orderByChild("users");
+
+        users.clear();
+        Query query = mDatabaseReference.child("users");
         query.addListenerForSingleValueEvent(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user;
-                users.clear();
+
 
                 for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
                     user = objSnapshot.getValue(User.class);
                     users.add(user);
                 }
-
 
                 if (users.size() <= 0) {
                     Toast.makeText(getActivity(), "Não há nenhum usuario proximo",
@@ -134,8 +137,8 @@ public class HomeFragment extends Fragment {
 
         ArrayList<UserViewHolder> l = new ArrayList<UserViewHolder>();
 
-        mUsersDatabaseReference = mUsersDatabaseReference.child(currentUser.getUid());
-        mUsersDatabaseReference.addValueEventListener(new ValueEventListener() {
+        mDatabaseReference = mDatabaseReference.child("users").child(currentUser.getUid());
+        mDatabaseReference.child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 userActual = dataSnapshot.getValue(User.class);

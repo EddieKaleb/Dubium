@@ -3,19 +3,14 @@ package com.dubium.views;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.transition.AutoTransition;
 import android.support.transition.Fade;
 import android.support.transition.TransitionManager;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -26,8 +21,9 @@ import android.widget.Toast;
 import com.dubium.BaseActivity;
 import com.dubium.R;
 import com.dubium.database.EmailPasswordLogin;
-import com.dubium.database.FacebookLogin;
-import com.dubium.database.GoogleLogin;
+import com.dubium.database.EmailPasswordModule;
+import com.dubium.database.FacebookModule;
+import com.dubium.database.GoogleModule;
 import com.dubium.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -40,9 +36,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -54,18 +47,20 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.btn_facebook) RelativeLayout mBtnFacebook;
     @BindView(R.id.btn_cadastre_se) Button mBtnCadastreSe;
     @BindView(R.id.btn_login) Button mBtnLogin;
+
     @BindView(R.id.btn_cadastrar) Button mBtnCadastrar;
     @BindView(R.id.btn_voltar) Button mBtnVoltar;
     @BindView(R.id.et_nome) EditText mEtNome;
     @BindView(R.id.et_email) EditText mEtEmail;
     @BindView(R.id.et_senha) EditText mEtSenha;
     @BindView(R.id.et_confirmar_senha) EditText mEtConfirmarSenha;
+
     @BindView(R.id.tv_login_first) TextView mTvLoginFirst;
     @BindView(R.id.tv_login_second) TextView mTvLoginSecond;
 
-    private GoogleLogin mGoogleLogin;
-    private FacebookLogin mFacebookLogin;
-    private EmailPasswordLogin mEmailPasswordLogin;
+    private GoogleModule mGoogleModule;
+    private FacebookModule mFacebookModule;
+    private EmailPasswordModule mEmailPasswordModule;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     private static final int RC_GOOGLE_SIGN_IN = 9001;
@@ -100,9 +95,9 @@ public class LoginActivity extends BaseActivity {
         mEtNome.setVisibility(View.GONE);
         mEtConfirmarSenha.setVisibility(View.GONE);
 
-        mGoogleLogin = new GoogleLogin(this, mFirebaseAuth);
-        mFacebookLogin = new FacebookLogin(this, mFirebaseAuth);
-        mEmailPasswordLogin = new EmailPasswordLogin(this, mFirebaseAuth);
+        mGoogleModule = new GoogleModule(this, mFirebaseAuth);
+        mFacebookModule = new FacebookModule(this, mFirebaseAuth);
+        mEmailPasswordModule = new EmailPasswordModule(this, mFirebaseAuth);
 
         initializeAuthStateListener();
 
@@ -143,11 +138,11 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                if (!validateForm()) {
+                if (!validateLoginForm()) {
                     return;
                 }
 
-                mEmailPasswordLogin.signIn(mEtEmail.getText().toString(), mEtSenha.getText().toString());
+                mEmailPasswordModule.signIn(mEtEmail.getText().toString(), mEtSenha.getText().toString());
             }
         });
 
@@ -165,6 +160,21 @@ public class LoginActivity extends BaseActivity {
             public void onClick(View view) {
 
                 facebookSignIn();
+            }
+        });
+
+        mBtnCadastrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (!validateRegisterForm()) {
+                    return;
+                }
+
+                String email = mEtEmail.getText().toString();
+                String password = mEtSenha.getText().toString();
+
+                mEmailPasswordModule.createAccount(email, password);
             }
         });
     }
@@ -187,7 +197,7 @@ public class LoginActivity extends BaseActivity {
     public void onDestroy() {
         super.onDestroy();
 
-        mGoogleLogin.revokeAccess();
+        mGoogleModule.revokeAccess();
     }
 
     @Override
@@ -197,18 +207,18 @@ public class LoginActivity extends BaseActivity {
         // Google Sign in.
         if (requestCode == RC_GOOGLE_SIGN_IN) {
 
-            mGoogleLogin.signIn(data);
+            mGoogleModule.signIn(data);
         }
         // Facebook Sign in.
         else{
-            mFacebookLogin.onActivityResult(requestCode, resultCode, data);
+            mFacebookModule.onActivityResult(requestCode, resultCode, data);
         }
     }
 
     // Sign in with Google
     private void googleSignIn() {
 
-        Intent signInIntent = mGoogleLogin.getSignIntent();
+        Intent signInIntent = mGoogleModule.getSignIntent();
         startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
 
     }
@@ -216,7 +226,7 @@ public class LoginActivity extends BaseActivity {
     // Sign in with Facebook
     private void facebookSignIn(){
 
-        mFacebookLogin.signIn();
+        mFacebookModule.signIn();
 
     }
 
@@ -235,7 +245,7 @@ public class LoginActivity extends BaseActivity {
         };
     }
 
-    private boolean validateForm() {
+    private boolean validateLoginForm() {
         boolean valid = true;
 
         String email = mEtEmail.getText().toString();
@@ -252,6 +262,49 @@ public class LoginActivity extends BaseActivity {
             valid = false;
         } else {
             mEtSenha.setError(null);
+        }
+
+        return valid;
+    }
+
+    private boolean validateRegisterForm(){
+        boolean valid = true;
+
+        String name = mEtNome.getText().toString();
+        if (TextUtils.isEmpty(name)) {
+            mEtNome.setError("Campo vazio!");
+            valid = false;
+        } else {
+            mEtNome.setError(null);
+        }
+
+        String email = mEtEmail.getText().toString();
+        if (TextUtils.isEmpty(email)) {
+            mEtEmail.setError("Campo vazio!");
+            valid = false;
+        } else {
+            mEtEmail.setError(null);
+        }
+
+        String password = mEtSenha.getText().toString();
+        if (TextUtils.isEmpty(password)) {
+            mEtSenha.setError("Campo vazio!");
+            valid = false;
+        } else {
+            mEtSenha.setError(null);
+        }
+
+        String passwordConfirm = mEtConfirmarSenha.getText().toString();
+        if (TextUtils.isEmpty(passwordConfirm)) {
+            mEtConfirmarSenha.setError("Campo vazio!");
+            valid = false;
+        } else {
+            mEtConfirmarSenha.setError(null);
+        }
+
+        if(!password.equals(passwordConfirm)){
+            mEtConfirmarSenha.setError("Senha incorreta!");
+            valid = false;
         }
 
         return valid;

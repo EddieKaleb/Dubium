@@ -37,7 +37,7 @@ import java.util.Arrays;
  * Created by Marcus Vinícius on 12/01/18.
  */
 
-public class FacebookLogin {
+public class FacebookModule {
 
     private CallbackManager mCallbackManager;
     private FirebaseAuth mFirebaseAuth;
@@ -45,10 +45,10 @@ public class FacebookLogin {
     private Context mContext;
     private DatabaseReference mUserReference;
 
-    private static final String TAG = "FacebookLogin";
+    private static final String TAG = "FacebookModule";
 
 
-    public FacebookLogin(Context context, FirebaseAuth firebaseAuth){
+    public FacebookModule(Context context, FirebaseAuth firebaseAuth){
 
         FacebookSdk.sdkInitialize(context.getApplicationContext());
         AppEventsLogger.activateApp(context);

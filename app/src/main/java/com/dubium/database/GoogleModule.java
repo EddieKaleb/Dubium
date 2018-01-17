@@ -34,7 +34,7 @@ import com.google.firebase.database.ValueEventListener;
  * Created by Marcus Vinícius on 12/01/18.
  */
 
-public class GoogleLogin {
+public class GoogleModule {
 
     private GoogleSignInClient mGoogleSignInClient;
     private GoogleSignInOptions gso;
@@ -47,10 +47,10 @@ public class GoogleLogin {
 
     private Context mContext;
 
-    private String TAG = "GoogleLogin";
+    private String TAG = "GoogleModule";
 
     //Class Constructor
-    public GoogleLogin(Context context, FirebaseAuth mFirebaseAuth){
+    public GoogleModule(Context context, FirebaseAuth mFirebaseAuth){
 
         this.mContext = context;
 

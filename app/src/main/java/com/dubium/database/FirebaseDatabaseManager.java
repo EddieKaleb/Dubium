@@ -42,12 +42,12 @@ public class FirebaseDatabaseManager {
 
     public void addAptitudeToUser(String uId, Subject subject){
 
-        mDatabase.child("users").child(uId).child("aptitudes").child(subject.getId()).setValue(subject.getName());
+        mDatabase.child("users").child(uId).child("aptitudes").child(subject.getId()).setValue(true);
     }
 
     public void addDifficultieToUser(String uId, Subject subject){
 
-        mDatabase.child("users").child(uId).child("difficulties").child(subject.getId()).setValue(subject.getName());
+        mDatabase.child("users").child(uId).child("difficulties").child(subject.getId()).setValue(true);
     }
 
     public void addSubjects(String id, Subject subject){

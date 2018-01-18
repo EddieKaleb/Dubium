@@ -12,19 +12,19 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * Created by Marcus Vinicius on 15/01/18.
  */
 
-public class UserAdress {
+public class UserAddress {
 
     private double latitude;
     private double longitude;
     private String city;
     private String state;
 
-    public UserAdress(double latitude, double longitude){
+    public UserAddress(double latitude, double longitude){
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    public UserAdress(){}
+    public UserAddress(){}
 
     public void findAdress(double latitude, double longitude) throws IOException {
         Geocoder geocoder;

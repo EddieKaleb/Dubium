@@ -3,10 +3,8 @@ package com.dubium.fragments;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.dubium.model.UserAdress;
 import com.google.firebase.auth.FirebaseAuth;
 
-import android.provider.Contacts;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -16,14 +14,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.dubium.R;
 import com.dubium.adapters.UserAdapter;
 import com.dubium.model.User;
-import com.dubium.views.HomeActivity;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -150,9 +145,9 @@ public class HomeFragment extends Fragment {
             UserViewHolder aux = new UserViewHolder();
             aux.setName(u.getName());
 
-            if(u.getmUserAdress() != null) {
-                aux.setDistancia(distance(current.getmUserAdress().getLatitude(), u.getmUserAdress().getLatitude(),
-                        current.getmUserAdress().getLongitude(), u.getmUserAdress().getLongitude(),
+            if(u.getmUserAddress() != null) {
+                aux.setDistancia(distance(current.getmUserAddress().getLatitude(), u.getmUserAddress().getLatitude(),
+                        current.getmUserAddress().getLongitude(), u.getmUserAddress().getLongitude(),
                         0.0, 0.0));
             }else{
                 aux.setDistancia(1000);

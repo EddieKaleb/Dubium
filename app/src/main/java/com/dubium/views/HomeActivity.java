@@ -1,11 +1,8 @@
 package com.dubium.views;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -17,9 +14,7 @@ import android.support.transition.TransitionManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,7 +25,7 @@ import com.dubium.R;
 import com.dubium.fragments.ChatsFragment;
 import com.dubium.fragments.HomeFragment;
 import com.dubium.fragments.ProfileFragment;
-import com.dubium.model.UserAdress;
+import com.dubium.model.UserAddress;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,8 +33,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -169,7 +162,7 @@ public class HomeActivity extends BaseActivity {
         double longitude;
         String towers = "";
         Location location = null;
-        UserAdress userAdress = new UserAdress();
+        UserAddress userAddress = new UserAddress();
 
         if (ActivityCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -197,8 +190,8 @@ public class HomeActivity extends BaseActivity {
 
             try {
 
-                userAdress.findAdress(latitude, longitude);
-                mDatabase.child("users").child(user.getUid()).child("userAdress").setValue(userAdress);
+                userAddress.findAdress(latitude, longitude);
+                mDatabase.child("users").child(user.getUid()).child("userAddress").setValue(userAddress);
 
             } catch (IOException e) {
                 e.printStackTrace();

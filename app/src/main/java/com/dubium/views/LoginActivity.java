@@ -278,7 +278,12 @@ public class LoginActivity extends BaseActivity {
         if (TextUtils.isEmpty(password)) {
             mEtSenha.setError("Campo vazio!");
             valid = false;
-        } else {
+        }
+        else if (password.length() < 6){
+            mEtSenha.setError("A senha deve conter pelos menos 6 caracteres!");
+            valid = false;
+        }
+        else {
             mEtSenha.setError(null);
         }
 

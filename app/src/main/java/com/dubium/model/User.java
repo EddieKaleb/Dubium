@@ -1,13 +1,5 @@
 package com.dubium.model;
 
-import android.location.Address;
-import android.location.Geocoder;
-
-import java.io.IOException;
-import java.util.List;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 /**
  * Created by eddie on 09/01/2018.
  */
@@ -18,25 +10,21 @@ public class User {
     private String name;
     private String email;
     private String photoUrl;
-    private UserAdress mUserAdress;
+    private UserAddress mUserAddress;
 
-    public User(String uId, String nome, String email, String photoUrl, UserAdress mUserAdress) {
+    public User(String uId, String nome, String email, String photoUrl, UserAddress mUserAddress) {
         this.uId = uId;
         this.name = nome;
         this.photoUrl = photoUrl;
         this.email = email;
-        this.mUserAdress = mUserAdress;
+        this.mUserAddress = mUserAddress;
     }
 
     public User(String uId, String nome, String email) {
         this.uId = uId;
         this.name = nome;
-        this.photoUrl = photoUrl;
         this.email = email;
-        this.mUserAdress = mUserAdress;
     }
-
-
 
     public User(){}
 
@@ -64,12 +52,12 @@ public class User {
         return photoUrl;
     }
 
-    public UserAdress getmUserAdress() {
-        return mUserAdress;
+    public UserAddress getmUserAddress() {
+        return mUserAddress;
     }
 
-    public void setmUserAdress(UserAdress mUserAdress) {
-        this.mUserAdress = mUserAdress;
+    public void setmUserAddress(UserAddress mUserAddress) {
+        this.mUserAddress = mUserAddress;
     }
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;

@@ -3,10 +3,12 @@ package com.dubium.fragments;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.dubium.model.UserAddress;
 import com.google.firebase.auth.FirebaseAuth;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,13 +95,13 @@ public class HomeFragment extends Fragment {
 
                 for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
                     user = objSnapshot.getValue(User.class);
-                    //USERADRESS ESTA VINDO NULO
                     if (user != getActualUser()) {
+                        //pra testar se ta pegando a city
+                        Toast.makeText(getActivity(), getAddressUser(user.getUid()),
+                                Toast.LENGTH_SHORT).show();
                         users.add(user);
                     }
                 }
-
-
                 if (users.size() <= 0) {
                     Toast.makeText(getActivity(), "Não há nenhum usuario proximo",
                             Toast.LENGTH_SHORT).show();
@@ -159,6 +161,29 @@ public class HomeFragment extends Fragment {
 
         return l;
     }
+
+    String city;
+    private String getAddressUser(String UId){
+
+        Query query = mDatabaseReference.child("users").child(UId).child("userAddress");
+        query.addListenerForSingleValueEvent(new ValueEventListener(){
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                UserAddress ua;
+
+                for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
+                    ua = objSnapshot.getValue(UserAddress.class);
+                    city = ua.getCity();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getActivity(), "ERRO", Toast.LENGTH_SHORT).show();
+            }
+        });
+        return city;
+    }
+
     /*private ArrayList<String> apComuns(){
         final ArrayList<String> aptidoes = new ArrayList<>();
 

@@ -10,14 +10,14 @@ public class User {
     private String name;
     private String email;
     private String photoUrl;
-    private UserAddress mUserAddress;
+    private UserAddress userAddress;
 
-    public User(String uId, String nome, String email, String photoUrl, UserAddress mUserAddress) {
+    public User(String uId, String nome, String email, String photoUrl, UserAddress userAddress) {
         this.uId = uId;
         this.name = nome;
         this.photoUrl = photoUrl;
         this.email = email;
-        this.mUserAddress = mUserAddress;
+        this.userAddress = userAddress;
     }
 
     public User(String uId, String nome, String email) {
@@ -52,12 +52,12 @@ public class User {
         return photoUrl;
     }
 
-    public UserAddress getmUserAddress() {
-        return mUserAddress;
+    public UserAddress getUserAddress() {
+        return userAddress;
     }
 
-    public void setmUserAddress(UserAddress mUserAddress) {
-        this.mUserAddress = mUserAddress;
+    public void setUserAddress(UserAddress userAddress) {
+        this.userAddress = userAddress;
     }
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;

@@ -149,9 +149,9 @@ public class HomeFragment extends Fragment {
             UserViewHolder aux = new UserViewHolder();
             aux.setName(u.getName());
 
-            if(u.getmUserAddress() != null) {
-                aux.setDistancia(distance(current.getmUserAddress().getLatitude(), u.getmUserAddress().getLatitude(),
-                        current.getmUserAddress().getLongitude(), u.getmUserAddress().getLongitude(),
+            if(u.getUserAddress() != null) {
+                aux.setDistancia(distance(current.getUserAddress().getLatitude(), u.getUserAddress().getLatitude(),
+                        current.getUserAddress().getLongitude(), u.getUserAddress().getLongitude(),
                         0.0, 0.0));
             }else{
                 aux.setDistancia(1000);
@@ -171,16 +171,20 @@ public class HomeFragment extends Fragment {
         query.addListenerForSingleValueEvent(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                UserAddress ua;
+                UserAddress ua = new UserAddress();
 
-                for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
+                /*for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
                     ua = objSnapshot.getValue(UserAddress.class);
                     city = ua.getCity();
-                }
+                }*/
+
+                ua = dataSnapshot.getValue(UserAddress.class);
+                city = ua.getCity();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(), "ERRO", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "ERRO", Toast.LENGTH_SHORT).show();
+                Log.i("GetUserAddress", city);
             }
         });
         return city;

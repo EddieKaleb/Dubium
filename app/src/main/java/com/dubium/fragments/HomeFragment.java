@@ -39,12 +39,10 @@ public class HomeFragment extends Fragment {
     UserAdapter mUserAdapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    final ArrayList<User> users = new ArrayList<>();
-
-
-    FirebaseAuth mFirebaseAuth;
     FirebaseUser currentUser;
     User userActual;
+    FirebaseAuth mFirebaseAuth;
+
     FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference();
 
@@ -57,6 +55,7 @@ public class HomeFragment extends Fragment {
         mRootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
+
         currentUser = mFirebaseAuth.getCurrentUser();
 
         mUsersListView = (ListView) mRootView.findViewById(R.id.lv_usuarios);
@@ -71,17 +70,6 @@ public class HomeFragment extends Fragment {
         });
 
         listar();
-        /*if (initialRefresh == true)
-            initialRefresh = false;
-
-        if (initialRefresh == true) {
-            users.add(new User("Marcus Vinicius","https://www.nationalgeographic.com/content/dam/animals/thumbs/rights-exempt/mammals/d/domestic-dog_thumb.jpg", 1, 2, 12));
-            initialRefresh = false;
-        }
-
-        mUserAdapter = new UserAdapter(mRootView.getContext(), users);
-
-        mUsersListView.setAdapter(mUserAdapter);*/
 
         return mRootView;
     }
@@ -97,19 +85,20 @@ public class HomeFragment extends Fragment {
     }
 
     public void listar(){
-
-
+        final ArrayList<User> users = new ArrayList<>();
         users.clear();
+
         Query query = mDatabaseReference.child("users");
         query.addListenerForSingleValueEvent(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user;
 
-
                 for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
                     user = objSnapshot.getValue(User.class);
-                    users.add(user);
+                    //USERADRESS ESTA VINDO NULO
+                    if (user != getActualUser() && (user.getmUserAdress() != null))
+                        users.add(user);
                 }
 
                 if (users.size() <= 0) {
@@ -133,10 +122,7 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private ArrayList<UserViewHolder> filterUserList(ArrayList<User> users){
-
-        ArrayList<UserViewHolder> l = new ArrayList<UserViewHolder>();
-
+    public User getActualUser(){
         mDatabaseReference = mDatabaseReference.child("users").child(currentUser.getUid());
         mDatabaseReference.child("users").addValueEventListener(new ValueEventListener() {
             @Override
@@ -146,14 +132,23 @@ public class HomeFragment extends Fragment {
             @Override
             public void onCancelled(DatabaseError databaseError) {            }
         });
+        return userActual;
+    }
+
+    private ArrayList<UserViewHolder> filterUserList(ArrayList<User> users){
+
+        ArrayList<UserViewHolder> l = new ArrayList<UserViewHolder>();
+
+        User current;
+        current = getActualUser();
 
         for(User u: users){
             UserViewHolder aux = new UserViewHolder();
             aux.setName(u.getName());
 
             if(u.getmUserAdress() != null) {
-                aux.setDistancia(distance(userActual.getmUserAdress().getLatitude(), u.getmUserAdress().getLatitude(),
-                        userActual.getmUserAdress().getLongitude(), u.getmUserAdress().getLongitude(),
+                aux.setDistancia(distance(current.getmUserAdress().getLatitude(), u.getmUserAdress().getLatitude(),
+                        current.getmUserAdress().getLongitude(), u.getmUserAdress().getLongitude(),
                         0.0, 0.0));
             }else{
                 aux.setDistancia(1000);

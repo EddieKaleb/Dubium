@@ -198,7 +198,7 @@ public class HomeActivity extends BaseActivity {
             try {
 
                 userAdress.findAdress(latitude, longitude);
-                mDatabase.child("users").child(user.getUid()).child("userAddress").setValue(userAdress);
+                mDatabase.child("users").child(user.getUid()).child("userAdress").setValue(userAdress);
 
             } catch (IOException e) {
                 e.printStackTrace();

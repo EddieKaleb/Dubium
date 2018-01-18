@@ -13,11 +13,16 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import com.dubium.R;
 import com.dubium.adapters.SetupAdapter;
+import com.dubium.database.FirebaseDatabaseManager;
 import com.dubium.model.Subject;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,7 +36,9 @@ public class AptitudesActivity extends Activity {
     @BindView(R.id.tv_first) TextView mTvFirst;
     @BindView(R.id.tv_second) TextView mTvSecond;
     @BindView(R.id.iv_icon) ImageView mIvIcon;
-    public final ArrayList<Subject> mDisciplinas = new ArrayList<>();
+
+    public FirebaseDatabaseManager mFirebaseDatabaseManager;
+    public ArrayList<Subject> mDisciplinas = new ArrayList<>();
     // Lista para aptidões e dificuldades
     public final ArrayList<Subject> mMinhasDisciplinas = new ArrayList<>();
 
@@ -44,11 +51,10 @@ public class AptitudesActivity extends Activity {
         mTvProsseguir.setVisibility(View.GONE);
         mLvDisciplinas.setVisibility(View.GONE);
 
+        mFirebaseDatabaseManager = new FirebaseDatabaseManager();
+
         // Query do firebase para adicionar algumas disciplinas
-        mDisciplinas.add(new Subject("1", "Matemática"));
-        mDisciplinas.add(new Subject("2", "Filosofia"));
-        mDisciplinas.add(new Subject("3", "Português"));
-        mDisciplinas.add(new Subject("4", "Inglês"));
+        mDisciplinas = mFirebaseDatabaseManager.getSubjects(this);
 
         final ArrayAdapter mAdapterSearch = new ArrayAdapter(this, android.R.layout.simple_list_item_1, mDisciplinas);
         final SetupAdapter mAdapterSetup = new SetupAdapter(this, mMinhasDisciplinas);

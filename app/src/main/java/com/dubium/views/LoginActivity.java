@@ -1,7 +1,5 @@
 package com.dubium.views;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,32 +7,21 @@ import android.support.transition.AutoTransition;
 import android.support.transition.Fade;
 import android.support.transition.TransitionManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dubium.BaseActivity;
 import com.dubium.R;
-import com.dubium.database.EmailPasswordLogin;
 import com.dubium.database.EmailPasswordModule;
 import com.dubium.database.FacebookModule;
 import com.dubium.database.GoogleModule;
-import com.dubium.model.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -173,8 +160,9 @@ public class LoginActivity extends BaseActivity {
 
                 String email = mEtEmail.getText().toString();
                 String password = mEtSenha.getText().toString();
+                String name = mEtNome.getText().toString();
 
-                mEmailPasswordModule.createAccount(email, password);
+                mEmailPasswordModule.createAccount(email, password, name);
             }
         });
     }
@@ -309,6 +297,4 @@ public class LoginActivity extends BaseActivity {
 
         return valid;
     }
-
-
 }

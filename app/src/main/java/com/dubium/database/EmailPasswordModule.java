@@ -3,6 +3,7 @@ package com.dubium.database;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,7 +42,9 @@ public class EmailPasswordModule {
         this.mFirebaseAuth = firebaseAuth;
     }
 
-    public void createAccount(String email, String password){
+    public void createAccount(String email, String password, String name){
+
+        final String userName = name;
 
         mFirebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener((Activity) mContext, new OnCompleteListener<AuthResult>() {
@@ -50,6 +54,21 @@ public class EmailPasswordModule {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser fbUser = mFirebaseAuth.getCurrentUser();
+
+                            //Add the user name to Firebase user profile
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(userName)
+                                    .build();
+
+                            fbUser.updateProfile(profileUpdates)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.d(TAG, "User profile updated.");
+                                            }
+                                        }
+                                    });
 
                             mUserReference = FirebaseDatabase.getInstance().getReference().child("users").child(fbUser.getUid());
 
@@ -61,6 +80,7 @@ public class EmailPasswordModule {
 
                                     // If user don't exists
                                     if(user == null){
+
                                         Intent i = new Intent(mContext, AptitudesActivity.class);
                                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                         mContext.startActivity(i);

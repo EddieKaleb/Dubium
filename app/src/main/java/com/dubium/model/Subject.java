@@ -16,6 +16,10 @@ public class Subject implements Serializable{
         this.name = name;
     }
 
+    public Subject(){
+
+    }
+
     public String getId(){
         return this.id;
     }

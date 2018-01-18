@@ -68,7 +68,10 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        listar();
+        if (initialRefresh) {
+            listar();
+            initialRefresh = false;
+        }
 
         return mRootView;
     }
@@ -85,7 +88,6 @@ public class HomeFragment extends Fragment {
 
     public void listar(){
         final ArrayList<User> users = new ArrayList<>();
-        users.clear();
 
         Query query = mDatabaseReference.child("users");
         query.addListenerForSingleValueEvent(new ValueEventListener(){
@@ -110,7 +112,7 @@ public class HomeFragment extends Fragment {
                     ArrayList<UserViewHolder> userListViewHolder;
                     userListViewHolder = filterUserList(users);
 
-                    mUserAdapter = new UserAdapter(getActivity(), userListViewHolder );
+                    mUserAdapter = new UserAdapter(getActivity(), userListViewHolder);
 
                     mUsersListView.setAdapter(mUserAdapter);
                 }

@@ -5,6 +5,8 @@ import android.os.Handler;
 
 import com.dubium.model.UserAdress;
 import com.google.firebase.auth.FirebaseAuth;
+
+import android.provider.Contacts;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -97,9 +99,11 @@ public class HomeFragment extends Fragment {
                 for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
                     user = objSnapshot.getValue(User.class);
                     //USERADRESS ESTA VINDO NULO
-                    if (user != getActualUser() && (user.getmUserAdress() != null))
+                    if (user != getActualUser()) {
                         users.add(user);
+                    }
                 }
+
 
                 if (users.size() <= 0) {
                     Toast.makeText(getActivity(), "Não há nenhum usuario proximo",
@@ -153,7 +157,6 @@ public class HomeFragment extends Fragment {
             }else{
                 aux.setDistancia(1000);
             }
-            aux.setDistancia(1000);
             aux.setAptidoesComuns(1);
             aux.setDificuldadesComuns(1);
             l.add(aux);
@@ -161,6 +164,44 @@ public class HomeFragment extends Fragment {
 
         return l;
     }
+    /*private ArrayList<String> apComuns(){
+        final ArrayList<String> aptidoes = new ArrayList<>();
+
+        Query query = mDatabaseReference.child("users");
+        query.addListenerForSingleValueEvent(new ValueEventListener(){
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user;
+
+                for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
+                    String UId = objSnapshot.getValue(User.class).getUid();
+                    Toast.makeText(getActivity(), "add " + UId , Toast.LENGTH_SHORT).show();
+
+                    Query query2 = mDatabaseReference.child("users").child(UId).child("aptitudes");
+                    query2.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for(DataSnapshot ds: dataSnapshot.getChildren())
+                                aptidoes.add(String.valueOf(ds.getValue()));
+
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Toast.makeText(getActivity(), "ERRO2", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getActivity(), "ERRO", Toast.LENGTH_SHORT).show();
+            }
+        });
+        return aptidoes;
+
+    }*/
+
+
 
     private double distance(double lat1, double lat2, double lon1, double lon2,
                             double el1, double el2) {

@@ -114,7 +114,7 @@ public class HomeActivity extends BaseActivity {
                     }
                 });
 
-        alertaValidacaoPermissao();
+        //alertaValidacaoPermissao();
 
         // Inicializa o AuthState para verificação de usuário logado.
     }
@@ -139,7 +139,7 @@ public class HomeActivity extends BaseActivity {
         return false;
     }
 
-    private void alertaValidacaoPermissao() {
+    /*private void alertaValidacaoPermissao() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Permissão");
         builder.setMessage("Para usar o app você precisa aceitar as permissões ");
@@ -152,7 +152,7 @@ public class HomeActivity extends BaseActivity {
         builder.setCancelable(false);
         builder.create();
         builder.show();
-    }
+    }*/
 
     private void signOut(){
         FirebaseAuth.getInstance().signOut();

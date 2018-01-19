@@ -25,8 +25,8 @@ public class DifficultiesActivity extends AptitudesActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        mTvProsseguir.setText("FINALIZAR");
-        mTvFirst.setText("Para finalizar");
+        mTvProsseguir.setText("PROSSEGUIR");
+        mTvFirst.setText("Para continuar");
         mTvSecond.setText("Adicione suas dificuldades!");
         mIvIcon.setImageResource(R.drawable.ic_help);
 
@@ -51,7 +51,7 @@ public class DifficultiesActivity extends AptitudesActivity {
                 for(Subject s : mDifficultiesList){
                     mDatabaseManager.addDifficultieToUser(fbUser.getUid(), s);
                 }
-                Intent intent = new Intent(v.getContext(), HomeActivity.class);
+                Intent intent = new Intent(v.getContext(), LocationActivity.class);
                 startActivity(intent);
                 finish();
             }

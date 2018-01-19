@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        listFilter();
+       // listFilter();
 
         return mRootView;
     }

@@ -1,9 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.dubium.fragments.ProfileFragment">
-
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context="com.dubium.fragments.ProfileFragment">
 
 
     <RelativeLayout
@@ -13,76 +12,198 @@
         android:background="@color/blue">
 
         <TextView
-            android:paddingTop="35dp"
-            android:layout_below="@id/iv_foto_perfil"
             android:id="@+id/tv_nome_perfil"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
+            android:layout_below="@id/iv_foto_perfil"
             android:layout_centerHorizontal="true"
+            android:background="@color/light_white"
             android:fontFamily="@string/font_family_regular"
+            android:paddingTop="35dp"
             android:text="EDDIE KALEB"
+            android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="16dp"
-            android:background="@color/white"/>
+            android:textSize="14dp" />
 
         <TextView
             android:id="@+id/tv_cidade_perfil"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
             android:layout_below="@id/tv_nome_perfil"
             android:layout_centerHorizontal="true"
+            android:background="@color/light_white"
             android:fontFamily="@string/font_family_thin"
             android:text="Campina Grande"
+            android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="11dp"
-            android:background="@color/white"/>
+            android:textSize="11dp" />
 
         <TextView
             android:id="@+id/tv_estado_perfil"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
             android:layout_below="@id/tv_cidade_perfil"
             android:layout_centerHorizontal="true"
+            android:background="@color/light_white"
             android:fontFamily="@string/font_family_thin"
+            android:paddingBottom="5dp"
             android:text="Paraíba"
+            android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="10dp"
-            android:background="@color/white"
-            android:paddingBottom="5dp"/>
+            android:textSize="10dp" />
 
         <ImageView
             android:id="@+id/iv_foto_perfil"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_marginBottom="-35dp"
-            android:src="@drawable/ic_anonymous"
-            android:adjustViewBounds="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="100dp"/>
+            android:layout_marginBottom="-35dp"
+            android:layout_marginTop="100dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_anonymous" />
 
         <LinearLayout
             android:id="@+id/foto_perfil_container"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_marginBottom="-35dp"
-            android:background="@drawable/ic_foto_grande"
-            android:orientation="horizontal"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="100dp"/>
+            android:layout_marginBottom="-35dp"
+            android:layout_marginTop="100dp"
+            android:background="@drawable/ic_foto_grande"
+            android:orientation="horizontal" />
+
 
         <RelativeLayout
-            android:layout_below="@id/tv_estado_perfil"
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white">
+            android:layout_below="@id/tv_estado_perfil"
+            android:background="@color/light_white" >
 
+            <!-- HABILIDADES -->
+            <RelativeLayout
+                android:id="@+id/aptidoes_container"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="35dp"
+                android:background="@color/white"
+                android:elevation="2dp">
+
+                <ListView
+                    android:id="@+id/lv_aptidoes_perfil"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></ListView>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/titulo_aptidoes"
+                android:layout_below="@id/tv_estado_perfil"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="25dp"
+                android:background="#008000"
+                android:elevation="4dp"
+                android:padding="5dp">
+
+                <ImageView
+                    android:id="@+id/ic_cerebro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/ic_cerebro" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/ic_cerebro"
+                    android:fontFamily="@string/font_family_regular"
+                    android:text="HABILIDADES"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="12dp" />
+
+            </RelativeLayout>
+
+            <!-- DIFICULDADES -->
+            <RelativeLayout
+                android:layout_below="@id/aptidoes_container"
+                android:id="@+id/dificuldades_container"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="35dp"
+                android:background="@color/white"
+                android:elevation="2dp">
+
+                <ListView
+                    android:id="@+id/lv_dificuldades_perfil"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></ListView>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_below="@id/aptidoes_container"
+                android:id="@+id/titulo_dificuldades"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="25dp"
+                android:background="@color/google"
+                android:elevation="4dp"
+                android:padding="5dp">
+
+                <ImageView
+                    android:id="@+id/ic_duvida"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/ic_duvida" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/ic_duvida"
+                    android:fontFamily="@string/font_family_regular"
+                    android:text="DIFICULDADES"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="12dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/btn_chat"
+                android:layout_below="@id/dificuldades_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/btns_social_login_height"
+                android:layout_marginTop="30dp"
+                android:background="#3F7F7F"
+                android:elevation="@dimen/general_elevation"
+                android:clickable="true"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp">
+                <!-- <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_google"
+                    android:padding="8dp" /> -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ENVIAR MENSAGEM"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/white"
+                    android:fontFamily="@string/font_family_regular"/>
+            </RelativeLayout>
         </RelativeLayout>
-
     </RelativeLayout>
-
-
-
 </FrameLayout>

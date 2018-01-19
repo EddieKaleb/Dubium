@@ -94,9 +94,11 @@ public class HomeActivity extends BaseActivity {
                             TransitionManager.beginDelayedTransition(mHomeContainer, new Fade());
                             switch (id) {
                                 case R.id.action_home:
+                                    mToolbar.setVisibility(View.VISIBLE);
                                     fragmentTransaction.replace(R.id.fragment, mHomeFragment).commit();
                                     return true;
                                 case R.id.action_chat:
+                                    mToolbar.setVisibility(View.VISIBLE);
                                     fragmentTransaction.replace(R.id.fragment, mChatsFragment).commit();
                                     return true;
                                 case R.id.action_person:

@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.dubium.BaseActivity;
@@ -99,6 +100,7 @@ public class HomeActivity extends BaseActivity {
                                     fragmentTransaction.replace(R.id.fragment, mChatsFragment).commit();
                                     return true;
                                 case R.id.action_person:
+                                    mToolbar.setVisibility(View.GONE);
                                     fragmentTransaction.replace(R.id.fragment, mProfileFragment).commit();
                                     return true;
                             }

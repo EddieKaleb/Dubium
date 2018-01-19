@@ -87,7 +87,7 @@ public class HomeFragment extends Fragment {
     }
 
     public void listar(){
-        final ArrayList<User> users = new ArrayList<>();
+     /*   final ArrayList<User> users = new ArrayList<>();
 
         Query query = mDatabaseReference.child("users");
         query.addListenerForSingleValueEvent(new ValueEventListener(){
@@ -122,7 +122,7 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getActivity(), "ERRO", Toast.LENGTH_SHORT).show();
             }
         });
-
+*/
     }
 
     public User getActualUser(){

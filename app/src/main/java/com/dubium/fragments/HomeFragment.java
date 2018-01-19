@@ -3,7 +3,6 @@ package com.dubium.fragments;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.dubium.model.UserAddress;
 import com.google.firebase.auth.FirebaseAuth;
 
 import android.support.v4.app.Fragment;
@@ -15,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import com.dubium.R;
@@ -32,7 +32,6 @@ import com.google.firebase.database.ValueEventListener;
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment {
-
     View mRootView;
     ListView mUsersListView;
     UserAdapter mUserAdapter;
@@ -52,9 +51,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_home, container, false);
-
         mFirebaseAuth = FirebaseAuth.getInstance();
-
         currentUser = mFirebaseAuth.getCurrentUser();
 
         mUsersListView = (ListView) mRootView.findViewById(R.id.lv_usuarios);
@@ -68,26 +65,35 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        if (initialRefresh) {
-            listar();
-            initialRefresh = false;
-        }
+        listFilter();
 
         return mRootView;
     }
 
-    private void refreshContent() {
-        new Handler().postDelayed(new Runnable() {
+    /* ESSE MÉTODO PEGA USUARIO ATUAL A PARTIR DO CURRENT E CHAMA O LISTAR, QUE VAI LISTAR, OBVIAMENTE */
+    public void listFilter(){
+        Query query = mDatabaseReference.child("users");
+        query.addValueEventListener(new ValueEventListener() {
             @Override
-            public void run() {
-                listar();
-                mSwipeRefreshLayout.setRefreshing(false);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot objSnapshot : dataSnapshot.getChildren()){
+                    if (objSnapshot.getValue(User.class).getUid().equals(currentUser.getUid()))
+                        userActual = objSnapshot.getValue(User.class);
+                }
+                if (initialRefresh) {
+                    listar(userActual);
+                    initialRefresh = false;
+                }else{
+                    listar(userActual);
+                }
             }
-        }, 100);
+            @Override
+            public void onCancelled(DatabaseError databaseError) {            }
+        });
     }
-
-    public void listar(){
-     /*   final ArrayList<User> users = new ArrayList<>();
+    /* VAI LISTAR OS USUARIOS DA MSM CIDADE E A PARTIR DE OUTROS PARAMETROS Q VOU COLOCAR AFTER*/
+    public void listar(final User atual){
+        final ArrayList<User> users = new ArrayList<>();
 
         Query query = mDatabaseReference.child("users");
         query.addListenerForSingleValueEvent(new ValueEventListener(){
@@ -97,12 +103,8 @@ public class HomeFragment extends Fragment {
 
                 for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
                     user = objSnapshot.getValue(User.class);
-                    if (user != getActualUser()) {
-                        //pra testar se ta pegando a city
-                        Toast.makeText(getActivity(), getAddressUser(user.getUid()),
-                                Toast.LENGTH_SHORT).show();
+                    if(user.getCity().equals(userActual.getCity()) && user.getUid() != userActual.getUid())
                         users.add(user);
-                    }
                 }
                 if (users.size() <= 0) {
                     Toast.makeText(getActivity(), "Não há nenhum usuario proximo",
@@ -122,40 +124,21 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getActivity(), "ERRO", Toast.LENGTH_SHORT).show();
             }
         });
-*/
+
     }
 
-    public User getActualUser(){
-        mDatabaseReference = mDatabaseReference.child("users").child(currentUser.getUid());
-        mDatabaseReference.child("users").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                userActual = dataSnapshot.getValue(User.class);
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {            }
-        });
-        return userActual;
-    }
-
+    /*ESSE AQUI VAI FAZER A TRASIÇÃO (PASSANDO OS DADOS) PRA O USER DO ADAPTER*/
     private ArrayList<UserViewHolder> filterUserList(ArrayList<User> users){
-
         ArrayList<UserViewHolder> l = new ArrayList<UserViewHolder>();
-
-        User current;
-        current = getActualUser();
 
         for(User u: users){
             UserViewHolder aux = new UserViewHolder();
             aux.setName(u.getName());
 
-            if(u.getUserAddress() != null) {
-                aux.setDistancia(distance(current.getUserAddress().getLatitude(), u.getUserAddress().getLatitude(),
-                        current.getUserAddress().getLongitude(), u.getUserAddress().getLongitude(),
+            aux.setDistancia(distance(userActual.getLatitude(), u.getLatitude(),
+                        userActual.getLongitude(), u.getLongitude(),
                         0.0, 0.0));
-            }else{
-                aux.setDistancia(1000);
-            }
+
             aux.setAptidoesComuns(1);
             aux.setDificuldadesComuns(1);
             l.add(aux);
@@ -164,74 +147,19 @@ public class HomeFragment extends Fragment {
         return l;
     }
 
-    String city;
-    private String getAddressUser(String UId){
-
-        Query query = mDatabaseReference.child("users").child(UId).child("userAddress");
-        query.addListenerForSingleValueEvent(new ValueEventListener(){
+    private void refreshContent() {
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                UserAddress ua = new UserAddress();
-
-                /*for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
-                    ua = objSnapshot.getValue(UserAddress.class);
-                    city = ua.getCity();
-                }*/
-
-                ua = dataSnapshot.getValue(UserAddress.class);
-                city = ua.getCity();
+            public void run() {
+                listFilter();
+                mSwipeRefreshLayout.setRefreshing(false);
             }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                //Toast.makeText(getActivity(), "ERRO", Toast.LENGTH_SHORT).show();
-                Log.i("GetUserAddress", city);
-            }
-        });
-        return city;
+        }, 100);
     }
-
-    /*private ArrayList<String> apComuns(){
-        final ArrayList<String> aptidoes = new ArrayList<>();
-
-        Query query = mDatabaseReference.child("users");
-        query.addListenerForSingleValueEvent(new ValueEventListener(){
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User user;
-
-                for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
-                    String UId = objSnapshot.getValue(User.class).getUid();
-                    Toast.makeText(getActivity(), "add " + UId , Toast.LENGTH_SHORT).show();
-
-                    Query query2 = mDatabaseReference.child("users").child(UId).child("aptitudes");
-                    query2.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for(DataSnapshot ds: dataSnapshot.getChildren())
-                                aptidoes.add(String.valueOf(ds.getValue()));
-
-                        }
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            Toast.makeText(getActivity(), "ERRO2", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(), "ERRO", Toast.LENGTH_SHORT).show();
-            }
-        });
-        return aptidoes;
-
-    }*/
-
-
-
-    private double distance(double lat1, double lat2, double lon1, double lon2,
+    /* CALCULA A DISTANCIA COM BASE NAS CORDENADAS*/
+    private String distance(double lat1, double lat2, double lon1, double lon2,
                             double el1, double el2) {
-
+        DecimalFormat df = new DecimalFormat("###,##0.00");
         final int R = 6371; // Radius of the earth
 
         Double latDistance = deg2rad(lat2 - lat1);
@@ -244,7 +172,7 @@ public class HomeFragment extends Fragment {
 
         double height = el1 - el2;
         distance = Math.pow(distance, 2) + Math.pow(height, 2);
-        return Math.sqrt(distance);
+        return df.format(Math.sqrt(distance)/1000);
     }
 
     private double deg2rad(double deg) {

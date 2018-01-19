@@ -1,15 +1,10 @@
 package com.dubium.database;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.dubium.adapters.UserAdapter;
-import com.dubium.fragments.UserViewHolder;
 import com.dubium.model.Subject;
 import com.dubium.model.User;
-import com.dubium.model.UserAddress;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +32,11 @@ public class FirebaseDatabaseManager {
     public void saveUser(User user) {
 
         String uId = user.getUid();
+
+        user.setCity("Campina Grande");
+        user.setState("Paraíba");
+        user.setLatitude(-7.2305600);
+        user.setLongitude(-35.8811100);
 
         mDatabase.child("users").child(uId).setValue(user);
     }
@@ -82,7 +82,4 @@ public class FirebaseDatabaseManager {
         return list;
     }
 
-    public void updateUserAddress(String uId, UserAddress userAddress){
-        mDatabase.child("users").child(uId).child("userAddress").setValue(userAddress);
-    }
 }

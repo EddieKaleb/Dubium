@@ -19,9 +19,9 @@ public class UserViewHolder {
     private String photoUrl;
     private int aptidoesComuns;
     private int dificuldadesComuns;
-    private double distancia;
+    private String distancia;
 
-    public UserViewHolder(String nome, String email, String photoUrl, int aptidoesComuns, int dificuldadesComuns, int distancia) {
+    public UserViewHolder(String nome, String email, String photoUrl, int aptidoesComuns, int dificuldadesComuns, String distancia) {
         this.name = nome;
         this.photoUrl = photoUrl;
         this.aptidoesComuns = aptidoesComuns;
@@ -76,11 +76,11 @@ public class UserViewHolder {
     }
 
     public String getDistancia() {
-        if (distancia == 1) return "aprox. 1 km";
-        return "aprox. " + (distancia/1000) + " kms";
+        if (distancia == "1") return "aprox. 1 km";
+        return "aprox. " + distancia + " kms";
     }
 
-    public void setDistancia(double distancia) {
+    public void setDistancia(String distancia) {
         this.distancia = distancia;
     }
 

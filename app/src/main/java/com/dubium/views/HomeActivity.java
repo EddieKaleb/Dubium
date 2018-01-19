@@ -26,7 +26,7 @@ import com.dubium.R;
 import com.dubium.fragments.ChatsFragment;
 import com.dubium.fragments.HomeFragment;
 import com.dubium.fragments.ProfileFragment;
-import com.dubium.model.UserAddress;
+import com.dubium.model.User;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -50,10 +50,8 @@ public class HomeActivity extends BaseActivity {
     ProfileFragment mProfileFragment;
 
     LocationManager locationManager;
-    FirebaseUser user;
+    FirebaseUser currentUser;
     private DatabaseReference mDatabase;
-
-
 
     final FragmentManager fragmentManager = getSupportFragmentManager();
     int mMenuPrevItem;
@@ -65,8 +63,7 @@ public class HomeActivity extends BaseActivity {
 
         ButterKnife.bind(this);
 
-
-        user = mFirebaseAuth.getCurrentUser();
+        currentUser = mFirebaseAuth.getCurrentUser();
 
         mHomeFragment = new HomeFragment();
         mChatsFragment = new ChatsFragment();
@@ -161,12 +158,11 @@ public class HomeActivity extends BaseActivity {
     }
 
     public void find_location(){
-
         double latitude ;
         double longitude;
         String towers = "";
         Location location = null;
-        UserAddress userAddress = new UserAddress();
+        User user = new User();
 
         if (ActivityCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -179,7 +175,6 @@ public class HomeActivity extends BaseActivity {
             Toast.makeText(this, "SEM PERMISSÃO", Toast.LENGTH_SHORT).show();
 
         }else{
-            Toast.makeText(this, "ATUALIZANDO LOCALIZAÇÃO", Toast.LENGTH_SHORT).show();
             locationManager = (LocationManager)
                     getSystemService(Context.LOCATION_SERVICE);
 
@@ -189,21 +184,23 @@ public class HomeActivity extends BaseActivity {
         }
 
         if (location != null) {
+            Toast.makeText(this, "LOCALIZAÇÃO ATUALIZADA", Toast.LENGTH_SHORT).show();
+
             longitude = location.getLongitude();
             latitude = location.getLatitude();
 
             try {
-
-                userAddress.findAdress(latitude, longitude);
-                mDatabase.child("users").child(user.getUid()).child("userAddress").setValue(userAddress);
+                user.findAdress(latitude, longitude);
+                mDatabase.child("users").child(currentUser.getUid()).child("city").setValue(user.getCity());
+                mDatabase.child("users").child(currentUser.getUid()).child("state").setValue(user.getState());
+                mDatabase.child("users").child(currentUser.getUid()).child("latitude").setValue(user.getLatitude());
+                mDatabase.child("users").child(currentUser.getUid()).child("longitude").setValue(user.getLongitude());
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }else{
             Toast.makeText(this, "Location is null! " + towers, Toast.LENGTH_SHORT).show();
-
         }
     }
 

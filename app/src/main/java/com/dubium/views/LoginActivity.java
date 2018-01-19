@@ -184,6 +184,9 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if(mAuthStateListener != null){
+            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+        }
 
         mGoogleModule.revokeAccess();
     }

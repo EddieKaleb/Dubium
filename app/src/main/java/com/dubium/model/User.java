@@ -1,5 +1,13 @@
 package com.dubium.model;
 
+import android.location.Address;
+import android.location.Geocoder;
+
+import java.io.IOException;
+import java.util.List;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 /**
  * Created by eddie on 09/01/2018.
  */
@@ -9,15 +17,21 @@ public class User {
     private String uId;
     private String name;
     private String email;
-    private String photoUrl;
-    private UserAddress userAddress;
+    private String city;
 
-    public User(String uId, String nome, String email, String photoUrl, UserAddress userAddress) {
+
+
+    private double latitude;
+    private double longitude;
+    private String state;
+    private String photoUrl;
+
+    public User(String uId, String nome, String email, String photoUrl) {
         this.uId = uId;
         this.name = nome;
         this.photoUrl = photoUrl;
         this.email = email;
-        this.userAddress = userAddress;
+
     }
 
     public User(String uId, String nome, String email) {
@@ -27,6 +41,57 @@ public class User {
     }
 
     public User(){}
+
+    public void findAdress(double latitude, double longitude) throws IOException {
+        Geocoder geocoder;
+        Address address = null;
+        List<Address> addresses;
+
+        geocoder = new Geocoder(getApplicationContext());
+        //PASSANDO A LATITUDE E LONGITUDE QUE TEMOS, E QUERENDO APENAS 1 RESULTADO
+        addresses = geocoder.getFromLocation(latitude, longitude,1);
+
+        if (addresses.size() > 0)
+            address = addresses.get(0);
+
+        this.state = address.getAdminArea();
+        this.city = address.getLocality();
+        this.latitude = latitude;
+        this.longitude = longitude;
+
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
 
     public String getUid(){
         return uId;
@@ -52,13 +117,6 @@ public class User {
         return photoUrl;
     }
 
-    public UserAddress getUserAddress() {
-        return userAddress;
-    }
-
-    public void setUserAddress(UserAddress userAddress) {
-        this.userAddress = userAddress;
-    }
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
     }

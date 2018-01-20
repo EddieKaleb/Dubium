@@ -15,6 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Marcus Vinícius on 12/01/18.
@@ -47,53 +48,53 @@ public class FirebaseDatabaseManager {
         mDatabase.child("users").child(uId).child("difficulties").child(subject.getId()).setValue(true);
     }
 
-    public ArrayList<Subject> getUserAptitudes(Context c, String uId, final List<Subject> allSubjects){
-        final Context context = c;
+    public ArrayList<Subject> getUserAptitudes(String uId){
 
-        final ArrayList<Subject> list = new ArrayList<>();
-
-        Query query = mDatabase.child("users").child(uId).child("aptitudes");
-        query.addListenerForSingleValueEvent(new ValueEventListener(){
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Subject subject;
-
-                for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
-                    String id = objSnapshot.getKey();
-                    int intId = Integer.parseInt(id) - 1;
-                    list.add(allSubjects.get(intId));
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(context, "ERRO", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        return list;
+        return this.getUserSubjects(uId, "aptitudes");
     }
 
-    public ArrayList<Subject> getUserDifficulties(Context c, String uId, final List<Subject> allSubjects){
-        final Context context = c;
+    public ArrayList<Subject> getUserDifficulties(String uId){
+
+        return this.getUserSubjects(uId, "difficulties");
+    }
+
+    public ArrayList<Subject> getUserSubjects(String uId, String subjectsType){
 
         final ArrayList<Subject> list = new ArrayList<>();
 
-        Query query = mDatabase.child("users").child(uId).child("difficulties");
+        Query query = mDatabase.child("users").child(uId).child(subjectsType);
 
+        /***** Pega a lista de ids de subjects de um user e a insere em um Map *****/
         query.addListenerForSingleValueEvent(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Subject subject;
+                Map<String, Boolean> aptitudesData = (Map<String,Boolean>)dataSnapshot.getValue();
 
-                for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
-                    String id = objSnapshot.getKey();
-                    int intId = Integer.parseInt(id) - 1;
-                    list.add(allSubjects.get(intId));
+                /***** Para cada id inserido pega a subject correspondente e insere na listAptitudes *****/
+                for (Map.Entry<String, Boolean> entry : aptitudesData.entrySet()) {
+                    String key = entry.getKey();
+                    boolean value = entry.getValue();
+
+                    Query query = mDatabase.child("subjects").child(key);
+
+                    query.addListenerForSingleValueEvent(new ValueEventListener(){
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Subject subject = dataSnapshot.getValue(Subject.class);
+
+                            Log.i("subject", subject.getId() + "   " + subject.getName());
+                            list.add(subject);
+
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                        }
+                    });
                 }
+
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(context, "ERRO", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -130,5 +131,4 @@ public class FirebaseDatabaseManager {
 
         return list;
     }
-
 }

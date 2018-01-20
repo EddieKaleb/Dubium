@@ -1,9 +1,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context="com.dubium.fragments.ProfileFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.dubium.fragments.ProfileFragment">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/container_perfil"
@@ -72,40 +76,46 @@ tools:context="com.dubium.fragments.ProfileFragment">
             android:background="@drawable/ic_foto_grande"
             android:orientation="horizontal" />
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_more"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="5dp"
+            android:tint="@color/light_gray"/>
 
         <RelativeLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/tv_estado_perfil"
+            android:paddingBottom="30dp"
             android:background="@color/light_white" >
 
             <!-- HABILIDADES -->
-            <RelativeLayout
+            <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/aptidoes_container"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
+                app:flexDirection="row"
+                app:flexWrap="wrap"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="35dp"
-                android:background="@color/white"
-                android:elevation="2dp">
-
-                <ListView
-                    android:id="@+id/lv_aptidoes_perfil"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"></ListView>
-            </RelativeLayout>
+                android:background="@color/light_white"
+                android:paddingTop="35dp"
+                android:paddingLeft="5dp"
+                android:paddingBottom="10dp"/>
 
             <RelativeLayout
                 android:id="@+id/titulo_aptidoes"
-                android:layout_below="@id/tv_estado_perfil"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_marginLeft="40dp"
                 android:layout_marginTop="25dp"
-                android:background="#008000"
                 android:elevation="4dp"
+                android:background="@color/dark_green"
                 android:padding="5dp">
 
                 <ImageView
@@ -114,6 +124,7 @@ tools:context="com.dubium.fragments.ProfileFragment">
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
+                    android:tint="@color/white"
                     android:src="@drawable/ic_cerebro" />
 
                 <TextView
@@ -130,22 +141,26 @@ tools:context="com.dubium.fragments.ProfileFragment">
             </RelativeLayout>
 
             <!-- DIFICULDADES -->
-            <RelativeLayout
+            <com.google.android.flexbox.FlexboxLayout
                 android:layout_below="@id/aptidoes_container"
                 android:id="@+id/dificuldades_container"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
+                app:flexDirection="row"
+                app:flexWrap="wrap"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:layout_marginTop="35dp"
-                android:background="@color/white"
-                android:elevation="2dp">
+                android:layout_marginTop="25dp"
+                android:background="@color/light_white"
+                android:paddingTop="30dp"
+                android:paddingLeft="5dp"
+                android:paddingBottom="10dp">
 
                 <ListView
                     android:id="@+id/lv_dificuldades_perfil"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"></ListView>
-            </RelativeLayout>
+            </com.google.android.flexbox.FlexboxLayout>
 
             <RelativeLayout
                 android:layout_below="@id/aptidoes_container"
@@ -153,9 +168,9 @@ tools:context="com.dubium.fragments.ProfileFragment">
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_marginLeft="40dp"
-                android:layout_marginTop="25dp"
-                android:background="@color/google"
+                android:layout_marginTop="10dp"
                 android:elevation="4dp"
+                android:background="@color/google"
                 android:padding="5dp">
 
                 <ImageView
@@ -164,6 +179,7 @@ tools:context="com.dubium.fragments.ProfileFragment">
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
+                    android:tint="@color/white"
                     android:src="@drawable/ic_duvida" />
 
                 <TextView
@@ -206,4 +222,5 @@ tools:context="com.dubium.fragments.ProfileFragment">
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
+    </ScrollView>
 </FrameLayout>

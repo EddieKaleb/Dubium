@@ -1,6 +1,7 @@
 package com.dubium.database;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.dubium.model.Subject;
@@ -13,6 +14,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Marcus Vinícius on 12/01/18.
@@ -45,21 +47,21 @@ public class FirebaseDatabaseManager {
         mDatabase.child("users").child(uId).child("difficulties").child(subject.getId()).setValue(true);
     }
 
-    public ArrayList<Subject> getUserAptitudes(Context c, String uId){
+    public ArrayList<Subject> getUserAptitudes(Context c, String uId, final List<Subject> allSubjects){
         final Context context = c;
 
         final ArrayList<Subject> list = new ArrayList<>();
 
         Query query = mDatabase.child("users").child(uId).child("aptitudes");
-
         query.addListenerForSingleValueEvent(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Subject subject;
 
                 for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
-                    subject = objSnapshot.getValue(Subject.class);
-                    list.add(subject);
+                    String id = objSnapshot.getKey();
+                    int intId = Integer.parseInt(id) - 1;
+                    list.add(allSubjects.get(intId));
                 }
             }
             @Override
@@ -71,7 +73,7 @@ public class FirebaseDatabaseManager {
         return list;
     }
 
-    public ArrayList<Subject> getUserDifficulties(Context c, String uId){
+    public ArrayList<Subject> getUserDifficulties(Context c, String uId, final List<Subject> allSubjects){
         final Context context = c;
 
         final ArrayList<Subject> list = new ArrayList<>();
@@ -84,8 +86,9 @@ public class FirebaseDatabaseManager {
                 Subject subject;
 
                 for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
-                    subject = objSnapshot.getValue(Subject.class);
-                    list.add(subject);
+                    String id = objSnapshot.getKey();
+                    int intId = Integer.parseInt(id) - 1;
+                    list.add(allSubjects.get(intId));
                 }
             }
             @Override

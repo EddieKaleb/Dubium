@@ -45,6 +45,58 @@ public class FirebaseDatabaseManager {
         mDatabase.child("users").child(uId).child("difficulties").child(subject.getId()).setValue(true);
     }
 
+    public ArrayList<Subject> getUserAptitudes(Context c, String uId){
+        final Context context = c;
+
+        final ArrayList<Subject> list = new ArrayList<>();
+
+        Query query = mDatabase.child("users").child(uId).child("aptitudes");
+
+        query.addListenerForSingleValueEvent(new ValueEventListener(){
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Subject subject;
+
+                for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
+                    subject = objSnapshot.getValue(Subject.class);
+                    list.add(subject);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(context, "ERRO", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        return list;
+    }
+
+    public ArrayList<Subject> getUserDifficulties(Context c, String uId){
+        final Context context = c;
+
+        final ArrayList<Subject> list = new ArrayList<>();
+
+        Query query = mDatabase.child("users").child(uId).child("difficulties");
+
+        query.addListenerForSingleValueEvent(new ValueEventListener(){
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Subject subject;
+
+                for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
+                    subject = objSnapshot.getValue(Subject.class);
+                    list.add(subject);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(context, "ERRO", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        return list;
+    }
+
     public void addSubjects(String id, Subject subject){
 
         mDatabase.child("subjects").child(id).setValue(subject);

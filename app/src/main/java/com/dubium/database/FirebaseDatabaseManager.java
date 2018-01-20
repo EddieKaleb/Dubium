@@ -32,12 +32,6 @@ public class FirebaseDatabaseManager {
     public void saveUser(User user) {
 
         String uId = user.getUid();
-
-        user.setCity("Campina Grande");
-        user.setState("Paraíba");
-        user.setLatitude(-7.2305600);
-        user.setLongitude(-35.8811100);
-
         mDatabase.child("users").child(uId).setValue(user);
     }
 

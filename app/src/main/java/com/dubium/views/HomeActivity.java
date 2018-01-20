@@ -133,21 +133,6 @@ public class HomeActivity extends BaseActivity {
         return false;
     }
 
-    /*private void alertaValidacaoPermissao() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Permissão");
-        builder.setMessage("Para usar o app você precisa aceitar as permissões ");
-        builder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                // Alguma ação
-            }
-        });
-        builder.setCancelable(false);
-        builder.create();
-        builder.show();
-    }*/
-
     private void signOut(){
         FirebaseAuth.getInstance().signOut();
         LoginManager.getInstance().logOut();
@@ -172,7 +157,6 @@ public class HomeActivity extends BaseActivity {
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     2);
 
-            Toast.makeText(this, "SEM PERMISSÃO", Toast.LENGTH_SHORT).show();
 
         }else{
             locationManager = (LocationManager)
@@ -200,7 +184,7 @@ public class HomeActivity extends BaseActivity {
                 e.printStackTrace();
             }
         }else{
-            Toast.makeText(this, "Location is null! " + towers, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "religue seu gps" + towers, Toast.LENGTH_SHORT).show();
         }
     }
 

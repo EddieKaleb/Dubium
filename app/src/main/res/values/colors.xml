@@ -16,4 +16,5 @@
     <color name="darker_gray">#434A54</color>
     <color name="facebook">#3b5998</color>
     <color name="google">#C54533</color>
+    <color name="msg_received">#E56F26</color>
 </resources>

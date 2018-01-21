@@ -125,4 +125,16 @@ public class FirebaseDatabaseManager {
 
         return list;
     }
+
+    public String initializeUserChat(String uId, String friendId){
+        String chatId = mDatabase.child("chats").push().getKey();
+
+        /***** INSERE O CHAT NO USUÁRIO ATUAL *****/
+        mDatabase.child("users").child(uId).child("conversations").child(friendId).child(chatId).setValue(true);
+
+        /***** INSERE O CHAT NO USUÁRIO REMETENTE *****/
+        mDatabase.child("users").child(friendId).child("conversations").child(uId).child(chatId).setValue(true);
+
+        return chatId;
+    }
 }

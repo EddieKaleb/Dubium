@@ -1,6 +1,8 @@
 package com.dubium.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import com.dubium.R;
 import com.dubium.fragments.UserViewHolder;
 import com.dubium.model.User;
+import com.dubium.views.ChatActivity;
 
 /**
  * Created by eddie on 09/01/2018.
@@ -29,9 +32,11 @@ public class UserAdapter extends ArrayAdapter<UserViewHolder> {
     TextView mTvAptidoesComuns;
     TextView mTvDificuldadesComuns;
     TextView mTvDistancia;
+    Context mContext;
 
     public UserAdapter(Context context, ArrayList<UserViewHolder> users) {
         super(context, 0, users);
+        this.mContext = context;
     }
 
     @Override
@@ -58,10 +63,17 @@ public class UserAdapter extends ArrayAdapter<UserViewHolder> {
                     .into(mIvFotoPerfil);
         }
 
+        final String friendId = u.getuId();
         mUsuarioContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Abre o perfil do usuário, por enquanto vai abrir o chat para adiantar essa parte
+                Intent intent = new Intent(v.getContext(), ChatActivity.class);
+
+                Bundle mBundle = new Bundle();
+                mBundle.putString("friendId", friendId);
+                intent.putExtras(mBundle);
+
+                mContext.startActivity(intent);
             }
         });
 

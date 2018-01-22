@@ -3,7 +3,6 @@ package com.dubium.database;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -70,40 +69,11 @@ public class EmailPasswordModule {
                                         }
                                     });
 
-                            mUserReference = FirebaseDatabase.getInstance().getReference().child("users").child(fbUser.getUid());
+                            Intent i = new Intent(mContext, AptitudesActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            mContext.startActivity(i);
+                            ((Activity) mContext).finish();
 
-                            ValueEventListener userListener = new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    // Get Post object and use the values to update the UI
-                                    User user = dataSnapshot.getValue(User.class);
-
-                                    // If user don't exists
-                                    if(user == null){
-
-                                        Intent i = new Intent(mContext, AptitudesActivity.class);
-                                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        mContext.startActivity(i);
-                                        ((Activity) mContext).finish();
-                                    }
-                                    // If user exists
-                                    else{
-                                        Intent i = new Intent(mContext, HomeActivity.class);
-                                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        mContext.startActivity(i);
-                                        ((Activity) mContext).finish();
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                    // Getting Post failed, log a message
-                                    Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                                    // ...
-                                }
-                            };
-
-                            mUserReference.addListenerForSingleValueEvent(userListener);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -122,7 +92,6 @@ public class EmailPasswordModule {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("LoginEmail", "signInWithEmail:success");
-                            FirebaseUser user = mFirebaseAuth.getCurrentUser();
 
                             FirebaseUser fbUser = mFirebaseAuth.getCurrentUser();
 

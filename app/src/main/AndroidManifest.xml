@@ -12,9 +12,11 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_d_pequeno"
         android:supportsRtl="true">
+
         <activity
             android:name=".views.SplashActivity"
             android:theme="@style/SplashStyle">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,7 +37,7 @@
             android:theme="@style/SetupStyle" />
         <activity
             android:name=".views.HomeActivity"
-            android:theme="@style/HomeStyle"></activity>
+            android:theme="@style/HomeStyle" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -57,10 +59,9 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".views.ChatActivity"
-            android:theme="@style/NoActionBar"></activity>
+            android:theme="@style/NoActionBar" />
     </application>
 
 </manifest>

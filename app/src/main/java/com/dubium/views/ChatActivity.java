@@ -109,14 +109,12 @@ public class ChatActivity extends BaseActivity {
         mPhotoImageView = (ImageView) findViewById(R.id.iv_photo);
         mNameTextView = (TextView) findViewById(R.id.tv_name);
 
+        mProgressBar.setVisibility(View.INVISIBLE);
 
         // Initialize message ListView and its adapter
         final List<Message> messages = new ArrayList<>();
         mMessageAdapter = new MessageAdapter(this, R.layout.item_message, messages);
         mMessageListView.setAdapter(mMessageAdapter);
-
-        // Initialize progress bar
-        mProgressBar.setVisibility(ProgressBar.INVISIBLE);
 
         if (friendPhotoUrl != null) {
             Glide.with(mPhotoImageView.getContext())

@@ -86,7 +86,7 @@ public class LoginActivity extends BaseActivity {
         mFacebookModule = new FacebookModule(this, mFirebaseAuth);
         mEmailPasswordModule = new EmailPasswordModule(this, mFirebaseAuth);
 
-        initializeAuthStateListener();
+        //initializeAuthStateListener();
 
         mBtnCadastreSe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,23 +170,23 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+        //mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
     @Override
     protected void onPause(){
         super.onPause();
-        if(mAuthStateListener != null){
+        /*if(mAuthStateListener != null){
             mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
-        }
+        }*/
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mAuthStateListener != null){
+        /*if(mAuthStateListener != null){
             mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
-        }
+        }*/
 
         mGoogleModule.revokeAccess();
     }

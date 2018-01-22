@@ -57,7 +57,7 @@
         android:fontFamily="@string/font_family_thin"
         android:paddingRight="7dp"
         android:paddingTop="34dp"
-        android:textColor="@color/black"
+        android:textColor="@color/dark_green"
         android:textSize="11dp" />
 
     <TextView
@@ -69,7 +69,7 @@
         android:layout_toRightOf="@id/foto_perfil_container"
         android:fontFamily="@string/font_family_thin"
         android:paddingTop="34dp"
-        android:textColor="@color/black"
+        android:textColor="@android:color/holo_red_dark"
         android:textSize="11dp" />
 
     <ImageView

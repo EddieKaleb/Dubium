@@ -7,11 +7,14 @@ import android.content.Context;
 import android.util.Log;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dubium.R;
 import com.dubium.model.Subject;
 import com.dubium.model.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,9 +34,13 @@ import fisk.chipcloud.ChipCloud;
 public class FirebaseDatabaseManager {
 
     private DatabaseReference mDatabase;
+    FirebaseAuth mFirebaseAuth;
+    FirebaseUser currentUser;
 
     public FirebaseDatabaseManager() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        currentUser = mFirebaseAuth.getCurrentUser();
     }
 
     // Save an user on database
@@ -94,8 +101,59 @@ public class FirebaseDatabaseManager {
         });
     }
 
-    public void addSubjects(String id, Subject subject) {
+    public void getUserSubjects(String uId, final String subjectsType, final TextView view) {
+        final ArrayList<Subject> list = new ArrayList<>();
 
+        Query query = mDatabase.child("users").child(uId).child(subjectsType);
+
+        /***** Pega a lista de ids de subjects de um user e a insere em um Map *****/
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot objDataSnapshot : dataSnapshot.getChildren()) {
+
+                    String key = objDataSnapshot.getKey();
+
+                    Query query = mDatabase.child("subjects").child(key);
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            final Subject subject = dataSnapshot.getValue(Subject.class);
+                            //view.setText(""+list.get(0).getName());
+
+                            Query query2;
+                            if(subjectsType.equals("aptitudes"))
+                                query2 = mDatabase.child("users").child(currentUser.getUid()).child("difficulties");
+                            else
+                                query2 = mDatabase.child("users").child(currentUser.getUid()).child("aptitudes");
+                            query2.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    for(DataSnapshot ds: dataSnapshot.getChildren()) {
+                                        if(ds.getKey().equals(subject.getId()))
+                                            //common+=" • " + subject.getName();
+                                            view.setText(" • " + subject.getName());
+                                    }
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {}
+                            });
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {}
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+    }
+
+    public void addSubjects(String id, Subject subject) {
         mDatabase.child("subjects").child(id).setValue(subject);
     }
 

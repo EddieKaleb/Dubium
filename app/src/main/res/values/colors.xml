@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#000000</color>
-    <color name="blue">#53A6A7</color>
+    <color name="blue">#53a6a7</color>
     <color name="green">#9FCC2E</color>
     <color name="dark_green">#008000</color>
     <color name="purple">#483A58</color>
@@ -15,6 +15,6 @@
     <color name="dark_gray">#656D78</color>
     <color name="darker_gray">#434A54</color>
     <color name="facebook">#3b5998</color>
-    <color name="google">#C54533</color>
+    <color name="google">#c54533</color>
     <color name="msg_received">#E56F26</color>
 </resources>

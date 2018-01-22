@@ -16,9 +16,12 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import com.dubium.R;
+import com.dubium.database.FirebaseDatabaseManager;
 import com.dubium.fragments.UserViewHolder;
 import com.dubium.model.User;
 import com.dubium.views.ChatActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 /**
  * Created by eddie on 09/01/2018.
@@ -26,6 +29,10 @@ import com.dubium.views.ChatActivity;
 
 public class UserAdapter extends ArrayAdapter<UserViewHolder> {
 
+    FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();;
+    FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();;
+
+    FirebaseDatabaseManager fbManager = new FirebaseDatabaseManager();
     RelativeLayout mUsuarioContainer;
     ImageView mIvFotoPerfil;
     TextView mTvNome;
@@ -54,8 +61,14 @@ public class UserAdapter extends ArrayAdapter<UserViewHolder> {
 
         mTvNome.setText(u.getName());
         mTvDistancia.setText(u.getDistancia());
-        mTvAptidoesComuns.setText(u.getAptidoesComuns());
-        mTvDificuldadesComuns.setText(u.getDificuldadesComuns());
+
+
+        //mTvAptidoesComuns.setText(u.getAptidoesComuns());
+        fbManager.getUserSubjects(u.getuId(), "aptitudes",mTvAptidoesComuns);
+        fbManager.getUserSubjects(u.getuId(), "difficulties",mTvDificuldadesComuns);
+
+
+        //mTvDificuldadesComuns.setText(u.getDificuldadesComuns());
 
         if (u.getPhotoUrl() != null) {
             Glide.with(mIvFotoPerfil.getContext())

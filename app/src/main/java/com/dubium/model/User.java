@@ -14,7 +14,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class User {
 
-    private String uId;
+    private String uid;
     private String name;
     private String email;
     private String city;
@@ -27,7 +27,7 @@ public class User {
     private String photoUrl;
 
     public User(String uId, String nome, String email, String photoUrl) {
-        this.uId = uId;
+        this.uid = uId;
         this.name = nome;
         this.photoUrl = photoUrl;
         this.email = email;
@@ -35,7 +35,7 @@ public class User {
     }
 
     public User(String uId, String nome, String email) {
-        this.uId = uId;
+        this.uid = uId;
         this.name = nome;
         this.email = email;
     }
@@ -94,11 +94,11 @@ public class User {
     }
 
     public String getUid(){
-        return uId;
+        return uid;
     }
 
     public void setUid(String uId){
-        this.uId = uId;
+        this.uid = uId;
     }
 
     public String getName() {

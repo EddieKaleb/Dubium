@@ -23,6 +23,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Handler;
 
 import fisk.chipcloud.ChipCloud;
@@ -51,6 +52,10 @@ public class FirebaseDatabaseManager {
 
     public void addAptitudeToUser(String uId, Subject subject) {
         mDatabase.child("users").child(uId).child("aptitudes").child(subject.getId()).setValue(true);
+    }
+
+    public void addAptitudesToUser(String uId, HashMap<String, Boolean> subjects) {
+        mDatabase.child("users").child(uId).child("aptitudes").setValue(subjects);
     }
 
     public void addDifficultieToUser(String uId, Subject subject) {

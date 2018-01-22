@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="btns_social_login_height">40dp</dimen>
-    <dimen name="btns_login_height">35dp</dimen>
+    <dimen name="btns_login_height">40dp</dimen>
     <dimen name="general_elevation">4dp</dimen>
     <dimen name="drawable_padding">5dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>

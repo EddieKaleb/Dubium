@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -15,17 +16,25 @@ import android.widget.TextView;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.dubium.R;
 import com.dubium.adapters.SetupAdapter;
 import com.dubium.database.FirebaseDatabaseManager;
+import com.dubium.fragments.ProfileFragment;
 import com.dubium.model.Subject;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import fisk.chipcloud.ChipCloud;
 
 public class AptitudesActivity extends Activity {
 
@@ -37,11 +46,14 @@ public class AptitudesActivity extends Activity {
     @BindView(R.id.tv_second) TextView mTvSecond;
     @BindView(R.id.iv_icon) ImageView mIvIcon;
 
+    public FirebaseAuth mFirebaseAuth;
     public FirebaseDatabaseManager mFirebaseDatabaseManager;
+    private DatabaseReference mDatabase;
+
+
     public ArrayList<Subject> mDisciplinas = new ArrayList<>();
     // Lista para aptidões e dificuldades
     public final ArrayList<Subject> mMinhasDisciplinas = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,15 +63,29 @@ public class AptitudesActivity extends Activity {
         mTvProsseguir.setVisibility(View.GONE);
         mLvDisciplinas.setVisibility(View.GONE);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         mFirebaseDatabaseManager = new FirebaseDatabaseManager();
+        mFirebaseAuth = FirebaseAuth.getInstance();
 
         // Query do firebase para adicionar algumas disciplinas
         mDisciplinas = mFirebaseDatabaseManager.getSubjects(this);
 
-        final ArrayAdapter mAdapterSearch = new ArrayAdapter(this, android.R.layout.simple_list_item_1, mDisciplinas);
         final SetupAdapter mAdapterSetup = new SetupAdapter(this, mMinhasDisciplinas);
+        final ArrayAdapter mAdapterSearch = new ArrayAdapter(this, android.R.layout.simple_list_item_1, mDisciplinas);
 
-        mLvDisciplinas.setAdapter(mAdapterSearch);
+        if (getIntent().getExtras().getString("calling-activity") != null){
+            setUserSubjects(mFirebaseAuth.getCurrentUser().getUid(), "aptitudes", mAdapterSetup);
+            mViewMensagem.setVisibility(View.GONE);
+            mLvDisciplinas.setVisibility(View.VISIBLE);
+            mLvDisciplinas.setAdapter(mAdapterSetup);
+            mTvProsseguir.setText("SALVAR");
+            mTvFirst.setText("Você está sem habilidades");
+            mTvSecond.setText("Adicione pelo menos uma!");
+            mTvProsseguir.setVisibility(View.VISIBLE);
+        } else {
+            mLvDisciplinas.setAdapter(mAdapterSearch);
+
+        }
 
         mLvDisciplinas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -114,13 +140,25 @@ public class AptitudesActivity extends Activity {
         mTvProsseguir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), DifficultiesActivity.class);
 
-                Bundle mBundle = new Bundle();
-                mBundle.putSerializable("Aptitudes", (ArrayList<Subject>) mMinhasDisciplinas);
-                intent.putExtras(mBundle);
-                startActivity(intent);
-                finish();
+                if (getIntent().getExtras().getString("calling-activity") != null){
+                    HashMap<String, Boolean> subjects = new HashMap<>();
+
+                    for (Subject s: mMinhasDisciplinas) subjects.put(s.getId(), true);
+                    mFirebaseDatabaseManager.addAptitudesToUser(mFirebaseAuth.getCurrentUser().getUid(), subjects);
+
+                    Intent intent = new Intent(v.getContext(), ProfileFragment.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(v.getContext(), DifficultiesActivity.class);
+
+                    Bundle mBundle = new Bundle();
+                    mBundle.putSerializable("Aptitudes", (ArrayList<Subject>) mMinhasDisciplinas);
+                    intent.putExtras(mBundle);
+                    getApplicationContext().startActivity(intent);
+                    finish();
+                }
             }
         });
 
@@ -138,4 +176,39 @@ public class AptitudesActivity extends Activity {
 
     @Override
     public void onBackPressed() {}
+
+    public void setUserSubjects(String uId, String subjectsType, final ArrayAdapter minhasDisciplinas) {
+
+        Query query = mDatabase.child("users").child(uId).child(subjectsType);
+
+        /***** Pega a lista de ids de subjects de um user e a insere em um Map *****/
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot objDataSnapshot : dataSnapshot.getChildren()) {
+
+                    String key = objDataSnapshot.getKey();
+
+                    Query query = mDatabase.child("subjects").child(key);
+
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Subject subject = dataSnapshot.getValue(Subject.class);
+                            minhasDisciplinas.add(subject);
+                            minhasDisciplinas.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
 }

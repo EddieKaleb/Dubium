@@ -2,11 +2,15 @@ package com.dubium.fragments;
 
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.transition.Fade;
+import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -18,11 +22,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.dubium.R;
 import com.dubium.database.FirebaseDatabaseManager;
 import com.dubium.model.Subject;
+import com.dubium.views.AptitudesActivity;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -49,7 +55,23 @@ public class ProfileFragment extends Fragment {
 
 
     View mRootView;
+
+    RelativeLayout mContainerPerfil;
+    RelativeLayout mContainerAptidoes;
+    RelativeLayout mContainerDificuldades;
+
     ImageView mIvFotoPerfil;
+    ImageView mIvEditar;
+    ImageView mIvEditarFoto;
+    ImageView mIvConfirmar;
+    ImageView mIvIconeAptidoes;
+    ImageView mIvIconeDificuldades;
+
+    TextView mTvNomePerfil;
+    TextView mTvCidadePerfil;
+    TextView mTvEstadoPerfil;
+
+
     FlexboxLayout mAptidoesContainer;
     FlexboxLayout mDificuldadesContainer;
 
@@ -67,7 +89,6 @@ public class ProfileFragment extends Fragment {
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
     }
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,6 +101,7 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.mRootView = view;
         init();
+        setListeners();
         loadData();
     }
 
@@ -92,18 +114,77 @@ public class ProfileFragment extends Fragment {
         mAptidoesContainer = (FlexboxLayout) mRootView.findViewById(R.id.aptidoes_container);
         mDificuldadesContainer = (FlexboxLayout) mRootView.findViewById(R.id.dificuldades_container);
         mIvFotoPerfil = (ImageView) mRootView.findViewById(R.id.iv_foto_perfil);
+        mTvNomePerfil = (TextView) mRootView.findViewById(R.id.tv_nome_perfil);
+        mTvCidadePerfil = (TextView) mRootView.findViewById(R.id.tv_cidade_perfil);
+        mTvEstadoPerfil = (TextView) mRootView.findViewById(R.id.tv_estado_perfil);
+        mContainerAptidoes = (RelativeLayout) mRootView.findViewById(R.id.titulo_aptidoes);
+        mContainerDificuldades = (RelativeLayout) mRootView.findViewById(R.id.titulo_dificuldades);
+        mIvEditar = (ImageView) mRootView.findViewById(R.id.iv_editar);
+        mIvConfirmar = (ImageView) mRootView.findViewById(R.id.iv_confirmar);
+        mIvEditarFoto = (ImageView) mRootView.findViewById(R.id.iv_editar_foto);
+        mIvIconeAptidoes = (ImageView) mRootView.findViewById(R.id.ic_cerebro);
+        mIvIconeDificuldades = (ImageView) mRootView.findViewById(R.id.ic_duvida);
 
         mFirebaseDatabaseManager = new FirebaseDatabaseManager();
         mChipsAptitudes = new ChipCloud(mRootView.getContext(), mAptidoesContainer, config);
         mChipsDifficulties = new ChipCloud(mRootView.getContext(), mDificuldadesContainer, config);
+
+        mContainerAptidoes.setClickable(false);
+        mContainerDificuldades.setClickable(false);
+        mIvConfirmar.setVisibility(View.GONE);
+        mIvEditarFoto.setVisibility(View.GONE);
     }
 
+
+    private void setListeners() {
+        mIvEditar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mContainerAptidoes.setClickable(true);
+                mContainerDificuldades.setClickable(true);
+                mIvConfirmar.setVisibility(View.VISIBLE);
+                mIvEditarFoto.setVisibility(View.VISIBLE);
+                mIvEditar.setVisibility(View.GONE);
+                mIvIconeAptidoes.setImageResource(R.drawable.ic_editar);
+                mIvIconeDificuldades.setImageResource(R.drawable.ic_editar);
+            }
+        });
+
+        mIvConfirmar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mContainerAptidoes.setClickable(false);
+                mContainerDificuldades.setClickable(false);
+                mIvConfirmar.setVisibility(View.GONE);
+                mIvEditarFoto.setVisibility(View.GONE);
+                mIvEditar.setVisibility(View.VISIBLE);
+                mIvIconeAptidoes.setImageResource(R.drawable.ic_cerebro);
+                mIvIconeDificuldades.setImageResource(R.drawable.ic_duvida);
+            }
+        });
+
+        mContainerAptidoes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AptitudesActivity.class);
+                intent.putExtra("calling-activity", "ProfileFragment");
+                startActivity(intent);
+            }
+        });
+    }
+
+
     private void loadData() {
+        mTvNomePerfil.setText(mFirebaseUser.getDisplayName().toUpperCase());
         mFirebaseDatabaseManager.setUserAptitudes(mFirebaseUser.getUid(), mChipsAptitudes);
         mFirebaseDatabaseManager.setUserDifficulties(mFirebaseUser.getUid(), mChipsDifficulties);
-        Glide.with(mIvFotoPerfil.getContext())
-                .load("https://www.what-dog.net/Images/faces2/scroll001.jpg")
-                .into(mIvFotoPerfil);
+
+        if (mFirebaseUser.getPhotoUrl() != null) {
+            Glide.with(mIvFotoPerfil.getContext())
+                    .load(mFirebaseUser.getPhotoUrl())
+                    .into(mIvFotoPerfil);
+        }
+
     }
 
     @Override

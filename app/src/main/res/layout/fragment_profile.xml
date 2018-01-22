@@ -1,4 +1,5 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,6 +15,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/blue">
+
+
+        <ImageView
+            android:id="@+id/iv_editar_foto"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginRight="10dp"
+            android:paddingBottom="5dp"
+            android:layout_above="@id/tv_nome_perfil"
+            android:layout_toEndOf="@id/iv_foto_perfil"
+            android:src="@drawable/ic_add_foto"
+            android:tint="@color/light_gray"
+            android:layout_marginTop="-5dp"/>
 
         <TextView
             android:id="@+id/tv_nome_perfil"
@@ -77,12 +91,23 @@
             android:orientation="horizontal" />
 
         <ImageView
+            android:id="@+id/iv_confirmar"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:src="@drawable/ic_check"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:tint="@color/light_gray"
+            android:layout_alignParentRight="true"/>
+
+        <ImageView
+            android:id="@+id/iv_editar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_more"
+            android:src="@drawable/ic_lapis"
             android:layout_alignParentRight="true"
             android:layout_marginTop="10dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="10dp"
             android:tint="@color/light_gray"/>
 
         <RelativeLayout
@@ -128,6 +153,7 @@
                     android:src="@drawable/ic_cerebro" />
 
                 <TextView
+                    android:id="@+id/tv_nome_habilidades"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -137,7 +163,6 @@
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="12dp" />
-
             </RelativeLayout>
 
             <!-- DIFICULDADES -->

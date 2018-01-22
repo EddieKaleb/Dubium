@@ -9,7 +9,11 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.transition.ChangeClipBounds;
+import android.support.transition.ChangeScroll;
+import android.support.transition.Explode;
 import android.support.transition.Fade;
+import android.support.transition.Slide;
 import android.support.transition.Transition;
 import android.support.transition.TransitionManager;
 import android.support.v4.app.ActivityCompat;
@@ -101,6 +105,7 @@ public class HomeActivity extends BaseActivity {
                                     return true;
                                 case R.id.action_person:
                                     mToolbar.setVisibility(View.GONE);
+                                    TransitionManager.beginDelayedTransition(mHomeContainer, new Explode());
                                     fragmentTransaction.replace(R.id.fragment, mProfileFragment).commit();
                                     return true;
                             }

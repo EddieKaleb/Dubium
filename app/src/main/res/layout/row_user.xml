@@ -49,15 +49,42 @@
         android:textSize="11dp" />
 
     <TextView
+        android:id="@+id/tv_aptidao_comum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_toRightOf="@id/iv_foto_perfil"
+        android:fontFamily="@string/font_family_thin"
+        android:paddingTop="34dp"
+        android:textColor="@color/dark_green"
+        android:layout_marginLeft="5dp"
+        android:text="A"
+        android:textSize="11dp" />
+
+    <TextView
         android:id="@+id/tv_aptidoes_comum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
-        android:layout_toRightOf="@id/foto_perfil_container"
+        android:layout_toRightOf="@id/tv_aptidao_comum"
+        android:layout_marginLeft="5dp"
         android:fontFamily="@string/font_family_thin"
-        android:paddingRight="7dp"
         android:paddingTop="34dp"
         android:textColor="@color/dark_green"
+        android:text="B"
+        android:textSize="11dp" />
+
+    <TextView
+        android:id="@+id/tv_dificuldade_comum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/tv_aptidoes_comum"
+        android:fontFamily="@string/font_family_thin"
+        android:paddingTop="34dp"
+        android:textColor="@android:color/holo_red_dark"
+        android:text="C"
         android:textSize="11dp" />
 
     <TextView
@@ -65,11 +92,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
-        android:layout_toEndOf="@id/tv_aptidoes_comum"
-        android:layout_toRightOf="@id/foto_perfil_container"
+        android:layout_toRightOf="@id/tv_dificuldade_comum"
         android:fontFamily="@string/font_family_thin"
         android:paddingTop="34dp"
+        android:layout_marginLeft="5dp"
         android:textColor="@android:color/holo_red_dark"
+        android:text="D"
         android:textSize="11dp" />
 
     <ImageView

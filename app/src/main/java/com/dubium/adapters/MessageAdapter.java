@@ -65,33 +65,6 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             timePhotoTextView.setVisibility(View.VISIBLE);
             timeTextTextView.setVisibility(View.GONE);
 
-            photoImageView.setOnTouchListener(new View.OnTouchListener() {
-
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN: {
-                            ImageView view = (ImageView) v;
-                            //overlay is black with transparency of 0x77 (119)
-                            view.getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
-                            view.invalidate();
-                            break;
-                        }
-                        case MotionEvent.ACTION_UP:
-                        case MotionEvent.ACTION_CANCEL: {
-                            ImageView view = (ImageView) v;
-                            //clear the overlay
-                            view.getDrawable().clearColorFilter();
-                            view.invalidate();
-                            break;
-                        }
-                    }
-
-                    return false;
-                }
-            });
-
             timePhotoTextView.setText(time);
             Glide.with(photoImageView.getContext())
                     .load(message.getPhotoUrl())

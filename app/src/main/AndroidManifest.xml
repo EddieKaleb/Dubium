@@ -57,6 +57,10 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".views.ChatActivity"
+            android:theme="@style/NoActionBar"></activity>
     </application>
 
 </manifest>

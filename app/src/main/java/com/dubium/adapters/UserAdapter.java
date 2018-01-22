@@ -83,7 +83,9 @@ public class UserAdapter extends ArrayAdapter<UserViewHolder> {
                 Intent intent = new Intent(v.getContext(), ChatActivity.class);
 
                 Bundle mBundle = new Bundle();
-                mBundle.putString("friendId", friendId);
+                mBundle.putString("friendUid", friendId);
+                mBundle.putString("friendPhotoUrl", u.getPhotoUrl());
+                mBundle.putString("friendName", u.getName());
                 intent.putExtras(mBundle);
 
                 mContext.startActivity(intent);

@@ -11,9 +11,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.dubium.BaseActivity;
 import com.dubium.R;
 import com.dubium.adapters.MessageAdapter;
@@ -44,13 +47,14 @@ public class ChatActivity extends BaseActivity {
 
     private String currentUserId;
     private String friendUserId;
+    private String friendPhotoUrl;
+    private String friendName;
     private String chatId = "";
 
     public static final String ANONYMOUS = "anonymous";
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 1000;
     public static final String FRIENDLY_MSG_LENGTH_KEY = "friendly_msg_length";
 
-    public static final int RC_SIGN_IN = 1;
     public static final int RC_PHOTO_PIKER = 2;
 
     private ListView mMessageListView;
@@ -59,6 +63,8 @@ public class ChatActivity extends BaseActivity {
     private ImageButton mPhotoPickerButton;
     private EditText mMessageEditText;
     private Button mSendButton;
+    private ImageView mPhotoImageView;
+    private TextView mNameTextView;
 
     private String mUsername;
 
@@ -80,7 +86,9 @@ public class ChatActivity extends BaseActivity {
         mUsername = mFirebaseAuth.getCurrentUser().getDisplayName();
 
         currentUserId = mFirebaseAuth.getUid();
-        friendUserId = getIntent().getStringExtra("friendId");
+        friendUserId = getIntent().getStringExtra("friendUid");
+        friendPhotoUrl = getIntent().getStringExtra("friendPhotoUrl");
+        friendName = getIntent().getStringExtra("friendName");
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -88,12 +96,6 @@ public class ChatActivity extends BaseActivity {
         mDatabaseReference = mFirebaseDatabase.getReference();
         mFirebaseDatabaseManager = new FirebaseDatabaseManager();
 
-        /** SE OS USUÁRIOS NUNCA SE COMUNICARAM É INICIALIZADO
-         * UM CHAT NO BANCO DE DADOS ENTRE OS DOIS
-         *
-         * SE JÁ EXISTE UM CHAT ENTRE ELES, ENTÃO O ID DESSE CHAT EH
-         * PARA SER UTILIZADO PELA ACTIVITY
-         * ****/
         initializeChat();
 
         mChatPhotosStorageReference = mFirebaseStorage.getReference().child("chat_photos");
@@ -104,6 +106,9 @@ public class ChatActivity extends BaseActivity {
         mPhotoPickerButton = (ImageButton) findViewById(R.id.bt_photo_picker);
         mMessageEditText = (EditText) findViewById(R.id.et_message);
         mSendButton = (Button) findViewById(R.id.bt_send);
+        mPhotoImageView = (ImageView) findViewById(R.id.iv_photo);
+        mNameTextView = (TextView) findViewById(R.id.tv_name);
+
 
         // Initialize message ListView and its adapter
         final List<Message> messages = new ArrayList<>();
@@ -112,6 +117,14 @@ public class ChatActivity extends BaseActivity {
 
         // Initialize progress bar
         mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+
+        if (friendPhotoUrl != null) {
+            Glide.with(mPhotoImageView.getContext())
+                    .load(friendPhotoUrl)
+                    .into(mPhotoImageView);
+        }
+
+        mNameTextView.setText(friendName);
 
         // ImagePickerButton shows an image picker to upload a image for a message
         mPhotoPickerButton.setOnClickListener(new View.OnClickListener() {

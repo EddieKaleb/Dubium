@@ -1,17 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.dubium.views.ChatActivity">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/userbar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/gray"
-        android:orientation="horizontal" />
+        android:layout_height="60dp"
+        android:background="@color/blueDark">
+
+        <ImageView
+            android:id="@+id/iv_photo"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_anonymous"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Vinicius"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_photo"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.529" />
+
+
+    </android.support.constraint.ConstraintLayout>
 
     <ListView
         android:id="@+id/lv_messages"
@@ -21,10 +54,10 @@
         android:layout_below="@id/userbar"
         android:layout_alignStart="@+id/linearLayout"
         android:divider="@android:color/transparent"
-        android:paddingBottom="4dp"
+        android:paddingBottom="2dp"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:paddingTop="4dp"
+        android:paddingTop="0dp"
         android:stackFromBottom="true"
         android:transcriptMode="alwaysScroll"
         tools:listitem="@layout/item_message" />

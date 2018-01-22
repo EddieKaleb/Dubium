@@ -36,8 +36,10 @@ public class UserAdapter extends ArrayAdapter<UserViewHolder> {
     RelativeLayout mUsuarioContainer;
     ImageView mIvFotoPerfil;
     TextView mTvNome;
-    TextView mTvAptidoesComuns;
-    TextView mTvDificuldadesComuns;
+    TextView mTvAptidaoComum;
+    TextView mTvAptidoesComum;
+    TextView mTvDificuldadeComum;
+    TextView mTvDificuldadesComum;
     TextView mTvDistancia;
     Context mContext;
 
@@ -55,8 +57,10 @@ public class UserAdapter extends ArrayAdapter<UserViewHolder> {
         mUsuarioContainer = (RelativeLayout) convertView.findViewById(R.id.usuario_container);
         mIvFotoPerfil = (ImageView) convertView.findViewById(R.id.iv_foto_perfil);
         mTvNome = (TextView) convertView.findViewById(R.id.tv_nome);
-        mTvAptidoesComuns = (TextView) convertView.findViewById(R.id.tv_aptidoes_comum);
-        mTvDificuldadesComuns = (TextView) convertView.findViewById(R.id.tv_dificuldades_comum);
+        mTvAptidoesComum = (TextView) convertView.findViewById(R.id.tv_aptidoes_comum);
+        mTvAptidaoComum = (TextView) convertView.findViewById(R.id.tv_aptidao_comum);
+        mTvDificuldadeComum = (TextView) convertView.findViewById(R.id.tv_dificuldade_comum);
+        mTvDificuldadesComum = (TextView) convertView.findViewById(R.id.tv_dificuldades_comum);
         mTvDistancia = (TextView) convertView.findViewById(R.id.tv_distancia);
 
         mTvNome.setText(u.getName());
@@ -64,8 +68,8 @@ public class UserAdapter extends ArrayAdapter<UserViewHolder> {
 
 
         //mTvAptidoesComuns.setText(u.getAptidoesComuns());
-        fbManager.getUserSubjects(u.getuId(), "aptitudes",mTvAptidoesComuns);
-        fbManager.getUserSubjects(u.getuId(), "difficulties",mTvDificuldadesComuns);
+        fbManager.getUserSubjects(u.getuId(), "aptitudes",mTvAptidaoComum, mTvAptidoesComum);
+        fbManager.getUserSubjects(u.getuId(), "difficulties",mTvDificuldadeComum, mTvDificuldadesComum);
 
 
         //mTvDificuldadesComuns.setText(u.getDificuldadesComuns());

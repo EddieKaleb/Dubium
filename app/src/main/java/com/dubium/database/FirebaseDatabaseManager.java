@@ -106,19 +106,21 @@ public class FirebaseDatabaseManager {
         });
     }
 
-    public void getUserSubjects(String uId, final String subjectsType, final TextView view) {
+    public void getUserSubjects(String uId, final String subjectsType, final TextView view, final TextView viewQuant) {
         final ArrayList<Subject> list = new ArrayList<>();
 
         Query query = mDatabase.child("users").child(uId).child(subjectsType);
 
         /***** Pega a lista de ids de subjects de um user e a insere em um Map *****/
         query.addListenerForSingleValueEvent(new ValueEventListener() {
+            int cont = 0;
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot objDataSnapshot : dataSnapshot.getChildren()) {
 
                     String key = objDataSnapshot.getKey();
+                    cont++;
 
                     Query query = mDatabase.child("subjects").child(key);
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -139,9 +141,10 @@ public class FirebaseDatabaseManager {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     for(DataSnapshot ds: dataSnapshot.getChildren()) {
                                         if(ds.getKey().equals(subject.getId()))
-                                            //common+=" • " + subject.getName();
                                             view.setText(" • " + subject.getName());
                                     }
+                                    if(view.getText().equals("C") || view.getText().equals("A"))
+                                        view.setText(" • " + subject.getName());
                                 }
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {}
@@ -151,6 +154,8 @@ public class FirebaseDatabaseManager {
                         public void onCancelled(DatabaseError databaseError) {}
                     });
                 }
+                if(cont > 0)
+                    viewQuant.setText("e mais "+ cont);
             }
 
             @Override

@@ -29,6 +29,7 @@ import com.dubium.R;
 import com.dubium.database.FirebaseDatabaseManager;
 import com.dubium.model.Subject;
 import com.dubium.views.AptitudesActivity;
+import com.dubium.views.DifficultiesActivity;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -93,6 +94,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
         return view;
     }
 
@@ -129,8 +131,6 @@ public class ProfileFragment extends Fragment {
         mChipsAptitudes = new ChipCloud(mRootView.getContext(), mAptidoesContainer, config);
         mChipsDifficulties = new ChipCloud(mRootView.getContext(), mDificuldadesContainer, config);
 
-        mContainerAptidoes.setClickable(false);
-        mContainerDificuldades.setClickable(false);
         mIvConfirmar.setVisibility(View.GONE);
         mIvEditarFoto.setVisibility(View.GONE);
     }
@@ -167,6 +167,15 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AptitudesActivity.class);
+                intent.putExtra("calling-activity", "ProfileFragment");
+                startActivity(intent);
+            }
+        });
+
+        mContainerDificuldades.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), DifficultiesActivity.class);
                 intent.putExtra("calling-activity", "ProfileFragment");
                 startActivity(intent);
             }

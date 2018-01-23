@@ -16,7 +16,6 @@
         android:layout_height="match_parent"
         android:background="@color/blue">
 
-
         <ImageView
             android:id="@+id/iv_editar_foto"
             android:layout_width="24dp"
@@ -136,6 +135,7 @@
             <RelativeLayout
                 android:id="@+id/titulo_aptidoes"
                 android:layout_width="wrap_content"
+                android:clickable="false"
                 android:layout_height="30dp"
                 android:layout_marginLeft="40dp"
                 android:layout_marginTop="25dp"
@@ -190,6 +190,7 @@
             <RelativeLayout
                 android:layout_below="@id/aptidoes_container"
                 android:id="@+id/titulo_dificuldades"
+                android:clickable="false"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_marginLeft="40dp"

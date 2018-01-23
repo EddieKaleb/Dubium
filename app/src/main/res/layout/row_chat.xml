@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/chat_container"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:layout_marginTop="-5dp"
+    android:background="@drawable/rectangle"
+    android:backgroundTint="@color/white"
+    android:elevation="1dp">
+
+    <ImageView
+        android:id="@+id/iv_foto_chat"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="-3dp"
+        android:src="@drawable/ic_anonymous"
+        android:adjustViewBounds="true" />
+
+    <LinearLayout
+        android:id="@+id/foto_perfil_container"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="-3dp"
+        android:background="@drawable/ring"
+        android:backgroundTint="@color/white"
+        android:orientation="horizontal" />
+
+    <TextView
+        android:id="@+id/tv_nome_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/foto_perfil_container"
+        android:fontFamily="@string/font_family_light"
+        android:text="ANÔNIMO"
+        android:textColor="@color/black"
+        android:textSize="@dimen/font_small" />
+
+    <TextView
+        android:id="@+id/tv_ultima_mensagem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:layout_toRightOf="@id/iv_foto_chat"
+        android:layout_centerVertical="true"
+        android:textSize="@dimen/font_smaller"
+        android:fontFamily="@string/font_family_light"
+        android:text="Olá, você poderia me tirar uma dúvida??"
+        android:textColor="@color/gray"/>
+
+    <TextView
+        android:id="@+id/tv_hora_mensagem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="13:20"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/font_smaller"
+        android:layout_marginRight="10dp"/>
+
+
+</RelativeLayout>

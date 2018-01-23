@@ -1,6 +1,7 @@
 package com.dubium.views;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -46,6 +48,9 @@ public class AptitudesActivity extends Activity {
     @BindView(R.id.tv_second) TextView mTvSecond;
     @BindView(R.id.iv_icon) ImageView mIvIcon;
 
+    public SetupAdapter mAdapterSetup;
+    public ArrayAdapter mAdapterSearch;
+
     public FirebaseAuth mFirebaseAuth;
     public FirebaseDatabaseManager mFirebaseDatabaseManager;
     private DatabaseReference mDatabase;
@@ -70,8 +75,8 @@ public class AptitudesActivity extends Activity {
         // Query do firebase para adicionar algumas disciplinas
         mDisciplinas = mFirebaseDatabaseManager.getSubjects(this);
 
-        final SetupAdapter mAdapterSetup = new SetupAdapter(this, mMinhasDisciplinas);
-        final ArrayAdapter mAdapterSearch = new ArrayAdapter(this, android.R.layout.simple_list_item_1, mDisciplinas);
+        mAdapterSetup = new SetupAdapter(this, mMinhasDisciplinas);
+        mAdapterSearch = new ArrayAdapter(this, android.R.layout.simple_list_item_1, mDisciplinas);
 
         if (getIntent().getExtras().getString("calling-activity") != null){
             setUserSubjects(mFirebaseAuth.getCurrentUser().getUid(), "aptitudes", mAdapterSetup);
@@ -146,10 +151,8 @@ public class AptitudesActivity extends Activity {
 
                     for (Subject s: mMinhasDisciplinas) subjects.put(s.getId(), true);
                     mFirebaseDatabaseManager.addAptitudesToUser(mFirebaseAuth.getCurrentUser().getUid(), subjects);
-
-                    Intent intent = new Intent(v.getContext(), ProfileFragment.class);
-                    startActivity(intent);
                     finish();
+
                 } else {
                     Intent intent = new Intent(v.getContext(), DifficultiesActivity.class);
 

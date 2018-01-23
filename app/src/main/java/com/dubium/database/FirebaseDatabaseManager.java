@@ -58,6 +58,10 @@ public class FirebaseDatabaseManager {
         mDatabase.child("users").child(uId).child("aptitudes").setValue(subjects);
     }
 
+    public void addDifficultiesToUser(String uId, HashMap<String, Boolean> subjects) {
+        mDatabase.child("users").child(uId).child("difficulties").setValue(subjects);
+    }
+
     public void addDifficultieToUser(String uId, Subject subject) {
         mDatabase.child("users").child(uId).child("difficulties").child(subject.getId()).setValue(true);
     }

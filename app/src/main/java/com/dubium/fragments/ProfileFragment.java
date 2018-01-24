@@ -1,63 +1,37 @@
 package com.dubium.fragments;
 
-
-import android.app.ProgressDialog;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.transition.Fade;
-import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.dubium.R;
 import com.dubium.database.FirebaseDatabaseManager;
-import com.dubium.model.Subject;
 import com.dubium.views.AptitudesActivity;
 import com.dubium.views.DifficultiesActivity;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import butterknife.BindView;
 import fisk.chipcloud.ChipCloud;
 import fisk.chipcloud.ChipCloudConfig;
-import fisk.chipcloud.ChipListener;
-
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ProfileFragment extends Fragment {
 
-
     View mRootView;
 
-    RelativeLayout mContainerPerfil;
     RelativeLayout mContainerAptidoes;
     RelativeLayout mContainerDificuldades;
 
@@ -72,7 +46,6 @@ public class ProfileFragment extends Fragment {
     TextView mTvCidadePerfil;
     TextView mTvEstadoPerfil;
 
-
     FlexboxLayout mAptidoesContainer;
     FlexboxLayout mDificuldadesContainer;
 
@@ -84,6 +57,8 @@ public class ProfileFragment extends Fragment {
     FirebaseUser mFirebaseUser;
     FirebaseAuth mFirebaseAuth;
 
+    final int NEW_DATA = 1;
+    boolean editMode = false;
 
     public ProfileFragment() {
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -93,9 +68,7 @@ public class ProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
-
-        return view;
+        return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
     @Override
@@ -133,55 +106,74 @@ public class ProfileFragment extends Fragment {
 
         mIvConfirmar.setVisibility(View.GONE);
         mIvEditarFoto.setVisibility(View.GONE);
+
+        Log.w("init", "Components");
+
+        if (editMode) initEditMode();
     }
 
+    private void initEditMode() {
+        mIvConfirmar.setVisibility(View.VISIBLE);
+        mIvEditarFoto.setVisibility(View.VISIBLE);
+        mIvEditar.setVisibility(View.GONE);
+        mIvIconeAptidoes.setImageResource(R.drawable.ic_editar);
+        mIvIconeDificuldades.setImageResource(R.drawable.ic_editar);
+    }
+
+    private void exitEditMode() {
+        mIvConfirmar.setVisibility(View.GONE);
+        mIvEditarFoto.setVisibility(View.GONE);
+        mIvEditar.setVisibility(View.VISIBLE);
+        mIvIconeAptidoes.setImageResource(R.drawable.ic_cerebro);
+        mIvIconeDificuldades.setImageResource(R.drawable.ic_duvida);
+    }
 
     private void setListeners() {
         mIvEditar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mContainerAptidoes.setClickable(true);
-                mContainerDificuldades.setClickable(true);
-                mIvConfirmar.setVisibility(View.VISIBLE);
-                mIvEditarFoto.setVisibility(View.VISIBLE);
-                mIvEditar.setVisibility(View.GONE);
-                mIvIconeAptidoes.setImageResource(R.drawable.ic_editar);
-                mIvIconeDificuldades.setImageResource(R.drawable.ic_editar);
+                editMode = true;
+               initEditMode();
             }
         });
 
         mIvConfirmar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mContainerAptidoes.setClickable(false);
-                mContainerDificuldades.setClickable(false);
-                mIvConfirmar.setVisibility(View.GONE);
-                mIvEditarFoto.setVisibility(View.GONE);
-                mIvEditar.setVisibility(View.VISIBLE);
-                mIvIconeAptidoes.setImageResource(R.drawable.ic_cerebro);
-                mIvIconeDificuldades.setImageResource(R.drawable.ic_duvida);
+                editMode = false;
+                exitEditMode();
             }
         });
 
         mContainerAptidoes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AptitudesActivity.class);
-                intent.putExtra("calling-activity", "ProfileFragment");
-                startActivity(intent);
+                if (editMode) {
+                    Intent intent = new Intent(getActivity(), AptitudesActivity.class);
+                    intent.putExtra("calling-activity", "AptitudesActivity");
+                    startActivityForResult(intent, NEW_DATA);
+                }
             }
         });
 
         mContainerDificuldades.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), DifficultiesActivity.class);
-                intent.putExtra("calling-activity", "ProfileFragment");
-                startActivity(intent);
+                if (editMode) {
+                    Intent intent = new Intent(getActivity(), DifficultiesActivity.class);
+                    intent.putExtra("calling-activity", "DifficultiesActivity");
+                    startActivityForResult(intent, NEW_DATA);
+                }
+            }
+        });
+
+        mIvEditarFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Abrir a galeria
             }
         });
     }
-
 
     private void loadData() {
         mTvNomePerfil.setText(mFirebaseUser.getDisplayName().toUpperCase());
@@ -193,12 +185,19 @@ public class ProfileFragment extends Fragment {
                     .load(mFirebaseUser.getPhotoUrl())
                     .into(mIvFotoPerfil);
         }
-
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case (NEW_DATA) : {
+                Log.w("Result", "New Data");
+                if (resultCode == Activity.RESULT_OK) {
+                    getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+                }
+                editMode = true;
+                break;
+            }
+        }
     }
 }
-

@@ -1,5 +1,6 @@
 package com.dubium.views;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -23,10 +24,13 @@ public class DifficultiesActivity extends AptitudesActivity {
     ArrayList<Subject> mDifficultiesList;
     FirebaseDatabaseManager mDatabaseManager;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
+
+
         mTvProsseguir.setText("PROSSEGUIR");
         mTvFirst.setText("Para continuar");
         mTvSecond.setText("Adicione suas dificuldades!");
@@ -59,6 +63,9 @@ public class DifficultiesActivity extends AptitudesActivity {
 
                     for (Subject s : mMinhasDisciplinas) subjects.put(s.getId(), true);
                     mFirebaseDatabaseManager.addDifficultiesToUser(mFirebaseAuth.getCurrentUser().getUid(), subjects);
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("DifficultiesActivity", "New Data");
+                    setResult(Activity.RESULT_OK, resultIntent);
                     finish();
                 } else {
 

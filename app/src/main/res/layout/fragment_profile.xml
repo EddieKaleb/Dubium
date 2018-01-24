@@ -206,7 +206,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
                     android:tint="@color/white"
-                    android:src="@drawable/ic_duvida" />
+                    android:src="@drawable/ic_duvida"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -217,7 +217,7 @@
                     android:text="DIFICULDADES"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="12dp" />
+                    android:textSize="12dp"/>
 
             </RelativeLayout>
 

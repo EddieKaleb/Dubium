@@ -58,7 +58,7 @@ public class AptitudesActivity extends Activity {
 
     public ArrayList<Subject> mDisciplinas = new ArrayList<>();
     // Lista para aptidões e dificuldades
-    public final ArrayList<Subject> mMinhasDisciplinas = new ArrayList<>();
+    public ArrayList<Subject> mMinhasDisciplinas = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,14 +79,17 @@ public class AptitudesActivity extends Activity {
         mAdapterSearch = new ArrayAdapter(this, android.R.layout.simple_list_item_1, mDisciplinas);
 
         if (getIntent().getExtras().getString("calling-activity") != null){
-            setUserSubjects(mFirebaseAuth.getCurrentUser().getUid(), "aptitudes", mAdapterSetup);
-            mViewMensagem.setVisibility(View.GONE);
-            mLvDisciplinas.setVisibility(View.VISIBLE);
-            mLvDisciplinas.setAdapter(mAdapterSetup);
-            mTvProsseguir.setText("SALVAR");
-            mTvFirst.setText("Você está sem habilidades");
-            mTvSecond.setText("Adicione pelo menos uma!");
-            mTvProsseguir.setVisibility(View.VISIBLE);
+            String request = getIntent().getExtras().getString("calling-activity");
+            if (request.equals("AptitudesActivity")) {
+                setUserSubjects(mFirebaseAuth.getCurrentUser().getUid(), "aptitudes", mAdapterSetup);
+                mViewMensagem.setVisibility(View.GONE);
+                mLvDisciplinas.setVisibility(View.VISIBLE);
+                mLvDisciplinas.setAdapter(mAdapterSetup);
+                mTvProsseguir.setText("SALVAR");
+                mTvFirst.setText("Você está sem habilidades");
+                mTvSecond.setText("Adicione pelo menos uma!");
+                mTvProsseguir.setVisibility(View.VISIBLE);
+            }
         } else {
             mLvDisciplinas.setAdapter(mAdapterSearch);
 
@@ -151,6 +154,10 @@ public class AptitudesActivity extends Activity {
 
                     for (Subject s: mMinhasDisciplinas) subjects.put(s.getId(), true);
                     mFirebaseDatabaseManager.addAptitudesToUser(mFirebaseAuth.getCurrentUser().getUid(), subjects);
+
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("AptitudesActivity", "New Data");
+                    setResult(Activity.RESULT_OK, resultIntent);
                     finish();
 
                 } else {
@@ -165,16 +172,6 @@ public class AptitudesActivity extends Activity {
             }
         });
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 
     @Override

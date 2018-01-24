@@ -15,6 +15,8 @@ package com.dubium.views;
         import android.widget.Toast;
 
         import com.dubium.R;
+        import com.dubium.database.FirebaseDatabaseManager;
+        import com.dubium.model.Subject;
         import com.dubium.model.User;
         import com.google.firebase.auth.FirebaseAuth;
         import com.google.firebase.auth.FirebaseUser;
@@ -22,6 +24,7 @@ package com.dubium.views;
         import com.google.firebase.database.FirebaseDatabase;
 
         import java.io.IOException;
+        import java.util.ArrayList;
         import java.util.List;
 
         import butterknife.BindView;
@@ -33,6 +36,10 @@ public class LocationActivity extends AptitudesActivity {
     public FirebaseAuth mFirebaseAuth;
     FirebaseUser currentUser;
     private DatabaseReference mDatabase;
+
+    FirebaseDatabaseManager mDatabaseManager;
+    ArrayList<Subject> mAptitudesList;
+    ArrayList<Subject> mDifficultiesList;
 
     @BindView(R.id.setup_divider)
     View mSetupDivider;
@@ -64,9 +71,26 @@ public class LocationActivity extends AptitudesActivity {
         Log.w("Height", "" + height);
         mViewMensagem.requestLayout();
 
+        mAptitudesList = (ArrayList<Subject>) getIntent().getExtras().get("Aptitudes");
+        mDifficultiesList = (ArrayList<Subject>) getIntent().getExtras().get("Difficulties");
+
         mTvProsseguir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
+                User user = new User(fbUser.getUid(), fbUser.getDisplayName(), fbUser.getEmail(), fbUser.getPhotoUrl().toString());
+
+                mDatabaseManager.saveUser(user);
+
+                for (Subject s : mAptitudesList) {
+                    mDatabaseManager.addAptitudeToUser(fbUser.getUid(), s);
+                }
+
+                for (Subject s : mDifficultiesList) {
+                    mDatabaseManager.addDifficultieToUser(fbUser.getUid(), s);
+                }
+
                 find_location();
                 Intent intent = new Intent(v.getContext(), HomeActivity.class);
                 startActivity(intent);

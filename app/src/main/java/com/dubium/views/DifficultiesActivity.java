@@ -62,19 +62,13 @@ public class DifficultiesActivity extends AptitudesActivity {
                     finish();
                 } else {
 
-                    FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
-                    User user = new User(fbUser.getUid(), fbUser.getDisplayName(), fbUser.getEmail());
+                    Bundle mBundle = new Bundle();
+                    mBundle.putSerializable("Aptitudes", (ArrayList<Subject>) mAptitudesList);
+                    mBundle.putSerializable("Difficulties", (ArrayList<Subject>) mDifficultiesList);
 
-                    mDatabaseManager.saveUser(user);
 
-                    for (Subject s : mAptitudesList) {
-                        mDatabaseManager.addAptitudeToUser(fbUser.getUid(), s);
-                    }
-
-                    for (Subject s : mDifficultiesList) {
-                        mDatabaseManager.addDifficultieToUser(fbUser.getUid(), s);
-                    }
                     Intent intent = new Intent(v.getContext(), LocationActivity.class);
+                    intent.putExtras(mBundle);
                     startActivity(intent);
                     finish();
                 }

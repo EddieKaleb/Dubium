@@ -159,7 +159,7 @@ public class AptitudesActivity extends Activity {
                     Bundle mBundle = new Bundle();
                     mBundle.putSerializable("Aptitudes", (ArrayList<Subject>) mMinhasDisciplinas);
                     intent.putExtras(mBundle);
-                    getApplicationContext().startActivity(intent);
+                    startActivity(intent);
                     finish();
                 }
             }

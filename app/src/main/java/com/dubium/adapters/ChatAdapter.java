@@ -54,7 +54,7 @@ public class ChatAdapter extends ArrayAdapter<Chat> {
         }
 
         mTvNomeChat.setText(chat.getName());
-        mTvUltimaMensagem.setText(chat.getMenssage());
+        mTvUltimaMensagem.setText(chat.getMessage());
         mTvHoraMensagem.setText(chat.getTime());
 
         mChatContainer.setOnClickListener(new View.OnClickListener() {

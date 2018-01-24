@@ -79,7 +79,14 @@ public class LocationActivity extends AptitudesActivity {
             public void onClick(View v) {
 
                 FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
-                User user = new User(fbUser.getUid(), fbUser.getDisplayName(), fbUser.getEmail(), fbUser.getPhotoUrl().toString());
+
+                String photoUrl = "";
+
+                if(fbUser.getPhotoUrl() != null){
+                    photoUrl = fbUser.getPhotoUrl().toString();
+                }
+
+                User user = new User(fbUser.getUid(), fbUser.getDisplayName(), fbUser.getEmail(), photoUrl);
 
                 mDatabaseManager.saveUser(user);
 

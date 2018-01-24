@@ -38,6 +38,8 @@ public class SplashActivity extends Activity {
 
     private void loadLogin() {
 
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
 
@@ -80,37 +82,5 @@ public class SplashActivity extends Activity {
             startActivity(activityIntent);
             finish();
         }
-    }
-
-    public void redirectToSetup(){
-        DatabaseReference mUserReference;
-        mUserReference = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid());
-
-        ValueEventListener userListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-                User user = dataSnapshot.getValue(User.class);
-
-                Context context = getBaseContext();
-
-                // If user don't exists
-                if(user == null){
-                    Intent i = new Intent(context, AptitudesActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    context.startActivity(i);
-                    ((Activity) context).finish();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w("HomeActivity", "loadPost:onCancelled", databaseError.toException());
-                // ...
-            }
-        };
-
-        mUserReference.addListenerForSingleValueEvent(userListener);
     }
 }

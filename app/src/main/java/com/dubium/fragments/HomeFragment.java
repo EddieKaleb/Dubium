@@ -38,6 +38,7 @@ public class HomeFragment extends Fragment {
     ListView mUsersListView;
     UserAdapter mUserAdapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
+    final ArrayList<User> users = new ArrayList<>();
 
     FirebaseUser currentUser;
     User userActual;
@@ -69,36 +70,26 @@ public class HomeFragment extends Fragment {
             }
         });
 
-
-        listFilter();
+        listFilter2();
 
         return mRootView;
     }
 
-    /* ESSE MÉTODO PEGA USUARIO ATUAL A PARTIR DO CURRENT E CHAMA O LISTAR, QUE VAI LISTAR, OBVIAMENTE */
-    public void listFilter(){
-        Query query = mDatabaseReference.child("users");
+
+    public void listFilter2(){
+        Query query = mDatabaseReference.child("users").child(currentUser.getUid());
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot objSnapshot : dataSnapshot.getChildren()){
-                    if (objSnapshot.getValue(User.class).getUid().equals(currentUser.getUid()))
-                        userActual = objSnapshot.getValue(User.class);
-                }
-                if (initialRefresh) {
-                    listar();
-                    initialRefresh = false;
-                }else{
-                    listar();
-                }
+                userActual = dataSnapshot.getValue(User.class);
+                listar();
             }
             @Override
-            public void onCancelled(DatabaseError databaseError) {            }
+            public void onCancelled(DatabaseError databaseError) { }
         });
     }
-    /* VAI LISTAR OS USUARIOS DA MSM CIDADE E A PARTIR DE OUTROS PARAMETROS Q VOU COLOCAR AFTER*/
+
     public void listar(){
-        final ArrayList<User> users = new ArrayList<>();
 
         Query query = mDatabaseReference.child("users");
         query.addListenerForSingleValueEvent(new ValueEventListener(){
@@ -132,9 +123,48 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getActivity(), "ERRO", Toast.LENGTH_SHORT).show();
             }
         });
+
+        //MODO MELHOR QUE ERA PRA FUNCIONAR
+
+        /*final ArrayList<User> users = new ArrayList<>();
+        Query query = mDatabaseReference.child("cities").child(userActual.getCity());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot obj: dataSnapshot.getChildren()) {
+                    String Uid = obj.getKey();
+
+                    Query query2 = mDatabaseReference.child("users").child(Uid);
+                    query2.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            User user = dataSnapshot.getValue(User.class);
+
+                            if((distance(userActual.getLatitude(), user.getLatitude(),
+                                    userActual.getLongitude(), user.getLongitude(),
+                                    0.0, 0.0)) < 40)
+                                users.add(user);
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {}
+                    });
+                }
+                if (users.size() > 0) {
+                    ArrayList<UserViewHolder> userListViewHolder;
+                    userListViewHolder = filterUserList(users);
+
+                    mUserAdapter = new UserAdapter(getActivity(), userListViewHolder);
+                    mUsersListView.setAdapter(mUserAdapter);
+                }else{
+                    Toast.makeText(getActivity(),"Sem usuarios para listar", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });*/
     }
 
-    /*ESSE AQUI VAI FAZER A TRASIÇÃO (PASSANDO OS DADOS) PRA O USER DO ADAPTER*/
     private ArrayList<UserViewHolder> filterUserList(ArrayList<User> users){
         ArrayList<UserViewHolder> l = new ArrayList<UserViewHolder>();
 
@@ -157,7 +187,7 @@ public class HomeFragment extends Fragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                listFilter();
+                listFilter2();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         }, 100);
@@ -185,6 +215,5 @@ public class HomeFragment extends Fragment {
     private double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
     }
-
 
 }

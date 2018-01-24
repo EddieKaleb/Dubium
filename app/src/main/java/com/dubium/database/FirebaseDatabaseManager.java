@@ -147,7 +147,7 @@ public class FirebaseDatabaseManager {
                                         if(ds.getKey().equals(subject.getId()))
                                             view.setText(" • " + subject.getName());
                                     }
-                                    if(view.getText().equals("C") || view.getText().equals("A"))
+                                    if(view.getText().equals("") || view.getText().equals(""))
                                         view.setText(" • " + subject.getName());
                                 }
                                 @Override
@@ -161,7 +161,6 @@ public class FirebaseDatabaseManager {
                 if(cont > 0)
                     viewQuant.setText("e mais "+ cont);
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });

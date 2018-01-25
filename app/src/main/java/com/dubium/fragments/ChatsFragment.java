@@ -78,6 +78,8 @@ public class ChatsFragment extends Fragment {
 
                     final Chat chat = new Chat();
 
+                    chat.setFriendId(friendId);
+
                     //mChats.add(chat);
 
                     Query query2 = mDatabaseReference.child("users").child(friendId);
@@ -88,7 +90,7 @@ public class ChatsFragment extends Fragment {
 
                             String name = dataSnapshot.child("name").getValue().toString();
 
-                            String photoUrl = "";
+                            String photoUrl = null;
                             if(dataSnapshot.child("photoUrl").getValue() != null){
                                 photoUrl = dataSnapshot.child("photoUrl").getValue().toString();
                             }

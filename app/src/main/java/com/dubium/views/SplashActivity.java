@@ -46,8 +46,6 @@ public class SplashActivity extends Activity {
             DatabaseReference mUserReference;
             mUserReference = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid());
 
-            FirebaseAuth.getInstance().signOut();
-
             ValueEventListener userListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

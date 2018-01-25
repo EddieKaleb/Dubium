@@ -26,6 +26,7 @@
             android:layout_toEndOf="@id/iv_foto_perfil"
             android:src="@drawable/ic_add_foto"
             android:tint="@color/light_white"
+            android:adjustViewBounds="true"
             android:layout_marginTop="-5dp"/>
 
         <ImageView

@@ -68,8 +68,6 @@ public class LocationActivity extends AptitudesActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
-        int width = displayMetrics.widthPixels;
-
         mViewMensagem.getLayoutParams().height = height - 180;
         Log.w("Height", "" + height);
         mViewMensagem.requestLayout();

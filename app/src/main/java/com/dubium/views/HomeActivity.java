@@ -76,7 +76,9 @@ public class HomeActivity extends BaseActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        mToolbar.setNavigationIcon(R.drawable.ic_location);
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         TransitionManager.beginDelayedTransition(mHomeContainer, new Fade());
@@ -133,8 +135,9 @@ public class HomeActivity extends BaseActivity {
             case R.id.action_sign_out:
                 signOut();
                 return true;
-            case R.id.action_location:
+            case android.R.id.home:
                 find_location();
+                return true;
         }
         return false;
     }

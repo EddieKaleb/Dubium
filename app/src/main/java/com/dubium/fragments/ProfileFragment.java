@@ -3,6 +3,7 @@ package com.dubium.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,13 +19,27 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.dubium.R;
 import com.dubium.database.FirebaseDatabaseManager;
+import com.dubium.model.Message;
 import com.dubium.views.AptitudesActivity;
 import com.dubium.views.DifficultiesActivity;
 import com.google.android.flexbox.FlexboxLayout;
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import fisk.chipcloud.ChipCloud;
 import fisk.chipcloud.ChipCloudConfig;
+
+import static android.app.Activity.RESULT_OK;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -34,6 +49,7 @@ public class ProfileFragment extends Fragment {
 
     RelativeLayout mContainerAptidoes;
     RelativeLayout mContainerDificuldades;
+    RelativeLayout mBtnChat;
 
     ImageView mIvFotoPerfil;
     ImageView mIvEditar;
@@ -56,8 +72,11 @@ public class ProfileFragment extends Fragment {
     FirebaseDatabaseManager mFirebaseDatabaseManager;
     FirebaseUser mFirebaseUser;
     FirebaseAuth mFirebaseAuth;
+    FirebaseStorage mFirebaseStorage;
+    StorageReference mProfilePhotosStorageReference;
 
-    final int NEW_DATA = 1;
+    static final int NEW_DATA = 1;
+    static final int RC_PHOTO_PIKER = 2;
     boolean editMode = false;
 
     public ProfileFragment() {
@@ -88,6 +107,7 @@ public class ProfileFragment extends Fragment {
 
         mAptidoesContainer = (FlexboxLayout) mRootView.findViewById(R.id.aptidoes_container);
         mDificuldadesContainer = (FlexboxLayout) mRootView.findViewById(R.id.dificuldades_container);
+        mBtnChat = (RelativeLayout) mRootView.findViewById(R.id.btn_chat);
         mIvFotoPerfil = (ImageView) mRootView.findViewById(R.id.iv_foto_perfil);
         mTvNomePerfil = (TextView) mRootView.findViewById(R.id.tv_nome_perfil);
         mTvCidadePerfil = (TextView) mRootView.findViewById(R.id.tv_cidade_perfil);
@@ -104,10 +124,12 @@ public class ProfileFragment extends Fragment {
         mChipsAptitudes = new ChipCloud(mRootView.getContext(), mAptidoesContainer, config);
         mChipsDifficulties = new ChipCloud(mRootView.getContext(), mDificuldadesContainer, config);
 
+        mFirebaseStorage = FirebaseStorage.getInstance();
+        mProfilePhotosStorageReference = mFirebaseStorage.getReference().child("profile_photos");
+
         mIvConfirmar.setVisibility(View.GONE);
         mIvEditarFoto.setVisibility(View.GONE);
-
-        Log.w("init", "Components");
+        mBtnChat.setVisibility(View.GONE);
 
         if (editMode) initEditMode();
     }
@@ -133,7 +155,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 editMode = true;
-               initEditMode();
+                initEditMode();
             }
         });
 
@@ -170,7 +192,10 @@ public class ProfileFragment extends Fragment {
         mIvEditarFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Abrir a galeria
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/jpeg");
+                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PIKER);
             }
         });
     }
@@ -189,15 +214,32 @@ public class ProfileFragment extends Fragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode) {
-            case (NEW_DATA) : {
-                Log.w("Result", "New Data");
-                if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case NEW_DATA:
                     getFragmentManager().beginTransaction().detach(this).attach(this).commit();
-                }
-                editMode = true;
-                break;
+                    editMode = true;
+                    break;
+                case RC_PHOTO_PIKER:
+                    Uri selectedImageUri = data.getData();
+                    StorageReference photoRef = mProfilePhotosStorageReference.child(selectedImageUri.getLastPathSegment());
+                    photoRef.putFile(selectedImageUri).addOnSuccessListener
+                            (getActivity(), new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                    Glide.with(mIvFotoPerfil.getContext())
+                                            .load(downloadUrl)
+                                            .into(mIvFotoPerfil);
+
+                                    mFirebaseDatabaseManager.
+                                }
+                            });
+                    break;
             }
         }
+
     }
+
+    private void setUser
 }

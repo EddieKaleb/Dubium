@@ -61,8 +61,7 @@
         android:fontFamily="@string/font_family_thin"
         android:paddingTop="34dp"
         android:textColor="@color/dark_green"
-        android:text="A"
-        android:textSize="14dp"/>
+        android:textSize="14dp" />
 
     <TextView
         android:id="@+id/tv_aptidoes_comum"
@@ -74,7 +73,6 @@
         android:fontFamily="@string/font_family_thin"
         android:paddingTop="34dp"
         android:textColor="@color/dark_green"
-        android:text="A"
         android:textSize="14dp" />
 
     <TextView
@@ -83,11 +81,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_aptidao_comum"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/foto_perfil_container"
         android:layout_marginTop="-3dp"
+        android:layout_toRightOf="@id/foto_perfil_container"
         android:fontFamily="@string/font_family_thin"
         android:textColor="@android:color/holo_red_dark"
-        android:text="A"
         android:textSize="14dp" />
 
     <TextView
@@ -100,7 +97,6 @@
         android:layout_toRightOf="@id/tv_dificuldade_comum"
         android:fontFamily="@string/font_family_thin"
         android:textColor="@android:color/holo_red_dark"
-        android:text="A"
         android:textSize="14dp" />
 
     <ImageView

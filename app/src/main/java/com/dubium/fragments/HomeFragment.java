@@ -101,12 +101,14 @@ public class HomeFragment extends Fragment {
                     user = objSnapshot.getValue(User.class);
                     if(!(userActual == null)) {
                         if(!(userActual.getLatitude() == 0)){
-                            if(!(user.getLatitude() == 0))
-                                if (user.getCity().equals(userActual.getCity()) && user.getUid() != userActual.getUid())
-                                    if((distance(userActual.getLatitude(), user.getLatitude(),
+                            if(!(user.getLatitude() == 0)) {
+                                if (user.getCity().equals(userActual.getCity()) && user.getUid() != userActual.getUid()) {
+                                    if ((distance(userActual.getLatitude(), user.getLatitude(),
                                             userActual.getLongitude(), user.getLongitude(),
                                             0.0, 0.0)) < 40)
                                         users.add(user);
+                                }
+                            }
                         }
                     }
                 }

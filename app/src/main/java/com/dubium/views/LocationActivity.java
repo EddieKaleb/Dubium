@@ -41,6 +41,8 @@ public class LocationActivity extends AptitudesActivity {
     ArrayList<Subject> mAptitudesList;
     ArrayList<Subject> mDifficultiesList;
 
+    boolean prosseguir;
+
     @BindView(R.id.setup_divider)
     View mSetupDivider;
 
@@ -100,9 +102,11 @@ public class LocationActivity extends AptitudesActivity {
                 }
 
                 find_location();
-                Intent intent = new Intent(v.getContext(), HomeActivity.class);
-                startActivity(intent);
-                finish();
+                if(prosseguir) {
+                    Intent intent = new Intent(v.getContext(), HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
     }
@@ -132,6 +136,7 @@ public class LocationActivity extends AptitudesActivity {
         }
 
         if (location != null) {
+            prosseguir = true;
             Toast.makeText(this, "LOCALIZAÇÃO ATUALIZADA", Toast.LENGTH_SHORT).show();
 
             longitude = location.getLongitude();
@@ -149,6 +154,7 @@ public class LocationActivity extends AptitudesActivity {
             }
         }else{
             Toast.makeText(this, "religue seu gps" + towers, Toast.LENGTH_SHORT).show();
+            prosseguir = false;
         }
     }
 

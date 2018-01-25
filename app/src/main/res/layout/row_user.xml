@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/usuario_container"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="85dp"
     android:layout_marginTop="-5dp"
     android:background="@drawable/rectangle"
     android:elevation="1dp">
@@ -12,7 +12,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="-3dp"
+        android:layout_marginLeft="5dp"
         android:src="@drawable/ic_anonymous"
         android:adjustViewBounds="true" />
 
@@ -21,8 +21,8 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="-3dp"
-        android:background="@drawable/ring"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/ic_foto_grande"
         android:backgroundTint="@color/white"
         android:orientation="horizontal" />
 
@@ -31,6 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/foto_perfil_container"
         android:fontFamily="@string/font_family_light"
         android:text="ANÔNIMO"
@@ -41,60 +42,66 @@
         android:id="@+id/tv_distancia"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="6dp"
         android:layout_toRightOf="@id/foto_perfil_container"
         android:fontFamily="@string/font_family_regular"
         android:paddingTop="20dp"
+        android:text="10km"
         android:textColor="@color/black"
-        android:textSize="11dp" />
+        android:textSize="12dp"
+        android:layout_marginLeft="10dp"/>
 
     <TextView
         android:id="@+id/tv_aptidao_comum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="6dp"
         android:layout_toRightOf="@id/iv_foto_perfil"
         android:fontFamily="@string/font_family_thin"
         android:paddingTop="34dp"
         android:textColor="@color/dark_green"
-        android:textSize="11dp" />
+        android:text="A"
+        android:textSize="14dp"/>
 
     <TextView
         android:id="@+id/tv_aptidoes_comum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="6dp"
         android:layout_toRightOf="@id/tv_aptidao_comum"
         android:fontFamily="@string/font_family_thin"
         android:paddingTop="34dp"
         android:textColor="@color/dark_green"
-        android:textSize="11dp" />
+        android:text="A"
+        android:textSize="14dp" />
 
     <TextView
         android:id="@+id/tv_dificuldade_comum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/tv_aptidao_comum"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="1dp"
-        android:layout_toRightOf="@id/tv_aptidoes_comum"
+        android:layout_toRightOf="@id/foto_perfil_container"
+        android:layout_marginTop="-3dp"
         android:fontFamily="@string/font_family_thin"
-        android:paddingTop="34dp"
         android:textColor="@android:color/holo_red_dark"
-        android:textSize="11dp" />
+        android:text="A"
+        android:textSize="14dp" />
 
     <TextView
         android:id="@+id/tv_dificuldades_comum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="1dp"
+        android:layout_below="@id/tv_aptidoes_comum"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="-3dp"
         android:layout_toRightOf="@id/tv_dificuldade_comum"
         android:fontFamily="@string/font_family_thin"
-        android:paddingTop="34dp"
         android:textColor="@android:color/holo_red_dark"
-        android:textSize="11dp" />
+        android:text="A"
+        android:textSize="14dp" />
 
     <ImageView
         android:layout_width="wrap_content"

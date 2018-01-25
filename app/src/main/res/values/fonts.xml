@@ -6,8 +6,8 @@
     <string name="font_family_condensed">sans-serif-condensed</string>
     <string name="font_family_black">sans-serif-black</string>
     <string name="font_family_thin">sans-serif-thin</string>
-    <dimen name="font_smaller">12dp</dimen>
-    <dimen name="font_small">14dp</dimen>
-    <dimen name="font_regular">18dp</dimen>
-    <dimen name="font_bigger">22dp</dimen>
+    <dimen name="font_smaller">15dp</dimen>
+    <dimen name="font_small">18dp</dimen>
+    <dimen name="font_regular">20dp</dimen>
+    <dimen name="font_bigger">26dp</dimen>
 </resources>

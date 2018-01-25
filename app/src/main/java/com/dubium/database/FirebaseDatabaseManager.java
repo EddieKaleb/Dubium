@@ -51,7 +51,7 @@ public class FirebaseDatabaseManager {
     }
 
     public void saveProfilePhoto(String uId, String uri) {
-        mDatabase.child("users").child(uId).setValue(uri);
+        mDatabase.child("users").child(uId).child("photoUrl").setValue(uri);
     }
 
     public void addAptitudeToUser(String uId, Subject subject) {

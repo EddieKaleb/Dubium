@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -231,15 +232,16 @@ public class ProfileFragment extends Fragment {
                                     Glide.with(mIvFotoPerfil.getContext())
                                             .load(downloadUrl)
                                             .into(mIvFotoPerfil);
-
-                                    mFirebaseDatabaseManager.
+                                    mFirebaseDatabaseManager.saveProfilePhoto(mFirebaseUser.getUid(), downloadUrl.toString());
                                 }
-                            });
+                            }).addOnProgressListener(getActivity(), new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            //
+                        }
+                    });
                     break;
             }
         }
-
     }
-
-    private void setUser
 }

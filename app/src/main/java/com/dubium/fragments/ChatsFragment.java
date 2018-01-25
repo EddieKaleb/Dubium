@@ -90,7 +90,7 @@ public class ChatsFragment extends Fragment {
 
                             String name = dataSnapshot.child("name").getValue().toString();
 
-                            String photoUrl = null;
+                            String photoUrl = "";
                             if(dataSnapshot.child("photoUrl").getValue() != null){
                                 photoUrl = dataSnapshot.child("photoUrl").getValue().toString();
                             }

@@ -54,7 +54,12 @@ public class ChatAdapter extends ArrayAdapter<Chat> {
         mTvHoraMensagem = (TextView) convertView.findViewById(R.id.tv_hora_mensagem);
         mChatContainer = (RelativeLayout) convertView.findViewById(R.id.chat_container);
 
-        if(chat.getPhotoUrl() != null){
+        String photoUrl = null;
+        if(chat.getPhotoUrl().equals("")){
+
+            photoUrl = null;
+        }
+        else{
             Glide.with(mIvFotoChat.getContext())
                     .load(chat.getPhotoUrl())
                     .into(mIvFotoChat);
@@ -64,6 +69,7 @@ public class ChatAdapter extends ArrayAdapter<Chat> {
         mTvUltimaMensagem.setText(chat.getMessage());
         mTvHoraMensagem.setText(chat.getTime());
 
+        final String friendPhotoUrl = photoUrl;
         mChatContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,7 +77,7 @@ public class ChatAdapter extends ArrayAdapter<Chat> {
 
                 Bundle mBundle = new Bundle();
                 mBundle.putString("friendUid", chat.getFriendId());
-                mBundle.putString("friendPhotoUrl", chat.getPhotoUrl());
+                mBundle.putString("friendPhotoUrl", friendPhotoUrl);
                 mBundle.putString("friendName", chat.getName());
                 intent.putExtras(mBundle);
 

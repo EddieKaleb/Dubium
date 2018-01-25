@@ -6,10 +6,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.dubium.R;
 import com.dubium.model.Subject;
 import com.dubium.model.User;
@@ -114,6 +116,27 @@ public class FirebaseDatabaseManager {
         });
     }
 
+    public void setProfilePhoto(String uId, final ImageView mIvFotoPerfil) {
+
+        Query query = mDatabase.child("users").child(uId).child("photoUrl");
+
+        /***** Pega a lista de ids de subjects de um user e a insere em um Map *****/
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String photoUrl = dataSnapshot.getValue(String.class);
+                if (photoUrl.length() > 0) {
+                    Glide.with(mIvFotoPerfil.getContext()).load(photoUrl).into(mIvFotoPerfil);
+                    Log.w("photoUrl", photoUrl);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
     public void getUserSubjects(String uId, final String subjectsType, final TextView view, final TextView viewQuant) {
         final ArrayList<Subject> list = new ArrayList<>();
 
@@ -122,6 +145,7 @@ public class FirebaseDatabaseManager {
         /***** Pega a lista de ids de subjects de um user e a insere em um Map *****/
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             int cont = 0;
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -139,7 +163,7 @@ public class FirebaseDatabaseManager {
                             //view.setText(""+list.get(0).getName());
 
                             Query query2;
-                            if(subjectsType.equals("aptitudes"))
+                            if (subjectsType.equals("aptitudes"))
                                 query2 = mDatabase.child("users").child(currentUser.getUid()).child("difficulties");
                             else
                                 query2 = mDatabase.child("users").child(currentUser.getUid()).child("aptitudes");
@@ -147,26 +171,32 @@ public class FirebaseDatabaseManager {
 
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    for(DataSnapshot ds: dataSnapshot.getChildren()) {
-                                        if(ds.getKey().equals(subject.getId()))
+                                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                        if (ds.getKey().equals(subject.getId()))
                                             view.setText(" • " + subject.getName());
                                     }
-                                    if(view.getText().equals("") || view.getText().equals(""))
+                                    if (view.getText().equals("") || view.getText().equals(""))
                                         view.setText(" • " + subject.getName());
                                 }
+
                                 @Override
-                                public void onCancelled(DatabaseError databaseError) {}
+                                public void onCancelled(DatabaseError databaseError) {
+                                }
                             });
                         }
+
                         @Override
-                        public void onCancelled(DatabaseError databaseError) {}
+                        public void onCancelled(DatabaseError databaseError) {
+                        }
                     });
                 }
-                if(cont > 0)
-                    viewQuant.setText("e mais "+ cont);
+                if (cont > 0)
+                    viewQuant.setText("e mais " + cont);
             }
+
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         });
     }
 
@@ -201,7 +231,7 @@ public class FirebaseDatabaseManager {
         return list;
     }
 
-    public String initializeUserChat(String uId, String friendId){
+    public String initializeUserChat(String uId, String friendId) {
         String chatId = mDatabase.child("chats").push().getKey();
 
         /***** INSERE O CHAT NO USUÁRIO ATUAL *****/

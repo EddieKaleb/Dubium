@@ -1,6 +1,7 @@
 package com.dubium.fragments;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -24,7 +25,10 @@ import com.dubium.views.AptitudesActivity;
 import com.dubium.views.DifficultiesActivity;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
@@ -55,6 +59,7 @@ public class ProfileFragment extends Fragment {
     ImageView mIvFotoPerfil;
     ImageView mIvEditar;
     ImageView mIvEditarFoto;
+    ImageView mIvRemoverFoto;
     ImageView mIvConfirmar;
     ImageView mIvIconeAptidoes;
     ImageView mIvIconeDificuldades;
@@ -75,6 +80,8 @@ public class ProfileFragment extends Fragment {
     FirebaseAuth mFirebaseAuth;
     FirebaseStorage mFirebaseStorage;
     StorageReference mProfilePhotosStorageReference;
+
+    ProgressDialog mProgressDialog;
 
     static final int NEW_DATA = 1;
     static final int RC_PHOTO_PIKER = 2;
@@ -118,8 +125,13 @@ public class ProfileFragment extends Fragment {
         mIvEditar = (ImageView) mRootView.findViewById(R.id.iv_editar);
         mIvConfirmar = (ImageView) mRootView.findViewById(R.id.iv_confirmar);
         mIvEditarFoto = (ImageView) mRootView.findViewById(R.id.iv_editar_foto);
+        mIvRemoverFoto = (ImageView) mRootView.findViewById(R.id.iv_apagar_foto);
         mIvIconeAptidoes = (ImageView) mRootView.findViewById(R.id.ic_cerebro);
         mIvIconeDificuldades = (ImageView) mRootView.findViewById(R.id.ic_duvida);
+
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setMessage("Carregando...");
+        mProgressDialog.setTitle("Nova Foto");
 
         mFirebaseDatabaseManager = new FirebaseDatabaseManager();
         mChipsAptitudes = new ChipCloud(mRootView.getContext(), mAptidoesContainer, config);
@@ -128,8 +140,7 @@ public class ProfileFragment extends Fragment {
         mFirebaseStorage = FirebaseStorage.getInstance();
         mProfilePhotosStorageReference = mFirebaseStorage.getReference().child("profile_photos");
 
-        mIvConfirmar.setVisibility(View.GONE);
-        mIvEditarFoto.setVisibility(View.GONE);
+        exitEditMode();
         mBtnChat.setVisibility(View.GONE);
 
         if (editMode) initEditMode();
@@ -138,6 +149,7 @@ public class ProfileFragment extends Fragment {
     private void initEditMode() {
         mIvConfirmar.setVisibility(View.VISIBLE);
         mIvEditarFoto.setVisibility(View.VISIBLE);
+        mIvRemoverFoto.setVisibility(View.VISIBLE);
         mIvEditar.setVisibility(View.GONE);
         mIvIconeAptidoes.setImageResource(R.drawable.ic_editar);
         mIvIconeDificuldades.setImageResource(R.drawable.ic_editar);
@@ -146,6 +158,7 @@ public class ProfileFragment extends Fragment {
     private void exitEditMode() {
         mIvConfirmar.setVisibility(View.GONE);
         mIvEditarFoto.setVisibility(View.GONE);
+        mIvRemoverFoto.setVisibility(View.GONE);
         mIvEditar.setVisibility(View.VISIBLE);
         mIvIconeAptidoes.setImageResource(R.drawable.ic_cerebro);
         mIvIconeDificuldades.setImageResource(R.drawable.ic_duvida);
@@ -199,18 +212,53 @@ public class ProfileFragment extends Fragment {
                 startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PIKER);
             }
         });
+
+        mIvRemoverFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFirebaseDatabaseManager.saveProfilePhoto(mFirebaseUser.getUid(), "");
+                mIvFotoPerfil.setImageResource(R.drawable.ic_anonymous);
+            }
+        });
+    }
+
+    private void refresh() {
+        getFragmentManager().beginTransaction().detach(this).attach(this).commit();
     }
 
     private void loadData() {
         mTvNomePerfil.setText(mFirebaseUser.getDisplayName().toUpperCase());
         mFirebaseDatabaseManager.setUserAptitudes(mFirebaseUser.getUid(), mChipsAptitudes);
         mFirebaseDatabaseManager.setUserDifficulties(mFirebaseUser.getUid(), mChipsDifficulties);
+        mFirebaseDatabaseManager.setProfilePhoto(mFirebaseUser.getUid(), mIvFotoPerfil);
+    }
 
-        if (mFirebaseUser.getPhotoUrl() != null) {
-            Glide.with(mIvFotoPerfil.getContext())
-                    .load(mFirebaseUser.getPhotoUrl())
-                    .into(mIvFotoPerfil);
-        }
+    private void loadPhoto(Uri uri) {
+        StorageReference photoRef = mProfilePhotosStorageReference.child(uri.getLastPathSegment());
+        photoRef.putFile(uri)
+                .addOnSuccessListener(getActivity(), new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        Glide.with(mIvFotoPerfil.getContext()).load(downloadUrl).into(mIvFotoPerfil);
+                        mFirebaseDatabaseManager.saveProfilePhoto(mFirebaseUser.getUid(), downloadUrl.toString());
+                    }
+                }).addOnProgressListener(getActivity(), new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                mProgressDialog.show();
+            }
+        }).addOnCompleteListener(getActivity(), new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                mProgressDialog.dismiss();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mProgressDialog.dismiss();
+            }
+        });
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -218,30 +266,16 @@ public class ProfileFragment extends Fragment {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case NEW_DATA:
-                    getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+                    refresh();
                     editMode = true;
                     break;
                 case RC_PHOTO_PIKER:
                     Uri selectedImageUri = data.getData();
-                    StorageReference photoRef = mProfilePhotosStorageReference.child(selectedImageUri.getLastPathSegment());
-                    photoRef.putFile(selectedImageUri).addOnSuccessListener
-                            (getActivity(), new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                                    Glide.with(mIvFotoPerfil.getContext())
-                                            .load(downloadUrl)
-                                            .into(mIvFotoPerfil);
-                                    mFirebaseDatabaseManager.saveProfilePhoto(mFirebaseUser.getUid(), downloadUrl.toString());
-                                }
-                            }).addOnProgressListener(getActivity(), new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            //
-                        }
-                    });
+                    loadPhoto(selectedImageUri);
+                    refresh();
                     break;
             }
         }
     }
+
 }

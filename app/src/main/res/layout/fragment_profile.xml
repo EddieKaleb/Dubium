@@ -25,7 +25,18 @@
             android:layout_above="@id/tv_nome_perfil"
             android:layout_toEndOf="@id/iv_foto_perfil"
             android:src="@drawable/ic_add_foto"
-            android:tint="@color/light_gray"
+            android:tint="@color/light_white"
+            android:layout_marginTop="-5dp"/>
+
+        <ImageView
+            android:id="@+id/iv_apagar_foto"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:paddingBottom="5dp"
+            android:layout_above="@id/tv_nome_perfil"
+            android:layout_toStartOf="@id/iv_foto_perfil"
+            android:src="@drawable/ic_remove_foto"
+            android:tint="@color/light_white"
             android:layout_marginTop="-5dp"/>
 
         <TextView

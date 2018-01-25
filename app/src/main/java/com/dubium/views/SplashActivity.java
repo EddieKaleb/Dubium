@@ -27,6 +27,7 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
         Handler handle = new Handler();
         handle.postDelayed(new Runnable() {
             @Override
@@ -38,10 +39,9 @@ public class SplashActivity extends Activity {
 
     private void loadLogin() {
 
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
+            Log.i("User", user.getDisplayName());
 
             DatabaseReference mUserReference;
             mUserReference = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid());
@@ -50,12 +50,10 @@ public class SplashActivity extends Activity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     // Get Post object and use the values to update the UI
-                    User user = dataSnapshot.getValue(User.class);
-
                     Context context = getBaseContext();
 
                     // If user don't exists
-                    if(user == null){
+                    if(dataSnapshot.getValue() == null){
                         activityIntent = new Intent(context, AptitudesActivity.class);
                     }
                     else{
@@ -82,5 +80,9 @@ public class SplashActivity extends Activity {
             startActivity(activityIntent);
             finish();
         }
+    }
+
+    static {
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 }

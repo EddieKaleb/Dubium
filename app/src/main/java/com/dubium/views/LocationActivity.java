@@ -60,6 +60,7 @@ public class LocationActivity extends AptitudesActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
         currentUser = mFirebaseAuth.getCurrentUser();
+        mDatabaseManager = new FirebaseDatabaseManager();
 
 
         DisplayMetrics displayMetrics = new DisplayMetrics();

@@ -174,6 +174,7 @@ public class HomeFragment extends Fragment {
             UserViewHolder aux = new UserViewHolder();
             aux.setUid(u.getUid());
             aux.setName(u.getName());
+            aux.setPhotoUrl(u.getPhotoUrl());
 
             DecimalFormat df = new DecimalFormat("0.#");
             aux.setDistancia(df.format(distance(userActual.getLatitude(), u.getLatitude(),

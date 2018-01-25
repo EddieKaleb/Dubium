@@ -3,6 +3,7 @@ package com.dubium.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,8 +52,8 @@ public class UserAdapter extends ArrayAdapter<UserViewHolder> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final UserViewHolder u = getItem(position);
-        if (convertView == null)
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_user, parent, false);
+
+        convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_user, parent, false);
 
         mUsuarioContainer = (RelativeLayout) convertView.findViewById(R.id.usuario_container);
         mIvFotoPerfil = (ImageView) convertView.findViewById(R.id.iv_foto_perfil);
@@ -82,13 +83,29 @@ public class UserAdapter extends ArrayAdapter<UserViewHolder> {
 
         //mTvDificuldadesComuns.setText(u.getDificuldadesComuns());
 
-        if (u.getPhotoUrl() != null) {
+        String photoUrl = null;
+
+
+        if(u.getPhotoUrl() == null){
+
+        }
+        else if(u.getPhotoUrl().equals("")){
+            Log.i("FriendPhotoUrl", u.getPhotoUrl()+"");
+
+            photoUrl = null;
+        }
+        else{
+            photoUrl = u.getPhotoUrl();
+            Log.i("FriendPhotoUrl", u.getPhotoUrl()+"");
+
             Glide.with(mIvFotoPerfil.getContext())
                     .load(u.getPhotoUrl())
                     .into(mIvFotoPerfil);
         }
 
         final String friendId = u.getuId();
+        final String friendPhotoUrl = photoUrl;
+
         mUsuarioContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +113,7 @@ public class UserAdapter extends ArrayAdapter<UserViewHolder> {
 
                 Bundle mBundle = new Bundle();
                 mBundle.putString("friendUid", friendId);
-                mBundle.putString("friendPhotoUrl", u.getPhotoUrl());
+                mBundle.putString("friendPhotoUrl", friendPhotoUrl);
                 mBundle.putString("friendName", u.getName());
                 intent.putExtras(mBundle);
 

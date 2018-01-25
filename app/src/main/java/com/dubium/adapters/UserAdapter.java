@@ -63,7 +63,15 @@ public class UserAdapter extends ArrayAdapter<UserViewHolder> {
         mTvDificuldadesComum = (TextView) convertView.findViewById(R.id.tv_dificuldades_comum);
         mTvDistancia = (TextView) convertView.findViewById(R.id.tv_distancia);
 
-        mTvNome.setText(u.getName());
+        if(u.getName().length() > 30){
+            String[] nome = u.getName().split(" ");
+
+            mTvNome.setText(nome[0] + " " + nome[1]);
+        }
+        else{
+            mTvNome.setText(u.getName());
+        }
+
         mTvDistancia.setText(u.getDistancia());
 
 

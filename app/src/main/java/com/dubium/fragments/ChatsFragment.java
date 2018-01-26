@@ -126,7 +126,19 @@ public class ChatsFragment extends Fragment {
                                     String messageId = dataSnapshot.getChildren().iterator().next().getKey();
                                     Log.i("MessageId", messageId);
 
-                                    String text = dataSnapshot.child(messageId).child("text").getValue().toString();
+
+                                    String text = "";
+                                    if(dataSnapshot.child(messageId).child("text").getValue() != null){
+                                        text = dataSnapshot.child(messageId).child("text").getValue().toString();
+
+                                        if(dataSnapshot.child(messageId).child("text").getValue().toString().length() > 40){
+                                            text = text.substring(0, 30) + "...";
+                                        }
+                                    }
+                                    else{
+                                        text = "Foto";
+                                    }
+
                                     String time = dataSnapshot.child(messageId).child("time").getValue().toString();
 
                                     chat.setMessage(text);

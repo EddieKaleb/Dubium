@@ -6,6 +6,7 @@ package com.dubium.model;
 
 public class Chat {
 
+    private String chatId;
     private String friendId;
     private String name;
     private String message;
@@ -23,6 +24,9 @@ public class Chat {
 
     }
 
+    public String getChatId() {
+        return chatId;
+    }
     public String getFriendId(){
         return friendId;
     }
@@ -35,6 +39,7 @@ public class Chat {
         this.friendId = friendId;
     }
 
+    public void setChatId(String chatId){ this.chatId = chatId; }
     public void setName(String name) {
         this.name = name;
     }

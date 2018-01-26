@@ -1,5 +1,6 @@
 package com.dubium.fragments;
 
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -100,6 +101,7 @@ public class ChatsFragment extends Fragment {
 
                     final Chat chat = new Chat();
 
+                    chat.setChatId(chatId);
                     chat.setFriendId(friendId);
 
                     Query query2 = mDatabaseReference.child("users").child(friendId);
@@ -119,7 +121,7 @@ public class ChatsFragment extends Fragment {
                             chat.setPhotoUrl(photoUrl);
 
                             Query query3 = mDatabaseReference.child("chats").child(chatId).child("messages").orderByKey().limitToLast(1);
-                            query3.addValueEventListener(new ValueEventListener() {
+                            query3.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     String messageId = dataSnapshot.getChildren().iterator().next().getKey();

@@ -19,6 +19,13 @@ import com.dubium.R;
 import com.dubium.model.Chat;
 import com.dubium.views.ChatActivity;
 import com.facebook.login.Login;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -35,6 +42,10 @@ public class ChatAdapter extends ArrayAdapter<Chat> {
     TextView mTvHoraMensagem;
     Context mContext;
 
+    FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
+    DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference();
+
+
     public ChatAdapter(Context context, List<Chat> chats) {
         super(context, 0, chats);
         this.mContext = context;
@@ -45,8 +56,8 @@ public class ChatAdapter extends ArrayAdapter<Chat> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         final Chat chat = getItem(position);
 
-        if (convertView == null)
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_chat, parent, false);
+
+        convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_chat, parent, false);
 
         mIvFotoChat = (ImageView) convertView.findViewById(R.id.iv_foto_chat);
         mTvNomeChat = (TextView) convertView.findViewById(R.id.tv_nome_chat);
@@ -55,11 +66,15 @@ public class ChatAdapter extends ArrayAdapter<Chat> {
         mChatContainer = (RelativeLayout) convertView.findViewById(R.id.chat_container);
 
         String photoUrl = null;
-        if(chat.getPhotoUrl().equals("")){
 
+        if(chat.getPhotoUrl() == null){}
+        else if(chat.getPhotoUrl().equals("")){
             photoUrl = null;
         }
         else{
+            photoUrl = chat.getPhotoUrl();
+            Log.i("FriendPhotoUrl", chat.getPhotoUrl()+"");
+
             Glide.with(mIvFotoChat.getContext())
                     .load(chat.getPhotoUrl())
                     .into(mIvFotoChat);
@@ -70,6 +85,7 @@ public class ChatAdapter extends ArrayAdapter<Chat> {
         mTvHoraMensagem.setText(chat.getTime());
 
         final String friendPhotoUrl = photoUrl;
+
         mChatContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

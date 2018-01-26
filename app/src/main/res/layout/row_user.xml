@@ -36,7 +36,7 @@
         android:fontFamily="@string/font_family_light"
         android:text="ANÔNIMO"
         android:textColor="@color/black"
-        android:textSize="@dimen/font_small" />
+        android:textSize="@dimen/font_smaller" />
 
     <TextView
         android:id="@+id/tv_distancia"

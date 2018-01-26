@@ -232,32 +232,6 @@
                     android:textSize="12dp"/>
 
             </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/btn_chat"
-                android:layout_below="@id/dificuldades_container"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/btns_social_login_height"
-                android:layout_marginTop="30dp"
-                android:background="#3F7F7F"
-                android:elevation="@dimen/general_elevation"
-                android:clickable="true"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp">
-                <!-- <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_google"
-                    android:padding="8dp" /> -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="ENVIAR MENSAGEM"
-                    android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true"
-                    android:textColor="@color/white"
-                    android:fontFamily="@string/font_family_regular"/>
-            </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
     </ScrollView>

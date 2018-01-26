@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.dubium.database.FirebaseDatabaseManager;
-import com.dubium.model.Subject;
-import com.dubium.views.HomeActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -34,170 +34,150 @@ import com.google.firebase.database.ValueEventListener;
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment {
+
     View mRootView;
+
     ListView mUsersListView;
+
     UserAdapter mUserAdapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
-    final ArrayList<User> users = new ArrayList<>();
 
     FirebaseUser currentUser;
-    User userActual;
+    User mUserActual;
     FirebaseAuth mFirebaseAuth;
 
-    FirebaseDatabaseManager fbManager;
     FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference();
 
+    final ArrayList<UserViewHolder> userListViewHolder = new ArrayList<>();
+
     boolean initialRefresh = true;
 
-    public HomeFragment(){}
+    private final int RATIO = 40;
 
+    public HomeFragment() { }
+
+    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.fragment_home, container, false);
+        return inflater.inflate(R.layout.fragment_home, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mRootView = view;
+        init();
+        setListeners();
+        loadData();
+    }
+
+    private void init() {
         mFirebaseAuth = FirebaseAuth.getInstance();
         currentUser = mFirebaseAuth.getCurrentUser();
-        fbManager = new FirebaseDatabaseManager();
 
-        mUsersListView = (ListView) mRootView.findViewById(R.id.lv_usuarios);
         mSwipeRefreshLayout = (SwipeRefreshLayout) mRootView.findViewById(R.id.swipe_refresh);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.blue, R.color.gray);
 
+        mUsersListView = (ListView) mRootView.findViewById(R.id.lv_usuarios);
+        mUserAdapter = new UserAdapter(getActivity(), userListViewHolder);
+        mUsersListView.setAdapter(mUserAdapter);
+    }
+
+    private void loadData() {
+        if (initialRefresh) {
+            getUserAndNearbies();
+            initialRefresh = false;
+        }
+    }
+
+    private void setListeners() {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshContent();
             }
         });
-
-        listFilter2();
-
-        return mRootView;
     }
 
-
-    public void listFilter2(){
+    public void getUserAndNearbies() {
         Query query = mDatabaseReference.child("users").child(currentUser.getUid());
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                userActual = dataSnapshot.getValue(User.class);
-                listar();
+                mUserActual = dataSnapshot.getValue(User.class);
+                getNearbyUsers();
             }
             @Override
-            public void onCancelled(DatabaseError databaseError) { }
+            public void onCancelled(DatabaseError databaseError) {}
         });
     }
 
-    public void listar(){
+    public void getNearbyUsers() {
 
         Query query = mDatabaseReference.child("users");
-        query.addListenerForSingleValueEvent(new ValueEventListener(){
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                User user;
-
                 for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
-                    user = objSnapshot.getValue(User.class);
-                    if(!(userActual == null)) {
-                        if(!(userActual.getLatitude() == 0)){
-                            if(!(user.getLatitude() == 0)) {
-                                if (user.getCity().equals(userActual.getCity()) && user.getUid() != userActual.getUid()) {
-                                    if ((distance(userActual.getLatitude(), user.getLatitude(),
-                                            userActual.getLongitude(), user.getLongitude(),
-                                            0.0, 0.0)) < 40)
-                                        users.add(user);
-                                }
+                    User nearbyUser = objSnapshot.getValue(User.class);
+
+                    if (mUserActual != null && !currentUser.getUid().equals(nearbyUser.getUid())) {
+                        if (mUserActual.getLatitude() != 0 && nearbyUser.getLatitude() != 0) {
+                            if (nearbyUser.getCity().equals(mUserActual.getCity()) && nearbyUser.getUid() != mUserActual.getUid()) {
+
+                                double actualLat  = mUserActual.getLatitude();
+                                double actualLong = mUserActual.getLongitude();
+                                double nearbyLat  = nearbyUser.getLatitude();
+                                double nearbyLong = nearbyUser.getLongitude();
+
+                                double distance = getKmsDistance(actualLat, nearbyLat, actualLong, nearbyLong,0.0,0.0);
+
+                                if (distance < RATIO) addUserViewHolder(nearbyUser, distance);
                             }
                         }
                     }
                 }
-                if (users.size() > 0) {
-                    ArrayList<UserViewHolder> userListViewHolder;
-                    userListViewHolder = filterUserList(users);
-
-                    mUserAdapter = new UserAdapter(getActivity(), userListViewHolder);
-                    mUsersListView.setAdapter(mUserAdapter);
-                }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(getActivity(), "ERRO", Toast.LENGTH_SHORT).show();
             }
         });
 
-        //MODO MELHOR QUE ERA PRA FUNCIONAR
-
-        /*final ArrayList<User> users = new ArrayList<>();
-        Query query = mDatabaseReference.child("cities").child(userActual.getCity());
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot obj: dataSnapshot.getChildren()) {
-                    String Uid = obj.getKey();
-
-                    Query query2 = mDatabaseReference.child("users").child(Uid);
-                    query2.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            User user = dataSnapshot.getValue(User.class);
-
-                            if((distance(userActual.getLatitude(), user.getLatitude(),
-                                    userActual.getLongitude(), user.getLongitude(),
-                                    0.0, 0.0)) < 40)
-                                users.add(user);
-                        }
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {}
-                    });
-                }
-                if (users.size() > 0) {
-                    ArrayList<UserViewHolder> userListViewHolder;
-                    userListViewHolder = filterUserList(users);
-
-                    mUserAdapter = new UserAdapter(getActivity(), userListViewHolder);
-                    mUsersListView.setAdapter(mUserAdapter);
-                }else{
-                    Toast.makeText(getActivity(),"Sem usuarios para listar", Toast.LENGTH_SHORT).show();
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });*/
     }
 
-    private ArrayList<UserViewHolder> filterUserList(ArrayList<User> users){
-        ArrayList<UserViewHolder> l = new ArrayList<UserViewHolder>();
+    private void addUserViewHolder(User user, double distance) {
+        UserViewHolder userViewHolder = new UserViewHolder();
 
-        for(User u: users){
-            UserViewHolder aux = new UserViewHolder();
-            aux.setUid(u.getUid());
-            aux.setName(u.getName());
-            aux.setPhotoUrl(u.getPhotoUrl());
+        userViewHolder.setUid(user.getUid());
+        userViewHolder.setName(user.getName());
+        userViewHolder.setPhotoUrl(user.getPhotoUrl());
 
-            DecimalFormat df = new DecimalFormat("0.#");
-            aux.setDistancia(df.format(distance(userActual.getLatitude(), u.getLatitude(),
-                    userActual.getLongitude(), u.getLongitude(),
-                    0.0, 0.0)));
+        DecimalFormat df = new DecimalFormat("0.#");
+        userViewHolder.setDistancia(df.format(distance));
 
-            l.add(aux);
-        }
-        return l;
+        mUserAdapter.add(userViewHolder);
     }
 
     private void refreshContent() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                listFilter2();
+                refresh();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
-        }, 100);
+        }, 1000);
     }
+
+    private  void refresh() {
+        getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+    }
+
     /* CALCULA A DISTANCIA COM BASE NAS CORDENADAS*/
-    private Double distance(double lat1, double lat2, double lon1, double lon2,
-                            double el1, double el2) {
+    private Double getKmsDistance(double lat1, double lat2, double lon1, double lon2, double el1, double el2) {
 
         final int R = 6371; // Radius of the earth
 
@@ -212,11 +192,10 @@ public class HomeFragment extends Fragment {
         double height = el1 - el2;
         distance = Math.pow(distance, 2) + Math.pow(height, 2);
 
-        return (Math.sqrt(distance)/1000);
+        return (Math.sqrt(distance) / 1000);
     }
 
     private double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
     }
-
 }

@@ -1,0 +1,217 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.dubium.fragments.ProfileFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/container_perfil"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/blue">
+
+            <TextView
+                android:id="@+id/tv_nome_perfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_foto_perfil"
+                android:layout_centerHorizontal="true"
+                android:background="@color/light_white"
+                android:fontFamily="@string/font_family_regular"
+                android:paddingTop="35dp"
+                android:text="EDDIE KALEB"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/tv_cidade_perfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_nome_perfil"
+                android:layout_centerHorizontal="true"
+                android:background="@color/light_white"
+                android:fontFamily="@string/font_family_thin"
+                android:text="Campina Grande"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="11dp" />
+
+            <TextView
+                android:id="@+id/tv_estado_perfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_cidade_perfil"
+                android:layout_centerHorizontal="true"
+                android:background="@color/light_white"
+                android:fontFamily="@string/font_family_thin"
+                android:paddingBottom="5dp"
+                android:text="Paraíba"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="10dp" />
+
+            <ImageView
+                android:id="@+id/iv_foto_perfil"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="-35dp"
+                android:layout_marginTop="100dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_anonymous" />
+
+            <LinearLayout
+                android:id="@+id/foto_perfil_container"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="-35dp"
+                android:layout_marginTop="100dp"
+                android:background="@drawable/ic_foto_grande"
+                android:orientation="horizontal" />
+
+
+            <RelativeLayout
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/tv_estado_perfil"
+                android:paddingBottom="30dp"
+                android:background="@color/light_white" >
+
+                <!-- HABILIDADES -->
+                <com.google.android.flexbox.FlexboxLayout
+                    android:id="@+id/aptidoes_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:flexDirection="row"
+                    app:flexWrap="wrap"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="35dp"
+                    android:background="@color/light_white"
+                    android:paddingTop="35dp"
+                    android:paddingLeft="5dp"
+                    android:paddingBottom="10dp"/>
+
+                <RelativeLayout
+                    android:id="@+id/titulo_aptidoes"
+                    android:layout_width="wrap_content"
+                    android:clickable="false"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="25dp"
+                    android:elevation="4dp"
+                    android:background="@color/dark_green"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/ic_cerebro"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="5dp"
+                        android:tint="@color/white"
+                        android:src="@drawable/ic_cerebro" />
+
+                    <TextView
+                        android:id="@+id/tv_nome_habilidades"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/ic_cerebro"
+                        android:fontFamily="@string/font_family_regular"
+                        android:text="HABILIDADES"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="12dp" />
+                </RelativeLayout>
+
+                <!-- DIFICULDADES -->
+                <com.google.android.flexbox.FlexboxLayout
+                    android:layout_below="@id/aptidoes_container"
+                    android:id="@+id/dificuldades_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:flexDirection="row"
+                    app:flexWrap="wrap"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="25dp"
+                    android:background="@color/light_white"
+                    android:paddingTop="30dp"
+                    android:paddingLeft="5dp"
+                    android:paddingBottom="10dp">
+
+                    <ListView
+                        android:id="@+id/lv_dificuldades_perfil"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"></ListView>
+                </com.google.android.flexbox.FlexboxLayout>
+
+                <RelativeLayout
+                    android:layout_below="@id/aptidoes_container"
+                    android:id="@+id/titulo_dificuldades"
+                    android:clickable="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="10dp"
+                    android:elevation="4dp"
+                    android:background="@color/google"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/ic_duvida"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="5dp"
+                        android:tint="@color/white"
+                        android:src="@drawable/ic_duvida"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/ic_duvida"
+                        android:fontFamily="@string/font_family_regular"
+                        android:text="DIFICULDADES"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="12dp"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/btn_chat"
+                    android:layout_below="@id/dificuldades_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/btns_social_login_height"
+                    android:layout_marginTop="30dp"
+                    android:background="#3F7F7F"
+                    android:elevation="@dimen/general_elevation"
+                    android:clickable="true"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ENVIAR MENSAGEM"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/white"
+                        android:fontFamily="@string/font_family_regular"/>
+                </RelativeLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+</FrameLayout>

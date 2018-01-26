@@ -66,35 +66,21 @@ public class UserAdapter extends ArrayAdapter<UserViewHolder> {
 
         if(u.getName().length() > 30){
             String[] nome = u.getName().split(" ");
-
             mTvNome.setText(nome[0] + " " + nome[1]);
-        }
-        else{
-            mTvNome.setText(u.getName());
-        }
+        } else{ mTvNome.setText(u.getName().toUpperCase()); }
 
         mTvDistancia.setText(u.getDistancia());
 
-
-        //mTvAptidoesComuns.setText(u.getAptidoesComuns());
         fbManager.getUserSubjects(u.getuId(), "aptitudes",mTvAptidaoComum, mTvAptidoesComum);
         fbManager.getUserSubjects(u.getuId(), "difficulties",mTvDificuldadeComum, mTvDificuldadesComum);
 
-
-        //mTvDificuldadesComuns.setText(u.getDificuldadesComuns());
-
         String photoUrl = null;
 
-
-        if(u.getPhotoUrl() == null){
-
-        }
-        else if(u.getPhotoUrl().equals("")){
+        if(u.getPhotoUrl().equals("")){
             Log.i("FriendPhotoUrl", u.getPhotoUrl()+"");
 
             photoUrl = null;
-        }
-        else{
+        } else {
             photoUrl = u.getPhotoUrl();
             Log.i("FriendPhotoUrl", u.getPhotoUrl()+"");
 

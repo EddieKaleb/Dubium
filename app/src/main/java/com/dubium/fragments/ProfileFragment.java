@@ -54,7 +54,6 @@ public class ProfileFragment extends Fragment {
 
     RelativeLayout mContainerAptidoes;
     RelativeLayout mContainerDificuldades;
-    RelativeLayout mBtnChat;
 
     ImageView mIvFotoPerfil;
     ImageView mIvEditar;
@@ -115,13 +114,15 @@ public class ProfileFragment extends Fragment {
 
         mAptidoesContainer = (FlexboxLayout) mRootView.findViewById(R.id.aptidoes_container);
         mDificuldadesContainer = (FlexboxLayout) mRootView.findViewById(R.id.dificuldades_container);
-        mBtnChat = (RelativeLayout) mRootView.findViewById(R.id.btn_chat);
-        mIvFotoPerfil = (ImageView) mRootView.findViewById(R.id.iv_foto_perfil);
+
         mTvNomePerfil = (TextView) mRootView.findViewById(R.id.tv_nome_perfil);
         mTvCidadePerfil = (TextView) mRootView.findViewById(R.id.tv_cidade_perfil);
         mTvEstadoPerfil = (TextView) mRootView.findViewById(R.id.tv_estado_perfil);
+
         mContainerAptidoes = (RelativeLayout) mRootView.findViewById(R.id.titulo_aptidoes);
         mContainerDificuldades = (RelativeLayout) mRootView.findViewById(R.id.titulo_dificuldades);
+
+        mIvFotoPerfil = (ImageView) mRootView.findViewById(R.id.iv_foto_perfil);
         mIvEditar = (ImageView) mRootView.findViewById(R.id.iv_editar);
         mIvConfirmar = (ImageView) mRootView.findViewById(R.id.iv_confirmar);
         mIvEditarFoto = (ImageView) mRootView.findViewById(R.id.iv_editar_foto);
@@ -141,7 +142,6 @@ public class ProfileFragment extends Fragment {
         mProfilePhotosStorageReference = mFirebaseStorage.getReference().child("profile_photos");
 
         exitEditMode();
-        mBtnChat.setVisibility(View.GONE);
 
         if (editMode) initEditMode();
     }

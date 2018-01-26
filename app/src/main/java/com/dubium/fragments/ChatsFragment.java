@@ -2,20 +2,20 @@ package com.dubium.fragments;
 
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.dubium.R;
 import com.dubium.adapters.ChatAdapter;
 import com.dubium.model.Chat;
-import com.dubium.model.Message;
-import com.dubium.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,35 +35,58 @@ public class ChatsFragment extends Fragment {
     View mRootView;
     ListView mLvChats;
 
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    ChatAdapter mChatAdapter;
     List<Chat> mChats = new ArrayList<>();
 
     FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference();
 
+    boolean initialRefresh = true;
+
     public ChatsFragment() { }
 
-
+    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.fragment_chats, container, false);
-
-        mLvChats = (ListView) mRootView.findViewById(R.id.lv_chats);
-
-        /*mChats.add(new Chat("Eddie K.", "Bora bora meu patrão", "12:20",
-                "https://img.buzzfeed.com/buzzfeed-static/static/2017-08/9/11/enhanced/buzzfeed-prod-fastlane-02/enhanced-1731-1502293831-8.jpg"));
-
-        mChats.add(new Chat("Héricles", "Me ajuda ai pow", "09:12",
-                "https://i.pinimg.com/736x/02/d7/01/02d701b77a984a1b6cf970e6eb0468e1--teacup-maltipoo-maltipoo-puppies.jpg"));*/
-
-
-        ChatAdapter mChatAdapter = new ChatAdapter(getContext(), mChats);
-        mLvChats.setAdapter(mChatAdapter);
-        setChats(mChatAdapter);
-
-        return mRootView;
+        return inflater.inflate(R.layout.fragment_chats, container, false);
     }
 
-    public void setChats(final ChatAdapter chatAdapter){
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mRootView = view;
+        init();
+        setListeners();
+        loadData();
+    }
+
+    private void setListeners() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshContent();
+            }
+        });
+    }
+
+    private void init() {
+        mSwipeRefreshLayout = (SwipeRefreshLayout) mRootView.findViewById(R.id.swipe_refresh_chats);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.blue, R.color.gray);
+
+        mLvChats = (ListView) mRootView.findViewById(R.id.lv_chats);
+        mChatAdapter = new ChatAdapter(getContext(), mChats);
+        mLvChats.setAdapter(mChatAdapter);
+    }
+
+    private void loadData() {
+        if (initialRefresh) {
+            setChats();
+            initialRefresh = false;
+        }
+    }
+
+    public void setChats(){
 
         String uId = FirebaseAuth.getInstance().getUid();
 
@@ -80,8 +103,6 @@ public class ChatsFragment extends Fragment {
 
                     chat.setFriendId(friendId);
 
-                    //mChats.add(chat);
-
                     Query query2 = mDatabaseReference.child("users").child(friendId);
                     query2.addValueEventListener(new ValueEventListener() {
                         @Override
@@ -94,8 +115,6 @@ public class ChatsFragment extends Fragment {
                             if(dataSnapshot.child("photoUrl").getValue() != null){
                                 photoUrl = dataSnapshot.child("photoUrl").getValue().toString();
                             }
-
-                            //User user = dataSnapshot.getValue(User.class);
 
                             chat.setName(name);
                             chat.setPhotoUrl(photoUrl);
@@ -113,8 +132,7 @@ public class ChatsFragment extends Fragment {
                                     chat.setMessage(text);
                                     chat.setTime(time);
 
-                                    chatAdapter.add(chat);
-                                    chatAdapter.notifyDataSetChanged();
+                                    mChatAdapter.add(chat);
                                 }
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
@@ -123,21 +141,27 @@ public class ChatsFragment extends Fragment {
                             });
                         }
                         @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            Log.i("getChats", "erro");
-                        }
+                        public void onCancelled(DatabaseError databaseError) { Log.i("getChats", "erro"); }
                     });
                 }
-
-
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.i("getChats", "erro");
             }
         });
-
+    }
+    private void refreshContent() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                refresh();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }, 1000);
     }
 
-
+    private  void refresh() {
+        getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+    }
 }

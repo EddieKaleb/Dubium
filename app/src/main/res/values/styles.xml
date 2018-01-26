@@ -43,5 +43,9 @@
         <item name="android:fontFamily">@string/font_family_thin</item>
         <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
     </style>
+
+    <style name="ProfileStyle" parent="@style/FullScreen">
+        <item name="android:windowBackground">@color/light_white</item>
+    </style>
     <!--###############################################################-->
 </resources>

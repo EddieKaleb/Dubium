@@ -20,6 +20,8 @@ public class UserViewHolder {
     private int aptidoesComuns;
     private int dificuldadesComuns;
     private String distancia;
+    private String city;
+    private String state;
 
     public UserViewHolder(String nome, String email, String photoUrl, int aptidoesComuns, int dificuldadesComuns, String distancia) {
         this.name = nome;
@@ -50,6 +52,14 @@ public class UserViewHolder {
     public String getPhotoUrl() {
         return photoUrl;
     }
+
+    public void setCity(String city) { this.city = city; }
+
+    public String getCity() { return city; }
+
+    public void setState(String state) { this.state = state; }
+
+    public String getState() {return state; }
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;

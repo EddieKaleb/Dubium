@@ -1,6 +1,5 @@
 package com.dubium.fragments;
 
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;

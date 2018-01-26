@@ -155,6 +155,8 @@ public class HomeFragment extends Fragment {
         userViewHolder.setUid(user.getUid());
         userViewHolder.setName(user.getName());
         userViewHolder.setPhotoUrl(user.getPhotoUrl());
+        userViewHolder.setCity(user.getCity());
+        userViewHolder.setState(user.getState());
 
         DecimalFormat df = new DecimalFormat("0.#");
         userViewHolder.setDistancia(df.format(distance));

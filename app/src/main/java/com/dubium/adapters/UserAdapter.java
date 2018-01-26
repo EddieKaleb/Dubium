@@ -21,6 +21,7 @@ import com.dubium.database.FirebaseDatabaseManager;
 import com.dubium.fragments.UserViewHolder;
 import com.dubium.model.User;
 import com.dubium.views.ChatActivity;
+import com.dubium.views.ProfileActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -93,20 +94,19 @@ public class UserAdapter extends ArrayAdapter<UserViewHolder> {
                     .into(mIvFotoPerfil);
         }
 
-        final String friendId = u.getuId();
-        final String friendPhotoUrl = photoUrl;
 
         mUsuarioContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ChatActivity.class);
-
+                Intent intent = new Intent(v.getContext(), ProfileActivity.class);
                 Bundle mBundle = new Bundle();
-                mBundle.putString("friendUid", friendId);
-                mBundle.putString("friendPhotoUrl", friendPhotoUrl);
-                mBundle.putString("friendName", u.getName());
-                intent.putExtras(mBundle);
+                mBundle.putString("uid", u.getuId());
+                mBundle.putString("name", u.getName());
+                mBundle.putString("city", u.getCity());
+                mBundle.putString("state", u.getState());
+                mBundle.putString("photoUrl", u.getPhotoUrl());
 
+                intent.putExtras(mBundle);
                 mContext.startActivity(intent);
             }
         });

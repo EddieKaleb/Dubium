@@ -37,6 +37,10 @@
             android:name=".views.HomeActivity"
             android:theme="@style/HomeStyle" />
 
+        <activity
+            android:name=".views.ProfileActivity"
+            android:theme="@style/ProfileStyle" />
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />

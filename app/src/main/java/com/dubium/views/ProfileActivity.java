@@ -2,6 +2,7 @@ package com.dubium.views;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -29,6 +30,10 @@ public class ProfileActivity extends Activity {
     FlexboxLayout mAptidoesContainer;
     FlexboxLayout mDificuldadesContainer;
 
+    TextView mTvNomePerfil;
+    TextView mTvCidadePerfil;
+    TextView mTvEstadoPerfil;
+
     ChipCloudConfig config;
     ChipCloud mChipsAptitudes;
     ChipCloud mChipsDifficulties;
@@ -37,17 +42,23 @@ public class ProfileActivity extends Activity {
     FirebaseStorage mFirebaseStorage;
     StorageReference mProfilePhotosStorageReference;
 
+    String uid;
+    String name;
+    String city;
+    String state;
+    String photoUrl;
+
     ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_profile);
+        setContentView(R.layout.activity_profile);
 
         init();
         loadData();
-
+        setListeners();
     }
 
     private void init() {
@@ -56,6 +67,10 @@ public class ProfileActivity extends Activity {
                 .checkedChipColor(Color.parseColor("#E5E5E5")).checkedTextColor(Color.parseColor("#666666"))
                 .uncheckedChipColor(Color.parseColor("#E5E5E5")).uncheckedTextColor(Color.parseColor("#666666"))
                 .useInsetPadding(true);
+
+        mTvNomePerfil = (TextView) findViewById(R.id.tv_nome_perfil);
+        mTvCidadePerfil = (TextView) findViewById(R.id.tv_cidade_perfil);
+        mTvEstadoPerfil = (TextView) findViewById(R.id.tv_estado_perfil);
 
         mBtnChat = (RelativeLayout) findViewById(R.id.btn_chat);
         mIvFotoPerfil = (ImageView) findViewById(R.id.iv_foto_perfil);
@@ -76,9 +91,35 @@ public class ProfileActivity extends Activity {
     }
 
     private void loadData() {
-        String uid = getIntent().getExtras().getString("uid");
+        uid = getIntent().getExtras().getString("uid");
+        name = getIntent().getExtras().getString("name");
+        city = getIntent().getExtras().getString("city");
+        state = getIntent().getExtras().getString("state");
+        photoUrl = getIntent().getExtras().getString("photoUrl");
+
+        mTvNomePerfil.setText(name.toUpperCase());
+        mTvCidadePerfil.setText(city);
+        mTvEstadoPerfil.setText(state);
+
         mFirebaseDatabaseManager.setUserAptitudes(uid, mChipsAptitudes);
         mFirebaseDatabaseManager.setUserDifficulties(uid, mChipsDifficulties);
         mFirebaseDatabaseManager.setProfilePhoto(uid, mIvFotoPerfil);
+    }
+
+    private void setListeners() {
+        mBtnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ChatActivity.class);
+
+                Bundle mBundle = new Bundle();
+                mBundle.putString("friendUid", uid);
+                mBundle.putString("friendPhotoUrl", photoUrl);
+                mBundle.putString("friendName", name);
+
+                intent.putExtras(mBundle);
+                startActivity(intent);
+            }
+        });
     }
 }

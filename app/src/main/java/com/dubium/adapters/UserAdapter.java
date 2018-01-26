@@ -76,11 +76,15 @@ public class UserAdapter extends ArrayAdapter<UserViewHolder> {
 
         String photoUrl = null;
 
-        if(u.getPhotoUrl().equals("")){
+        if(u.getPhotoUrl() == null){
+
+        }
+        else if(u.getPhotoUrl().equals("")){
             Log.i("FriendPhotoUrl", u.getPhotoUrl()+"");
 
             photoUrl = null;
-        } else {
+        }
+        else{
             photoUrl = u.getPhotoUrl();
             Log.i("FriendPhotoUrl", u.getPhotoUrl()+"");
 

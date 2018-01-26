@@ -58,6 +58,14 @@
                 android:textSize="10dp" />
 
             <ImageView
+                android:id="@+id/iv_voltar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/ic_voltar"/>
+
+            <ImageView
                 android:id="@+id/iv_foto_perfil"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
@@ -65,6 +73,7 @@
                 android:layout_marginBottom="-35dp"
                 android:layout_marginTop="100dp"
                 android:adjustViewBounds="true"
+                android:backgroundTint="@color/light_white"
                 android:src="@drawable/ic_anonymous" />
 
             <LinearLayout

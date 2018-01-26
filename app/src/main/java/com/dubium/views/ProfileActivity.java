@@ -26,6 +26,7 @@ public class ProfileActivity extends Activity {
     RelativeLayout mBtnChat;
 
     ImageView mIvFotoPerfil;
+    ImageView mIvVoltar;
 
     FlexboxLayout mAptidoesContainer;
     FlexboxLayout mDificuldadesContainer;
@@ -74,6 +75,8 @@ public class ProfileActivity extends Activity {
 
         mBtnChat = (RelativeLayout) findViewById(R.id.btn_chat);
         mIvFotoPerfil = (ImageView) findViewById(R.id.iv_foto_perfil);
+        mIvVoltar = (ImageView) findViewById(R.id.iv_voltar);
+
         mAptidoesContainer = (FlexboxLayout) findViewById(R.id.aptidoes_container);
         mDificuldadesContainer = (FlexboxLayout) findViewById(R.id.dificuldades_container);
 
@@ -119,6 +122,13 @@ public class ProfileActivity extends Activity {
 
                 intent.putExtras(mBundle);
                 startActivity(intent);
+            }
+        });
+
+        mIvVoltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

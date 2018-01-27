@@ -1,5 +1,6 @@
 package com.dubium.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,8 +17,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.dubium.R;
+import com.dubium.fragments.ChatsFragment;
 import com.dubium.model.Chat;
 import com.dubium.views.ChatActivity;
+import com.dubium.views.HomeActivity;
 import com.facebook.login.Login;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -27,13 +30,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by eddie on 22/01/2018.
  */
 
-public class ChatAdapter extends ArrayAdapter<Chat> {
+public class ChatAdapter extends ArrayAdapter<Chat> implements Serializable{
 
     RelativeLayout mChatContainer;
     ImageView mIvFotoChat;
@@ -44,7 +48,6 @@ public class ChatAdapter extends ArrayAdapter<Chat> {
 
     FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference();
-
 
     public ChatAdapter(Context context, List<Chat> chats) {
         super(context, 0, chats);
@@ -95,6 +98,7 @@ public class ChatAdapter extends ArrayAdapter<Chat> {
                 mBundle.putString("friendUid", chat.getFriendId());
                 mBundle.putString("friendPhotoUrl", friendPhotoUrl);
                 mBundle.putString("friendName", chat.getName());
+
                 intent.putExtras(mBundle);
 
                 mContext.startActivity(intent);
@@ -102,5 +106,8 @@ public class ChatAdapter extends ArrayAdapter<Chat> {
         });
 
         return convertView;
+
     }
+
+
 }

@@ -1,5 +1,6 @@
 package com.dubium.views;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -316,4 +317,9 @@ public class ChatActivity extends BaseActivity {
         onSignedInitialize();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

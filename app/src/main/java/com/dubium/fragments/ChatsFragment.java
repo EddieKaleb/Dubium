@@ -1,6 +1,9 @@
 package com.dubium.fragments;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -27,10 +30,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ChatsFragment extends Fragment {
+public class ChatsFragment extends Fragment{
 
     View mRootView;
     ListView mLvChats;
@@ -43,6 +48,8 @@ public class ChatsFragment extends Fragment {
     DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference();
 
     boolean initialRefresh = true;
+
+    static final int LAST_MESSAGE = 3;
 
     public ChatsFragment() { }
 
@@ -96,7 +103,7 @@ public class ChatsFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot objSnapshot : dataSnapshot.getChildren()){
-                    String friendId = objSnapshot.getKey();
+                    final String friendId = objSnapshot.getKey();
                     final String chatId = objSnapshot.getChildren().iterator().next().getKey();
 
                     final Chat chat = new Chat();
@@ -121,9 +128,10 @@ public class ChatsFragment extends Fragment {
                             chat.setPhotoUrl(photoUrl);
 
                             Query query3 = mDatabaseReference.child("chats").child(chatId).child("messages").orderByKey().limitToLast(1);
-                            query3.addListenerForSingleValueEvent(new ValueEventListener() {
+                            query3.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
+
                                     String messageId = dataSnapshot.getChildren().iterator().next().getKey();
                                     Log.i("MessageId", messageId);
 
@@ -145,7 +153,23 @@ public class ChatsFragment extends Fragment {
                                     chat.setMessage(text);
                                     chat.setTime(time);
 
-                                    mChatAdapter.add(chat);
+                                    boolean isNewChat = true;
+                                    if (mChatAdapter.getCount() == 0)
+                                        mChatAdapter.add(chat);
+                                    else {
+                                        for (int i = 0; i < mChatAdapter.getCount(); i++) {
+                                            Chat c = mChatAdapter.getItem(i);
+                                            if (c.getFriendId().equals(chat.getFriendId())) {
+                                                mChatAdapter.getItem(i).setMessage(text);
+                                                mChatAdapter.getItem(i).setTime(time);
+                                                mChatAdapter.notifyDataSetChanged();
+                                                isNewChat = false;
+                                            }
+                                        }
+                                        if (isNewChat) mChatAdapter.add(chat);
+                                    }
+
+
                                 }
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
@@ -168,7 +192,7 @@ public class ChatsFragment extends Fragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                refresh();
+                setChats();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         }, 1000);
@@ -176,5 +200,35 @@ public class ChatsFragment extends Fragment {
 
     private  void refresh() {
         getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.w("onPause", "log");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.w("onPause", "log");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.w("onDetach", "log");
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.w("onAttach", "log");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.w("onStart", "log");
     }
 }

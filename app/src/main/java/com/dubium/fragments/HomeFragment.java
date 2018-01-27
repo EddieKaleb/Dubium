@@ -102,7 +102,7 @@ public class HomeFragment extends Fragment {
 
     public void getUserAndNearbies() {
         Query query = mDatabaseReference.child("users").child(currentUser.getUid());
-        query.addValueEventListener(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mUserActual = dataSnapshot.getValue(User.class);

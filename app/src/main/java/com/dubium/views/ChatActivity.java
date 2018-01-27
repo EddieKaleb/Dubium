@@ -316,10 +316,4 @@ public class ChatActivity extends BaseActivity {
         mMessagesDatabaseReference = mDatabaseReference.child("chats").child(chatId).child("messages");
         onSignedInitialize();
     }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-    }
 }

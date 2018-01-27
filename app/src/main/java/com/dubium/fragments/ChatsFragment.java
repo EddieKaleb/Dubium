@@ -49,8 +49,6 @@ public class ChatsFragment extends Fragment{
 
     boolean initialRefresh = true;
 
-    static final int LAST_MESSAGE = 3;
-
     public ChatsFragment() { }
 
     @Nullable
@@ -192,7 +190,7 @@ public class ChatsFragment extends Fragment{
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                setChats();
+                refresh();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         }, 1000);
@@ -200,35 +198,5 @@ public class ChatsFragment extends Fragment{
 
     private  void refresh() {
         getFragmentManager().beginTransaction().detach(this).attach(this).commit();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.w("onPause", "log");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.w("onPause", "log");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.w("onDetach", "log");
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.w("onAttach", "log");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.w("onStart", "log");
     }
 }

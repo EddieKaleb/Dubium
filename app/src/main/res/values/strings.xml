@@ -15,6 +15,6 @@
 
     <!-- SetupActivity -->
     <string name="tv_first">Vamos começar?</string>
-    <string name="tv_second">Adicione alguns favoritos!</string>
+    <string name="tv_second">Adicione suas habilidades!</string>
     <string name="tv_prosseguir">PROSSEGUIR</string>
 </resources>

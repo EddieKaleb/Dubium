@@ -168,8 +168,7 @@ public class HomeActivity extends BaseActivity {
 
 
         }else{
-            locationManager = (LocationManager)
-                    getSystemService(Context.LOCATION_SERVICE);
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
             Criteria crit = new Criteria();
             towers = locationManager.getBestProvider(crit, false);
@@ -189,9 +188,7 @@ public class HomeActivity extends BaseActivity {
                 mDatabase.child("users").child(currentUser.getUid()).child("latitude").setValue(user.getLatitude());
                 mDatabase.child("users").child(currentUser.getUid()).child("longitude").setValue(user.getLongitude());
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            } catch (IOException e) { e.printStackTrace(); }
         }else{
             Toast.makeText(this, "Ative sua localização", Toast.LENGTH_SHORT).show();
         }

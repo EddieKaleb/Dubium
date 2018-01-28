@@ -5,7 +5,9 @@
     <SearchView
         android:id="@+id/sv_disciplinas"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:queryHint="Pesquisar disciplina">
+    </SearchView>
     <View
         android:id="@+id/setup_divider"
         android:layout_width="match_parent"

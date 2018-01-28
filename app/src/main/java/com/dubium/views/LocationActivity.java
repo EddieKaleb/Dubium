@@ -56,7 +56,7 @@ public class LocationActivity extends AptitudesActivity {
         mTvProsseguir.setText("PERMITIR");
         mTvProsseguir.setGravity(Gravity.END);
         mTvFirst.setText("Para finalizar");
-        mTvSecond.setText("Precisamos acessar sua localização!");
+        mTvSecond.setText("habilite sua localização!");
         mIvIcon.setImageResource(R.drawable.ic_localizacao);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();

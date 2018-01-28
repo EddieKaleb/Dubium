@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.dubium.R;
 import com.dubium.database.FirebaseDatabaseManager;
 import com.dubium.model.Message;
+import com.dubium.model.User;
 import com.dubium.views.AptitudesActivity;
 import com.dubium.views.DifficultiesActivity;
 import com.google.android.flexbox.FlexboxLayout;
@@ -31,6 +32,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -85,6 +91,7 @@ public class ProfileFragment extends Fragment {
     static final int NEW_DATA = 1;
     static final int RC_PHOTO_PIKER = 2;
     boolean editMode = false;
+    private DatabaseReference mDatabase;
 
     public ProfileFragment() {
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -138,8 +145,24 @@ public class ProfileFragment extends Fragment {
         mChipsAptitudes = new ChipCloud(mRootView.getContext(), mAptidoesContainer, config);
         mChipsDifficulties = new ChipCloud(mRootView.getContext(), mDificuldadesContainer, config);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         mFirebaseStorage = FirebaseStorage.getInstance();
         mProfilePhotosStorageReference = mFirebaseStorage.getReference().child("profile_photos");
+
+        mDatabase.child("users").child(mFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+
+                mTvCidadePerfil.setText(user.getCity());
+                mTvEstadoPerfil.setText(user.getState());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         exitEditMode();
 
@@ -231,6 +254,7 @@ public class ProfileFragment extends Fragment {
         mFirebaseDatabaseManager.setUserAptitudes(mFirebaseUser.getUid(), mChipsAptitudes);
         mFirebaseDatabaseManager.setUserDifficulties(mFirebaseUser.getUid(), mChipsDifficulties);
         mFirebaseDatabaseManager.setProfilePhoto(mFirebaseUser.getUid(), mIvFotoPerfil);
+
     }
 
     private void loadPhoto(Uri uri) {

@@ -135,7 +135,7 @@ public class LocationActivity extends AptitudesActivity {
 
         if (location != null) {
             prosseguir = true;
-            Toast.makeText(this, "LOCALIZAÇÃO ATUALIZADA", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Localização atualizada", Toast.LENGTH_SHORT).show();
 
             longitude = location.getLongitude();
             latitude = location.getLatitude();
@@ -151,7 +151,7 @@ public class LocationActivity extends AptitudesActivity {
                 e.printStackTrace();
             }
         }else{
-            Toast.makeText(this, "religue seu gps" + towers, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Atualize sua localização" + towers, Toast.LENGTH_SHORT).show();
             prosseguir = false;
         }
     }

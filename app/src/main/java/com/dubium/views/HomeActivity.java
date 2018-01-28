@@ -177,7 +177,7 @@ public class HomeActivity extends BaseActivity {
         }
 
         if (location != null) {
-            Toast.makeText(this, "LOCALIZAÇÃO ATUALIZADA", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Localização atualizada", Toast.LENGTH_SHORT).show();
 
             longitude = location.getLongitude();
             latitude = location.getLatitude();
@@ -193,7 +193,7 @@ public class HomeActivity extends BaseActivity {
                 e.printStackTrace();
             }
         }else{
-            Toast.makeText(this, "religue seu gps" + towers, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Ative sua localização", Toast.LENGTH_SHORT).show();
         }
     }
 

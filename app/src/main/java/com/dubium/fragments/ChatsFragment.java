@@ -100,84 +100,90 @@ public class ChatsFragment extends Fragment{
         query1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot objSnapshot : dataSnapshot.getChildren()){
-                    final String friendId = objSnapshot.getKey();
-                    final String chatId = objSnapshot.getChildren().iterator().next().getKey();
+                if (dataSnapshot.getValue() != null) {
 
-                    final Chat chat = new Chat();
+                    for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
+                        final String friendId = objSnapshot.getKey();
+                        final String chatId = objSnapshot.getChildren().iterator().next().getKey();
 
-                    chat.setChatId(chatId);
-                    chat.setFriendId(friendId);
+                        final Chat chat = new Chat();
 
-                    Query query2 = mDatabaseReference.child("users").child(friendId);
-                    query2.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            Log.i("Query1", dataSnapshot.child("name").getValue().toString());
+                        chat.setChatId(chatId);
+                        chat.setFriendId(friendId);
 
-                            String name = dataSnapshot.child("name").getValue().toString();
+                        Query query2 = mDatabaseReference.child("users").child(friendId);
+                        query2.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Log.i("Query1", dataSnapshot.child("name").getValue().toString());
 
-                            String photoUrl = "";
-                            if(dataSnapshot.child("photoUrl").getValue() != null){
-                                photoUrl = dataSnapshot.child("photoUrl").getValue().toString();
+                                String name = dataSnapshot.child("name").getValue().toString();
+
+                                String photoUrl = "";
+                                if (dataSnapshot.child("photoUrl").getValue() != null) {
+                                    photoUrl = dataSnapshot.child("photoUrl").getValue().toString();
+                                }
+
+                                chat.setName(name);
+                                chat.setPhotoUrl(photoUrl);
+
+                                Query query3 = mDatabaseReference.child("chats").child(chatId).child("messages").orderByKey().limitToLast(1);
+                                query3.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                        String messageId = dataSnapshot.getChildren().iterator().next().getKey();
+                                        Log.i("MessageId", messageId);
+
+
+                                        String text = "";
+                                        if (dataSnapshot.child(messageId).child("text").getValue() != null) {
+                                            text = dataSnapshot.child(messageId).child("text").getValue().toString();
+
+                                            if (dataSnapshot.child(messageId).child("text").getValue().toString().length() > 40) {
+                                                text = text.substring(0, 30) + "...";
+                                            }
+                                        } else {
+                                            text = "Foto";
+                                        }
+
+                                        String time = dataSnapshot.child(messageId).child("time").getValue().toString();
+
+                                        chat.setMessage(text);
+                                        chat.setTime(time);
+
+                                        boolean isNewChat = true;
+                                        if (mChatAdapter.getCount() == 0)
+                                            mChatAdapter.add(chat);
+                                        else {
+                                            for (int i = 0; i < mChatAdapter.getCount(); i++) {
+                                                Chat c = mChatAdapter.getItem(i);
+                                                if (c.getFriendId().equals(chat.getFriendId())) {
+                                                    mChatAdapter.getItem(i).setMessage(text);
+                                                    mChatAdapter.getItem(i).setTime(time);
+                                                    mChatAdapter.notifyDataSetChanged();
+                                                    isNewChat = false;
+                                                }
+                                            }
+                                            if (isNewChat) mChatAdapter.add(chat);
+                                        }
+
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        Log.i("getChats", "erro");
+                                    }
+                                });
                             }
 
-                            chat.setName(name);
-                            chat.setPhotoUrl(photoUrl);
-
-                            Query query3 = mDatabaseReference.child("chats").child(chatId).child("messages").orderByKey().limitToLast(1);
-                            query3.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                    String messageId = dataSnapshot.getChildren().iterator().next().getKey();
-                                    Log.i("MessageId", messageId);
-
-
-                                    String text = "";
-                                    if(dataSnapshot.child(messageId).child("text").getValue() != null){
-                                        text = dataSnapshot.child(messageId).child("text").getValue().toString();
-
-                                        if(dataSnapshot.child(messageId).child("text").getValue().toString().length() > 40){
-                                            text = text.substring(0, 30) + "...";
-                                        }
-                                    }
-                                    else{
-                                        text = "Foto";
-                                    }
-
-                                    String time = dataSnapshot.child(messageId).child("time").getValue().toString();
-
-                                    chat.setMessage(text);
-                                    chat.setTime(time);
-
-                                    boolean isNewChat = true;
-                                    if (mChatAdapter.getCount() == 0)
-                                        mChatAdapter.add(chat);
-                                    else {
-                                        for (int i = 0; i < mChatAdapter.getCount(); i++) {
-                                            Chat c = mChatAdapter.getItem(i);
-                                            if (c.getFriendId().equals(chat.getFriendId())) {
-                                                mChatAdapter.getItem(i).setMessage(text);
-                                                mChatAdapter.getItem(i).setTime(time);
-                                                mChatAdapter.notifyDataSetChanged();
-                                                isNewChat = false;
-                                            }
-                                        }
-                                        if (isNewChat) mChatAdapter.add(chat);
-                                    }
-
-
-                                }
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                    Log.i("getChats", "erro");
-                                }
-                            });
-                        }
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) { Log.i("getChats", "erro"); }
-                    });
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Log.i("getChats", "erro");
+                            }
+                        });
+                    }
                 }
             }
             @Override

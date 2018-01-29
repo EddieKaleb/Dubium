@@ -2,7 +2,7 @@
 <resources>
     <color name="black">#000000</color>
     <color name="blue">#53a6a7</color>
-    <color name="blueDark">#348182</color>
+    <color name="blueDark">#009688</color>
     <color name="green">#9FCC2E</color>
     <color name="light_green">#3F7F7F</color>
     <color name="dark_green">#008000</color>
@@ -18,5 +18,6 @@
     <color name="darker_gray">#434A54</color>
     <color name="facebook">#3b5998</color>
     <color name="google">#c54533</color>
-    <color name="msg_received">#E56F26</color>
+    <color name="msg_received">#9e9e9e</color>
+    <color name="time_text_msg_sent">#B2DFDB</color>
 </resources>

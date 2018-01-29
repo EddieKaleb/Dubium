@@ -152,6 +152,7 @@ public class ChatsFragment extends Fragment{
                                         chat.setMessage(text);
                                         chat.setTime(time);
 
+                                        // Configura no item chat a última mensagem enviada
                                         boolean isNewChat = true;
                                         if (mChatAdapter.getCount() == 0)
                                             mChatAdapter.add(chat);

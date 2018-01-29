@@ -66,6 +66,7 @@ public class ChatActivity extends BaseActivity {
     private Button mSendButton;
     private ImageView mPhotoImageView;
     private TextView mNameTextView;
+    private ImageView mBackImageView;
 
     private String mUsername;
 
@@ -109,6 +110,7 @@ public class ChatActivity extends BaseActivity {
         mSendButton = (Button) findViewById(R.id.bt_send);
         mPhotoImageView = (ImageView) findViewById(R.id.iv_photo);
         mNameTextView = (TextView) findViewById(R.id.tv_name);
+        mBackImageView = (ImageView) findViewById(R.id.iv_voltar);
 
         mProgressBar.setVisibility(View.INVISIBLE);
 
@@ -179,6 +181,13 @@ public class ChatActivity extends BaseActivity {
                 }
                 mMessagesDatabaseReference.push().setValue(message);                // Clear input box
                 mMessageEditText.setText("");
+            }
+        });
+
+        mBackImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
     }

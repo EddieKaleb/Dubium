@@ -1,7 +1,9 @@
 package com.dubium.views;
 
         import android.annotation.SuppressLint;
+        import android.app.AlertDialog;
         import android.content.Context;
+        import android.content.DialogInterface;
         import android.content.Intent;
         import android.content.pm.PackageManager;
         import android.location.Criteria;
@@ -113,44 +115,70 @@ public class LocationActivity extends AptitudesActivity {
     }
     public void find_location(){
 
-        User user = new User();
+        final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
 
-        if (ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED){
+        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            buildAlertMessageNoGps();
 
-            Log.w("checkSelfPermission", "log");
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_LOCATION);
-        } else {
-            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-            Criteria crit = new Criteria();
-            towers = locationManager.getBestProvider(crit, false);
-            location = getLastKnownLocation();
         }
+        else{
+            User user = new User();
 
-        if (location != null) {
-            prosseguir = true;
-            Toast.makeText(this, "Localização atualizada", Toast.LENGTH_SHORT).show();
+            if (ActivityCompat.checkSelfPermission(this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED){
 
-            longitude = location.getLongitude();
-            latitude = location.getLatitude();
+                Log.w("checkSelfPermission", "log");
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                        REQUEST_LOCATION);
+            } else {
+                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-            try {
-                user.findAdress(latitude, longitude);
-                mDatabase.child("users").child(currentUser.getUid()).child("city").setValue(user.getCity());
-                mDatabase.child("users").child(currentUser.getUid()).child("state").setValue(user.getState());
-                mDatabase.child("users").child(currentUser.getUid()).child("latitude").setValue(user.getLatitude());
-                mDatabase.child("users").child(currentUser.getUid()).child("longitude").setValue(user.getLongitude());
+                Criteria crit = new Criteria();
+                towers = locationManager.getBestProvider(crit, false);
+                location = getLastKnownLocation();
+            }
 
-            } catch (IOException e) { e.printStackTrace(); }
+            if (location != null) {
+                prosseguir = true;
+                Toast.makeText(this, "Localização atualizada", Toast.LENGTH_SHORT).show();
+
+                longitude = location.getLongitude();
+                latitude = location.getLatitude();
+
+                try {
+                    user.findAdress(latitude, longitude);
+                    mDatabase.child("users").child(currentUser.getUid()).child("city").setValue(user.getCity());
+                    mDatabase.child("users").child(currentUser.getUid()).child("state").setValue(user.getState());
+                    mDatabase.child("users").child(currentUser.getUid()).child("latitude").setValue(user.getLatitude());
+                    mDatabase.child("users").child(currentUser.getUid()).child("longitude").setValue(user.getLongitude());
+
+                } catch (IOException e) { e.printStackTrace(); }
+            }
+
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+            finish();
         }
+    }
 
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
-        finish();
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 
     private Location getLastKnownLocation() {

@@ -1,5 +1,6 @@
 package com.dubium.views;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -54,6 +55,8 @@ public class LoginActivity extends BaseActivity {
 
     private DatabaseReference mUserReference;
 
+    ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +88,9 @@ public class LoginActivity extends BaseActivity {
         mGoogleModule = new GoogleModule(this, mFirebaseAuth);
         mFacebookModule = new FacebookModule(this, mFirebaseAuth);
         mEmailPasswordModule = new EmailPasswordModule(this, mFirebaseAuth);
+
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage("Carregando...");
 
         //initializeAuthStateListener();
 
@@ -124,28 +130,23 @@ public class LoginActivity extends BaseActivity {
         mBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (!validateLoginForm()) {
-                    return;
-                }
-
+                if (!validateLoginForm()) { return; }
+                mProgressDialog.show();
                 mEmailPasswordModule.signIn(mEtEmail.getText().toString(), mEtSenha.getText().toString());
+                mProgressDialog.dismiss();
             }
         });
 
         mBtnGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 googleSignIn();
-
             }
         });
 
         mBtnFacebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 facebookSignIn();
             }
         });
@@ -158,11 +159,15 @@ public class LoginActivity extends BaseActivity {
                     return;
                 }
 
+                mProgressDialog.show();
+
                 String email = mEtEmail.getText().toString();
                 String password = mEtSenha.getText().toString();
                 String name = mEtNome.getText().toString();
 
                 mEmailPasswordModule.createAccount(email, password, name);
+
+                mProgressDialog.dismiss();
             }
         });
     }

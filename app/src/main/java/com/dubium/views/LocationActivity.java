@@ -1,5 +1,6 @@
 package com.dubium.views;
 
+        import android.annotation.SuppressLint;
         import android.content.Context;
         import android.content.Intent;
         import android.content.pm.PackageManager;
@@ -41,10 +42,17 @@ public class LocationActivity extends AptitudesActivity {
     ArrayList<Subject> mAptitudesList;
     ArrayList<Subject> mDifficultiesList;
 
-    boolean prosseguir;
+    boolean prosseguir = false;
 
     @BindView(R.id.setup_divider)
     View mSetupDivider;
+
+    public static final int REQUEST_LOCATION = 2;
+
+    String towers = "";
+    Location location = null;
+    double latitude = 0;
+    double longitude = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,33 +108,23 @@ public class LocationActivity extends AptitudesActivity {
                 }
 
                 find_location();
-                if(prosseguir) {
-                    Intent intent = new Intent(v.getContext(), HomeActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
             }
         });
     }
-
     public void find_location(){
-        double latitude ;
-        double longitude;
-        String towers = "";
-        Location location = null;
+
         User user = new User();
 
         if (ActivityCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED){
 
+            Log.w("checkSelfPermission", "log");
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    2);
-
-        }else{
-            locationManager = (LocationManager)
-                    getSystemService(Context.LOCATION_SERVICE);
+                    REQUEST_LOCATION);
+        } else {
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
             Criteria crit = new Criteria();
             towers = locationManager.getBestProvider(crit, false);
@@ -147,13 +145,12 @@ public class LocationActivity extends AptitudesActivity {
                 mDatabase.child("users").child(currentUser.getUid()).child("latitude").setValue(user.getLatitude());
                 mDatabase.child("users").child(currentUser.getUid()).child("longitude").setValue(user.getLongitude());
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }else{
-            Toast.makeText(this, "Atualize sua localização" + towers, Toast.LENGTH_SHORT).show();
-            prosseguir = false;
+            } catch (IOException e) { e.printStackTrace(); }
         }
+
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private Location getLastKnownLocation() {
@@ -179,5 +176,29 @@ public class LocationActivity extends AptitudesActivity {
             return null;
         }
         return bestLocation;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions,
+                                           int[] grantResults) {
+        if (requestCode == REQUEST_LOCATION) {
+            if (grantResults.length == 1
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.w("onRequestPermissions", "OK");
+                // We can now safely use the API we requested access to
+                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+                Criteria crit = new Criteria();
+                towers = locationManager.getBestProvider(crit, false);
+                location = getLastKnownLocation();
+
+                Intent intent = new Intent(this, HomeActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Toast.makeText(this, "Ative sua localização", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

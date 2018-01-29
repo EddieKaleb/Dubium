@@ -139,7 +139,6 @@ public class ProfileFragment extends Fragment {
 
         mProgressDialog = new ProgressDialog(getActivity());
         mProgressDialog.setMessage("Carregando...");
-        mProgressDialog.setTitle("Nova Foto");
 
         mFirebaseDatabaseManager = new FirebaseDatabaseManager();
         mChipsAptitudes = new ChipCloud(mRootView.getContext(), mAptidoesContainer, config);

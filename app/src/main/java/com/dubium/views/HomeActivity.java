@@ -61,11 +61,15 @@ public class HomeActivity extends BaseActivity {
     final FragmentManager fragmentManager = getSupportFragmentManager();
     int mMenuPrevItem;
 
+    public static final int REQUEST_LOCATION = 2;
+
+    String towers = "";
+    Location location = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         ButterKnife.bind(this);
 
         currentUser = mFirebaseAuth.getCurrentUser();
@@ -115,10 +119,6 @@ public class HomeActivity extends BaseActivity {
                         return false;
                     }
                 });
-
-        //alertaValidacaoPermissao();
-
-        // Inicializa o AuthState para verificação de usuário logado.
     }
 
     @Override
@@ -152,10 +152,9 @@ public class HomeActivity extends BaseActivity {
     }
 
     public void find_location(){
-        double latitude ;
-        double longitude;
-        String towers = "";
-        Location location = null;
+        double latitude = 0;
+        double longitude = 0;
+
         User user = new User();
 
         if (ActivityCompat.checkSelfPermission(this,
@@ -164,16 +163,15 @@ public class HomeActivity extends BaseActivity {
 
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    2);
-
-
-        }else{
+                    REQUEST_LOCATION);
+        } else {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
             Criteria crit = new Criteria();
             towers = locationManager.getBestProvider(crit, false);
             location = getLastKnownLocation();
         }
+
 
         if (location != null) {
             Toast.makeText(this, "Localização atualizada", Toast.LENGTH_SHORT).show();
@@ -189,8 +187,6 @@ public class HomeActivity extends BaseActivity {
                 mDatabase.child("users").child(currentUser.getUid()).child("longitude").setValue(user.getLongitude());
 
             } catch (IOException e) { e.printStackTrace(); }
-        }else{
-            Toast.makeText(this, "Ative sua localização", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -220,5 +216,15 @@ public class HomeActivity extends BaseActivity {
     }
 
 
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions,
+                                           int[] grantResults) {
+        if (requestCode == REQUEST_LOCATION) {
+            if (grantResults.length == 1
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // We can now safely use the API we requested access to
+            }
+        }
+    }
 }

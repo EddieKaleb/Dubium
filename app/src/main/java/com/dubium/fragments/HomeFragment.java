@@ -1,5 +1,6 @@
 package com.dubium.fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -51,6 +52,8 @@ public class HomeFragment extends Fragment {
 
     final ArrayList<UserViewHolder> userListViewHolder = new ArrayList<>();
 
+    ProgressDialog mProgressDialog;
+
     boolean initialRefresh = true;
 
     private final int RATIO = 40;
@@ -78,6 +81,9 @@ public class HomeFragment extends Fragment {
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) mRootView.findViewById(R.id.swipe_refresh);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.blue, R.color.gray);
+
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setMessage("Carregando...");
 
         mUsersListView = (ListView) mRootView.findViewById(R.id.lv_usuarios);
         mUserAdapter = new UserAdapter(getActivity(), userListViewHolder);
@@ -117,9 +123,12 @@ public class HomeFragment extends Fragment {
 
         Query query = mDatabaseReference.child("users");
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                mUserAdapter.clear();
+                mProgressDialog.show();
+
                 for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
                     User nearbyUser = objSnapshot.getValue(User.class);
 
@@ -139,12 +148,11 @@ public class HomeFragment extends Fragment {
                         }
                     }
                 }
+                mProgressDialog.dismiss();
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(), "ERRO", Toast.LENGTH_SHORT).show();
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
 
     }

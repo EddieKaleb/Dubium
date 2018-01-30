@@ -18,8 +18,8 @@
 
         <ImageView
             android:id="@+id/iv_editar_foto"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginRight="10dp"
             android:paddingBottom="5dp"
             android:layout_above="@id/tv_nome_perfil"
@@ -31,8 +31,8 @@
 
         <ImageView
             android:id="@+id/iv_apagar_foto"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:paddingBottom="5dp"
             android:layout_above="@id/tv_nome_perfil"
             android:layout_toStartOf="@id/iv_foto_perfil"
@@ -94,22 +94,22 @@
 
         <ImageView
             android:id="@+id/iv_confirmar"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
             android:src="@drawable/ic_check"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
             android:tint="@color/light_gray"
             android:layout_alignParentRight="true"/>
 
         <ImageView
             android:id="@+id/iv_editar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:src="@drawable/ic_lapis"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
             android:tint="@color/light_gray"/>
 
         <RelativeLayout

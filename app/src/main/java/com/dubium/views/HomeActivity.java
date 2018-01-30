@@ -187,6 +187,10 @@ public class HomeActivity extends BaseActivity {
                 mDatabase.child("users").child(currentUser.getUid()).child("longitude").setValue(user.getLongitude());
 
             } catch (IOException e) { e.printStackTrace(); }
+
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 

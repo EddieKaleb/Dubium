@@ -7,24 +7,16 @@
     android:background="@drawable/rectangle"
     android:elevation="1dp">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/iv_foto_perfil"
+        android:layout_centerVertical="true"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="5dp"
         android:src="@drawable/ic_anonymous"
-        android:adjustViewBounds="true" />
-
-    <LinearLayout
-        android:id="@+id/foto_perfil_container"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_centerVertical="true"
+        app:civ_border_width="0.3dp"
         android:layout_marginLeft="5dp"
-        android:background="@drawable/ic_foto_grande"
-        android:backgroundTint="@color/white"
-        android:orientation="horizontal" />
+        app:civ_border_color="@color/light_gray"/>
 
     <TextView
         android:id="@+id/tv_nome"
@@ -32,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/foto_perfil_container"
+        android:layout_toRightOf="@id/iv_foto_perfil"
         android:fontFamily="@string/font_family_light"
         android:text="ANÔNIMO"
         android:textColor="@color/black"
@@ -43,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:layout_toRightOf="@id/foto_perfil_container"
+        android:layout_toRightOf="@id/iv_foto_perfil"
         android:fontFamily="@string/font_family_regular"
         android:paddingTop="20dp"
         android:text="10km"
@@ -82,7 +74,7 @@
         android:layout_below="@id/tv_aptidao_comum"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="-3dp"
-        android:layout_toRightOf="@id/foto_perfil_container"
+        android:layout_toRightOf="@id/iv_foto_perfil"
         android:fontFamily="@string/font_family_thin"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="14dp" />

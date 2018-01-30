@@ -54,6 +54,8 @@ dependencies {
     compile 'com.github.fiskurgit:ChipCloud:3.0.5'
 
     compile 'com.google.android:flexbox:0.3.2'
+
+    compile 'de.hdodenhof:circleimageview:2.2.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

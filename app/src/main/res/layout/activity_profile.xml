@@ -65,27 +65,16 @@
                 android:layout_marginLeft="15dp"
                 android:src="@drawable/ic_voltar"/>
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="-35dp"
                 android:id="@+id/iv_foto_perfil"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="-35dp"
                 android:layout_marginTop="100dp"
-                android:adjustViewBounds="true"
-                android:backgroundTint="@color/light_white"
-                android:src="@drawable/ic_anonymous" />
-
-            <LinearLayout
-                android:id="@+id/foto_perfil_container"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="-35dp"
-                android:layout_marginTop="100dp"
-                android:background="@drawable/ic_foto_grande"
-                android:orientation="horizontal" />
-
+                android:src="@drawable/ic_anonymous"
+                app:civ_border_width="0dp"/>
 
             <RelativeLayout
                 android:id="@+id/container"

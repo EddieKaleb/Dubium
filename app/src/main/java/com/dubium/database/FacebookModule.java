@@ -1,6 +1,7 @@
 package com.dubium.database;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -44,6 +45,7 @@ public class FacebookModule {
     private FirebaseDatabaseManager mFirebaseDatabaseManager;
     private Context mContext;
     private DatabaseReference mUserReference;
+    ProgressDialog mProgressDialog;
 
     private static final String TAG = "FacebookModule";
 
@@ -57,6 +59,9 @@ public class FacebookModule {
 
         this.mContext = context;
         this.mFirebaseAuth = firebaseAuth;
+
+        mProgressDialog = new ProgressDialog(mContext);
+        mProgressDialog.setMessage("Carregando...");
 
         initializeFacebookSignIn();
 
@@ -101,6 +106,10 @@ public class FacebookModule {
 
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
+
+        final ProgressDialog mProgressDialog = new ProgressDialog(mContext);
+        mProgressDialog.setMessage("Carregando...");
+        mProgressDialog.show();
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mFirebaseAuth.signInWithCredential(credential)
@@ -155,6 +164,8 @@ public class FacebookModule {
                             Toast.makeText(mContext, "Authentication failed." + task.getException(),
                                     Toast.LENGTH_LONG).show();
                         }
+
+                        mProgressDialog.dismiss();
                     }
                 });
     }

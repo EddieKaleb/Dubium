@@ -1,6 +1,7 @@
 package com.dubium.database;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -47,6 +48,8 @@ public class GoogleModule {
 
     private Context mContext;
 
+    ProgressDialog mProgressDialog;
+
     private String TAG = "GoogleModule";
 
     //Class Constructor
@@ -64,9 +67,13 @@ public class GoogleModule {
 
         this.mGoogleSignInClient = GoogleSignIn.getClient(context, gso);
 
+        mProgressDialog = new ProgressDialog(mContext);
+        mProgressDialog.setMessage("Carregando...");
+
     }
 
     public void signIn(Intent data) {
+        mProgressDialog.show();
         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
         try {
             // Google Sign In was successful, authenticate with Firebase.
@@ -139,7 +146,7 @@ public class GoogleModule {
                                 Toast.makeText(mContext, "Autentication failed", Toast.LENGTH_LONG).show();
                             }
 
-                            //hideProgressDialog();
+                            mProgressDialog.dismiss();
                         }
                     });
     }

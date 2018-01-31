@@ -19,6 +19,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -45,10 +47,7 @@ public class GoogleModule {
 
     private DatabaseReference mUserReference;
 
-
     private Context mContext;
-
-    ProgressDialog mProgressDialog;
 
     private String TAG = "GoogleModule";
 
@@ -66,14 +65,9 @@ public class GoogleModule {
                 .build();
 
         this.mGoogleSignInClient = GoogleSignIn.getClient(context, gso);
-
-        mProgressDialog = new ProgressDialog(mContext);
-        mProgressDialog.setMessage("Carregando...");
-
     }
 
     public void signIn(Intent data) {
-        mProgressDialog.show();
         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
         try {
             // Google Sign In was successful, authenticate with Firebase.
@@ -105,7 +99,8 @@ public class GoogleModule {
 
                                 FirebaseUser fbUser = mFirebaseAuth.getCurrentUser();
 
-                                mUserReference = FirebaseDatabase.getInstance().getReference().child("users").child(fbUser.getUid());
+                                mUserReference = FirebaseDatabase.getInstance().
+                                        getReference().child("users").child(fbUser.getUid());
 
                                 ValueEventListener userListener = new ValueEventListener() {
                                     @Override
@@ -140,13 +135,10 @@ public class GoogleModule {
                                 mUserReference.addListenerForSingleValueEvent(userListener);
 
                             } else {
-
                                 // If sign in failed, a message is displayed to the user.
                                 Log.w(TAG, "signInWithCredential:failure", task.getException());
                                 Toast.makeText(mContext, "Autentication failed", Toast.LENGTH_LONG).show();
                             }
-
-                            mProgressDialog.dismiss();
                         }
                     });
     }

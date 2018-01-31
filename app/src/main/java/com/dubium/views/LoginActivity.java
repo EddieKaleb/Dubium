@@ -155,11 +155,11 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
 
+                mProgressDialog.show();
+
                 if (!validateRegisterForm()) {
                     return;
                 }
-
-                mProgressDialog.show();
 
                 String email = mEtEmail.getText().toString();
                 String password = mEtSenha.getText().toString();
@@ -202,18 +202,18 @@ public class LoginActivity extends BaseActivity {
 
         // Google Sign in.
         if (requestCode == RC_GOOGLE_SIGN_IN) {
-
             mGoogleModule.signIn(data);
         }
         // Facebook Sign in.
         else{
             mFacebookModule.onActivityResult(requestCode, resultCode, data);
         }
+        mProgressDialog.dismiss();
     }
 
     // Sign in with Google
     private void googleSignIn() {
-
+        mProgressDialog.show();
         Intent signInIntent = mGoogleModule.getSignIntent();
         startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
 

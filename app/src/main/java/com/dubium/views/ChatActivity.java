@@ -1,9 +1,11 @@
 package com.dubium.views;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -15,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -23,7 +26,9 @@ import com.dubium.R;
 import com.dubium.adapters.MessageAdapter;
 import com.dubium.database.FirebaseDatabaseManager;
 import com.dubium.model.Message;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -79,6 +84,8 @@ public class ChatActivity extends BaseActivity {
 
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mChatPhotosStorageReference;
+
+    ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,6 +203,7 @@ public class ChatActivity extends BaseActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == RC_PHOTO_PIKER && resultCode == RESULT_OK){
+            mProgressBar.setVisibility(View.VISIBLE);
             Uri selectedImageUri = data.getData();
 
             StorageReference photoRef = mChatPhotosStorageReference.child(selectedImageUri.getLastPathSegment());
@@ -218,7 +226,12 @@ public class ChatActivity extends BaseActivity {
                             mMessagesDatabaseReference.push().setValue(message);
 
                         }
-                    });
+                    }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    mProgressBar.setVisibility(View.INVISIBLE);
+                }
+            });
         }
     }
 

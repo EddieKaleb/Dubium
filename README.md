@@ -5,10 +5,10 @@ Plataforma Android com a finalidade de conectar estudantes que possuem conhecime
 <table>
   <tr>
     <td>
-      <img align="left" src="screenshots/home.PNG"> 
+      <img align="left" src="screenshots/home.png"> 
     </td>
     <td>
-      <img align="right" src="screenshots/chats.PNG">
+      <img align="right" src="screenshots/chats.png">
     </td>
   </tr>
  </table>

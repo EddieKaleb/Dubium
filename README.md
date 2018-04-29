@@ -11,4 +11,9 @@ Plataforma Android com a finalidade de conectar estudantes que possuem conhecime
       <img align="right" src="screenshots/chats.png">
     </td>
   </tr>
+  <tr>
+    <td>
+      <img align="left" src="screenshots/chat.png">
+    </td>
+  </tr>
  </table>

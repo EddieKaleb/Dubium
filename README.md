@@ -1,6 +1,9 @@
 # Dubium
 Plataforma Android com a finalidade de conectar estudantes que possuem conhecimentos e dificuldades em disciplinas semelhantes. A aplicação conta com bate-papo e listagem de usuários próximos que estão dispostos a ajudar ou necessitam de ajuda.
 
+
+Android platform for the purpose of connecting students who have knowledge and difficulties in similar disciplines. The application has a chat and list of nearby users who are willing to help or need help.
+
 ## Screenshots
 <table>
   <tr>
